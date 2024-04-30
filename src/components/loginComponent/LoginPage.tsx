@@ -1,4 +1,3 @@
-import React from "react";
 import {
   MDBBtn,
   MDBContainer,
@@ -7,6 +6,9 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 import logo from "../../images/logo.png";
+import axios from 'axios';
+import { AxiosError } from 'axios';
+import React from 'react';
 
 function App() {
   return (
@@ -32,9 +34,8 @@ function App() {
               </label>
               <MDBInput id="form2" type="password" />
             </div>
-
             <div className="text-center pt-1 mb-5 pb-1">
-              <MDBBtn className="mb-4 w-100 gradient-custom-2">Sign in</MDBBtn>
+              <MDBBtn className="mb-4 w-100 gradient-custom-2" onClick={handleLoginButtonClick}>Login</MDBBtn>
               <a className="text-muted" href="#!">
                 Forgot password?
               </a>
@@ -42,8 +43,8 @@ function App() {
 
             <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
               <p className="mb-0">Don't have an account?</p>
-              <MDBBtn outline className="mx-2" color="danger">
-                Create New Account
+              <MDBBtn outline className="mx-2" color="primary">
+                Sign in
               </MDBBtn>
             </div>
           </div>
@@ -64,4 +65,16 @@ function App() {
   );
 }
 
+
+
+const handleLoginButtonClick = async () => {
+  try {
+      const response = await axios.post('/api/login', { username: 'example', password: 'password' });
+      console.log(response.data);
+      // Add logic to handle successful login (e.g., redirect to dashboard)
+  } catch (error: any) {
+      console.error('Login failed:', error.response.data);
+      // Add logic to handle failed login (e.g., display error message)
+  }
+};
 export default App;
