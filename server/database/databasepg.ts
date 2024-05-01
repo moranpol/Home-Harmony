@@ -8,13 +8,7 @@ const client = new Client({
     database: 'home-harmonyDB'
 })
 
-client.connect((err: Error) => {
-    if (err) {
-        console.error('Error connecting to PostgreSQL:', err.stack);
-        return;
-    }
-    console.log('Connected to PostgreSQL database');
-});
+
 
 
 

@@ -7,8 +7,6 @@ import {
 } from "mdb-react-ui-kit";
 import logo from "../../images/logo.png";
 import axios from 'axios';
-import { AxiosError } from 'axios';
-import React from 'react';
 
 function App() {
   return (
@@ -69,9 +67,10 @@ function App() {
 
 const handleLoginButtonClick = async () => {
   try {
-      const response = await axios.post('/api/login', { username: 'example', password: 'password' });
+      const email = (document.getElementById('form1') as HTMLInputElement)?.value; 
+      const password = (document.getElementById('form2') as HTMLInputElement)?.value; 
+      const response = await axios.post('/api/login', { email: email , password: password });
       console.log(response.data);
-      // Add logic to handle successful login (e.g., redirect to dashboard)
   } catch (error: any) {
       console.error('Login failed:', error.response.data);
       // Add logic to handle failed login (e.g., display error message)
