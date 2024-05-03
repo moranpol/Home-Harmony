@@ -1,6 +1,8 @@
 
-const Client = require('./database/databasepg');
-const express = require('express');
+
+const client = require('./database/databasepg');
+import * as express from 'express';
+
 const router = express.Router();
 
 router.post('/login', async (req, res) => {
@@ -16,9 +18,10 @@ router.post('/login', async (req, res) => {
 async function validateLogin(email: string, password: string): Promise<boolean> {
     const query = 'SELECT u.password FROM usersTable u WHERE u.email = $1';
     const values = [email];
-    const result = await Client.query(query, values);
+    const result = await client.query(query, values);
     const password_from_table = result.rows[0]?.password;
     return password === password_from_table;
+    
 }
 
-module.exports = router;
+export default router;

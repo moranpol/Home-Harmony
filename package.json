@@ -6,11 +6,14 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/aws-lambda": "^8.10.137",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.96",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
+    "aws-sdk": "^2.1612.0",
     "axios": "^1.6.8",
+    "esbuild": "^0.20.2",
     "mdb-react-ui-kit": "^8.0.0",
     "pg": "^8.11.5",
     "react": "^18.3.1",
@@ -46,4 +49,5 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
+  
 }
