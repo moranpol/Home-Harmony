@@ -1,10 +1,9 @@
 export class Chores {
-    
-    private apartmentId: number;
+  private apartmentId: number;
 
-    constructor(apartmentId: number) {
-        this.apartmentId = apartmentId;
-    }
+  constructor(apartmentId: number) {
+    this.apartmentId = apartmentId;
+  }
 
-    // Add other properties and methods here
+  // Add other properties and methods here
 }
