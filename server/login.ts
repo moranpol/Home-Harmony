@@ -5,7 +5,8 @@ const router = express.Router();
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   if (await validateLogin(email, password)) {
-    res.status(200).json({ success: true, message: "Login successful" });
+    const userId = await getId(email);
+    res.status(200).json({ success: true, message: "Login successful", userId });
   } else {
     res
       .status(401)
@@ -23,4 +24,9 @@ async function validateLogin(
   return password === password_from_table;
 }
 
+async function getId(email: string): Promise<number> {
+  const query = `SELECT u.id FROM usersTable u WHERE u.email = '${email}'`;
+  const result = await DataSource.createQueryRunner().manager.query(query);
+  return result[0]?.id;
+}
 export default router;
