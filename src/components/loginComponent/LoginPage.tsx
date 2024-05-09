@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   MDBBtn,
   MDBContainer,
@@ -10,7 +10,29 @@ import logo from "../../images/logo.png";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
-function App() {
+type LoginProps = {
+  setUserId: React.Dispatch<React.SetStateAction<any>>;
+}
+
+function Login({setUserId}: LoginProps) {
+  
+  const navigate = useNavigate();
+  const handleSignInButtonClick = () => {navigate("/SignUp");};
+  const handleLoginButtonClick = async () => {
+    const email = (document.getElementById("form1") as HTMLInputElement)?.value;
+    const password = (document.getElementById("form2") as HTMLInputElement)?.value;
+    await axios.post("/login", {email: email, password: password})
+    .then(function(response) {
+        alert("Login successful");
+        setUserId(response.data.userId);
+        navigate("/expenses");
+    })
+    .catch(function(error) {
+        console.error("Login failed:", error.response.data);
+        alert("Login failed. "+ error.response.data.message);
+    });
+  };
+
   return (
     <MDBContainer
       className="my-5 gradient-form"
@@ -40,14 +62,12 @@ function App() {
               >
                 Login
               </MDBBtn>
-              <a className="text-muted" href="#!">
-                Forgot password?
-              </a>
+              
             </div>
 
             <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
               <p className="mb-0">Don't have an account?</p>
-              <MDBBtn outline className="mx-2" color="primary">
+              <MDBBtn outline className="mx-2" color="primary" onClick={handleSignInButtonClick}>
                 Sign in
               </MDBBtn>
             </div>
@@ -76,25 +96,5 @@ function App() {
   );
 }
 
-const handleLoginButtonClick = async () => {
-  try {
-    //const navigate = useNavigate();
-    const email = (document.getElementById("form1") as HTMLInputElement)?.value;
-    const password = (document.getElementById("form2") as HTMLInputElement)
-      ?.value;
-    const response = await axios.post("/api/login", {
-      email: email,
-      password: password,
-    });
-    console.log(response.data);
-    if (response.data.success) {
-      console.log("Login successful");
-      //navigate("/home");
-    } else {
-    }
-  } catch (error: any) {
-    console.error("Login failed:", error.response.data);
-    // Add logic to handle failed login (e.g., display error message)
-  }
-};
-export default App;
+
+export default Login;
