@@ -19,9 +19,9 @@ axios.defaults.baseURL = "http://localhost:5000";
 
 type LoginProps = {
   setUserId: React.Dispatch<React.SetStateAction<any>>;
-}
+};
 
-function SignUp({setUserId}: LoginProps) {
+function SignUp({ setUserId }: LoginProps) {
   const [registerInfo, setRegisterInfo] = useState({
     firstName: "",
     lastName: "",
@@ -86,7 +86,7 @@ function SignUp({setUserId}: LoginProps) {
       )
     ) {
       newErrors.password =
-        "Password must contain at least 8 characters, including uppercase, lowercase, special character and numbers.";
+        "Password must contain at least 8 characters, including uppercase and lowercase letters, special character and numbers.";
       isValid = false;
     } else {
       newErrors.password = "";
@@ -118,6 +118,7 @@ function SignUp({setUserId}: LoginProps) {
     setErrors(newErrors);
     return isValid;
   };
+
   const navigate = useNavigate();
   const onSubmit = () => {
     if (validateForm()) {
@@ -129,9 +130,9 @@ function SignUp({setUserId}: LoginProps) {
           if (response.data.success) {
             console.log("Registration successful");
             setUserId(response.data.userId);
-            
-             navigate("/SignUp/confirm");
-        }})
+            navigate("/SignUp/confirm");
+          }
+        })
         .catch((error) => {
           console.error("Registration failed:", error);
 
@@ -155,7 +156,7 @@ function SignUp({setUserId}: LoginProps) {
             component="h1"
             variant="h5"
             gutterBottom
-            sx={{ textAlign: "center", marginBottom: 2, color: "#333" }}
+            sx={{ textAlign: "center", marginBottom: "2rem", color: "#333" }}
           >
             Sign Up
           </Typography>
@@ -219,6 +220,7 @@ function SignUp({setUserId}: LoginProps) {
                 fullWidth
                 className="inputField"
                 name="password"
+                title="Password must contain at least 8 characters, including uppercase and lowercase letters, special character and numbers."
                 label="Password"
                 type={showPassword ? "text" : "password"}
                 id="password"
@@ -247,6 +249,7 @@ function SignUp({setUserId}: LoginProps) {
                 name="confirmPassword"
                 label="Confirm Password"
                 className="inputField"
+                title="Password must contain at least 8 characters, including uppercase and lowercase letters, special character and numbers."
                 type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
                 autoComplete="new-password"
@@ -294,7 +297,11 @@ function SignUp({setUserId}: LoginProps) {
                 src={registerInfo.image ?? ""}
               />
               <label htmlFor="image" className="fileInputLabel">
-                <Button variant="outlined" component="span" className="MuiButton-root">
+                <Button
+                  variant="outlined"
+                  component="span"
+                  className="MuiButton-root"
+                >
                   {registerInfo.image ? (
                     <>
                       <span>{registerInfo.image}</span>

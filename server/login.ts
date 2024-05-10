@@ -2,11 +2,13 @@ import express from "express";
 import DataSource from "./database/databasepg";
 const router = express.Router();
 
-router.post("/login", async (req, res) => {
+router.post("/", async (req, res) => {
   const { email, password } = req.body;
   if (await validateLogin(email, password)) {
     const userId = await getId(email);
-    res.status(200).json({ success: true, message: "Login successful", userId });
+    res
+      .status(200)
+      .json({ success: true, message: "Login successful", userId });
   } else {
     res
       .status(401)

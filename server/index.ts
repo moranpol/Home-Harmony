@@ -11,8 +11,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
-app.use("/", loginRouter);
-app.use("/", signUpRouter);
+app.use("/login", loginRouter);
+app.use("/register", signUpRouter);
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
@@ -22,5 +22,5 @@ app.listen(PORT, () => {
     })
     .catch((err) => {
       console.log("Error connecting to database", err);
-    });    
+    });
 });
