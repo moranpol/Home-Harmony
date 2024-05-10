@@ -13,10 +13,15 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import "./SignUpPage.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 axios.defaults.baseURL = "http://localhost:5000";
 
-function SignUp() {
+type LoginProps = {
+  setUserId: React.Dispatch<React.SetStateAction<any>>;
+}
+
+function SignUp({setUserId}: LoginProps) {
   const [registerInfo, setRegisterInfo] = useState({
     firstName: "",
     lastName: "",
@@ -113,7 +118,7 @@ function SignUp() {
     setErrors(newErrors);
     return isValid;
   };
-
+  const navigate = useNavigate();
   const onSubmit = () => {
     if (validateForm()) {
       axios
@@ -123,9 +128,10 @@ function SignUp() {
 
           if (response.data.success) {
             console.log("Registration successful");
-            // todo - go to login page
-          }
-        })
+            setUserId(response.data.userId);
+            
+             navigate("/SignUp/confirm");
+        }})
         .catch((error) => {
           console.error("Registration failed:", error);
 
@@ -151,7 +157,7 @@ function SignUp() {
             gutterBottom
             sx={{ textAlign: "center", marginBottom: 2, color: "#333" }}
           >
-            Sign up
+            Sign Up
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
