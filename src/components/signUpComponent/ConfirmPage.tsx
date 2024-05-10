@@ -9,8 +9,8 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import "./SignUpPage.css";
 import axios from "axios";
-axios.defaults.baseURL = "http://localhost:5000";
 
+axios.defaults.baseURL = "http://localhost:5000";
 
 function ConfirmPage({ userId }: { userId: number }) {
   const [confirmationCode, setConfirmationCode] = useState("");
@@ -18,10 +18,11 @@ function ConfirmPage({ userId }: { userId: number }) {
   const [confirmationError, setConfirmationError] = useState("");
 
   const validateForm = () => {
-    if (confirmationCode.length > 6|| confirmationCode.length < 6) {
-      setConfirmationError("Confirmation code must be 6 digits");
+    if (confirmationCode.length > 6 || confirmationCode.length < 6) {
+      setConfirmationError("Confirmation code must be 6 digits.");
       return false;
-    }};
+    }
+  };
 
   const handleConfirmationCodeChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -31,22 +32,21 @@ function ConfirmPage({ userId }: { userId: number }) {
 
   const handleConfirm = () => {
     if (validateForm()) {
-    axios
-      .post("register/confirm", {
-        confirmationCode: confirmationCode,
-        userId: userId,
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.data.success) {
-          alert("Confirmation success");
-        } else {
+      axios
+        .post("register/confirm", {
+          confirmationCode: confirmationCode,
+          userId: userId,
+        })
+        .then((response) => {
+          console.log(response);
+          if (response.data.success) {
+            alert("Confirmation success");
+          }
+        })
+        .catch((error) => {
+          console.error("Confirmation failed:", error.response.data);
           alert("Confirmation failed. Please try again.");
-        }
-      })
-      .catch((error) => {
-        alert("Confirmation failed. Please try again.");
-      });
+        });
     }
   };
 
@@ -56,7 +56,11 @@ function ConfirmPage({ userId }: { userId: number }) {
         <Grid item xs={12} sm={6} md={4}>
           <Card className="card">
             <CardContent>
-              <Typography variant="h5" component="div" sx={{ textAlign: "center", marginBottom: 4, color: "#333" }}>
+              <Typography
+                variant="h5"
+                component="div"
+                sx={{ textAlign: "center", marginBottom: 4, color: "#333" }}
+              >
                 Confirm Your Account
               </Typography>
               <TextField

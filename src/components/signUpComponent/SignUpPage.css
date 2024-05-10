@@ -9,49 +9,50 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   background: white;
+  padding: 2rem;
 }
 
 /* Card */
 .card {
   width: 100%;
-  max-width: 600px;
+  max-width: 37.5rem;
   padding: 2rem;
   background: linear-gradient(135deg, #FFF2D7, #f7e2b3);
-  border-radius: 10px;
-  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 0.625rem;
+  box-shadow: 0rem 0.25rem 1rem rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.card h1{
+.card h1 {
   text-align: center;
   color: #333333;
-  margin-bottom: 3rem;
+  margin-bottom: 1.875rem;
   font-size: 3rem;
-  letter-spacing: 2px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.125rem;
+  text-shadow: 0.125rem 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
   position: relative;
 }
 
 .card h1::before {
   content: "";
   position: absolute;
-  bottom: -10px;
+  bottom: -0.625rem;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
-  height: 3px;
+  width: 5rem;
+  height: 0.1875rem;
   background-color: #f8c794;
-  border-radius: 2px;
+  border-radius: 0.125rem;
 }
 
 /* Input Fields */
 .inputField {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.9375rem;
   width: 100%;
 }
 
@@ -60,7 +61,7 @@ body {
 }
 
 .inputField .MuiOutlinedInput-root {
-  border-radius: 5px;
+  border-radius: 0.3125rem;
   background-color: #ffffff;
 }
 
@@ -70,7 +71,7 @@ body {
 
 .inputField .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
   border-color: #f8c794;
-  border-width: 2px;
+  border-width: 0.125rem;
 }
 
 /* File Input */
@@ -79,7 +80,7 @@ body {
 }
 
 .fileInputLabel {
-  margin-bottom: 1rem;
+  margin-bottom: 0.625rem;
 }
 
 .fileInputLabel .MuiButton-root {
@@ -88,8 +89,8 @@ body {
   font-weight: 500;
   text-transform: none;
   border: none;
-  border-radius: 5px;
-  padding: 0.7rem 2rem;
+  border-radius: 0.3125rem;
+  padding: 0.4375rem 1.25rem;
   cursor: pointer;
 }
 
@@ -99,24 +100,24 @@ body {
 
 /* Error Text */
 .errorText {
-  padding: 10px;
+  padding: 0.625rem;
   color: #ff4d4d;
-  font-size: 0.9rem;
+  font-size: 0.5625rem;
 }
 
 /* Button */
 .submitButton {
   text-transform: none;
   border: none;
-  border-radius: 5px;
+  border-radius: 0.3125rem;
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.3s ease;
 }
 
 /* Media Queries */
-@media screen and (max-width: 768px) {
-  /* Adjust styles for screens with a maximum width of 768px */
+@media screen and (max-width: 48rem) {
+  /* Adjust styles for screens with a maximum width of 48rem */
   .cardContainer {
     height: auto;
     padding: 2rem 0;
@@ -132,8 +133,8 @@ body {
   }
 }
 
-@media screen and (max-width: 480px) {
-  /* Adjust styles for screens with a maximum width of 480px */
+@media screen and (max-width: 30rem) {
+  /* Adjust styles for screens with a maximum width of 30rem */
   .cardContainer {
     padding: 1rem 0;
   }
@@ -151,20 +152,58 @@ body {
   }
 
   .inputField .MuiOutlinedInput-root {
-    font-size: 0.9rem;
+    font-size: 0.5625rem;
   }
 
   .fileInputLabel .MuiButton-root {
-    font-size: 0.9rem;
-    padding: 0.5rem 1.5rem;
+    font-size: 0.5625rem;
+    padding: 0.3125rem 0.9375rem;
   }
 
   .errorText {
-    font-size: 0.8rem;
+    font-size: 0.5rem;
   }
 
   .submitButton {
-    font-size: 0.9rem;
-    padding: 0.5rem 1.5rem;
+    font-size: 0.5625rem;
+    padding: 0.3125rem 0.9375rem;
+  }
+}
+
+/* Additional Media Queries */
+@media screen and (max-width: 20rem) {
+  /* Adjust styles for screens with a maximum width of 20rem */
+  .cardContainer {
+    padding: 0.5rem 0;
+  }
+
+  .card {
+    padding: 0.5rem;
+  }
+
+  .card h1 {
+    font-size: 1.75rem;
+  }
+
+  .inputField {
+    margin-bottom: 0.75rem;
+  }
+
+  .inputField .MuiOutlinedInput-root {
+    font-size: 0.5rem;
+  }
+
+  .fileInputLabel .MuiButton-root {
+    font-size: 0.5rem;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .errorText {
+    font-size: 0.4375rem;
+  }
+
+  .submitButton {
+    font-size: 0.5rem;
+    padding: 0.25rem 0.75rem;
   }
 }

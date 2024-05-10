@@ -1,32 +1,35 @@
 import express from "express";
 import DataSource from "./database/databasepg";
-import fs from "fs";
+//import fs from "fs";
 import { Amplify } from "aws-amplify";
 import { enviorment } from "./enviorments/enviorment";
-import { signUp ,confirmSignUp} from "aws-amplify/auth";
+import { signUp, confirmSignUp } from "aws-amplify/auth";
 
 const signUpRouter = express.Router();
 
 Amplify.configure({
   Auth: { Cognito: enviorment.Cognito },
 });
-signUpRouter.post("/register/confirm", async (req, res) => {
+
+signUpRouter.post("/confirm", async (req, res) => {
   const confirmationInfo = req.body;
-  const query= `SELECT u.email FROM usersTable u WHERE u.id = ${confirmationInfo.userId}`;
-  const email=await DataSource.createQueryRunner().manager.query(query);
+
+  const query = `SELECT u.email FROM usersTable u WHERE u.id = ${confirmationInfo.userId}`;
+  const email = await DataSource.createQueryRunner().manager.query(query);
+
   try {
-    await confirmSignUp({  username: email[0].email, confirmationCode: confirmationInfo.confirmationCode });
+    await confirmSignUp({
+      username: email[0].email,
+      confirmationCode: confirmationInfo.confirmationCode,
+    });
     res.status(200).json({ success: true, message: "Confirmation success" });
-  }
-  catch (error:any) {
+  } catch (error: any) {
     console.log("Confirmation failed", error);
     res.status(500).json({ success: false, error: "Confirmation failed" });
   }
 });
 
-signUpRouter.post("/register", async (req, res) => {
-  
-
+signUpRouter.post("/", async (req, res) => {
   const registerInfo = req.body;
 
   try {
@@ -37,14 +40,23 @@ signUpRouter.post("/register", async (req, res) => {
       username: registerInfo.email,
       password: registerInfo.password,
     });
+
     const query = `insert into usersTable (fname, lname, email, birthdate, password) values ('${registerInfo.firstName}', '${registerInfo.lastName}', '${registerInfo.email}', '${registerInfo.birthday}', '${registerInfo.password}')`;
     await DataSource.createQueryRunner().manager.query(query);
-    const idQuery= `select id from usersTable where email = '${registerInfo.email}'`;
+
+    const idQuery = `select id from usersTable where email = '${registerInfo.email}'`;
     const userId = await DataSource.createQueryRunner().manager.query(idQuery);
-    res.status(200).json({ success: true, message: "Registration success", userId: userId[0].id});
-  } catch (error:any) {
-    console.log("Registration failed", error);
     
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Registration success",
+        userId: userId[0].id,
+      });
+  } catch (error: any) {
+    console.log("Registration failed", error);
+
     if (error.name === "UsernameExistsException") {
       res
         .status(400)
