@@ -8,9 +8,9 @@ signUpRouter.post("/register", async (req, res) => {
 
   if (await isFormValid(registerInfo.email)) {
     try {
-    //   const imagePath = registerInfo.photo;
-    //   const imageBuffer = fs.readFileSync(imagePath);
-      // todo - add image to S3 and somthing called multer 
+      // const imagePath = registerInfo.photo;
+      // const imageBuffer = fs.readFileSync(imagePath);
+      // todo - add image to S3 and somthing called multer
       const query = `insert into usersTable (fname, lname, email, birthdate, password) values ('${registerInfo.fname}', '${registerInfo.lname}', '${registerInfo.email}', '${registerInfo.birthday}', '${registerInfo.password}')`;
       await DataSource.createQueryRunner().manager.query(query);
       res.status(200).json({ success: true, message: "Registration success" });
@@ -27,7 +27,7 @@ signUpRouter.post("/register", async (req, res) => {
 });
 
 async function isFormValid(email: string): Promise<boolean> {
-  const query = `SELECT u.password FROM usersTable u WHERE u.email = '${email}'`;
+  const query = `SELECT * FROM usersTable u WHERE u.email = '${email}'`;
   const result = await DataSource.createQueryRunner().manager.query(query);
   return result.length === 0;
 }

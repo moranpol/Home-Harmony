@@ -1,219 +1,342 @@
-import React from "react";
-import {
-  MDBInput,
-  MDBContainer,
-  MDBValidation,
-  MDBValidationItem,
-  MDBCardBody,
-  MDBCard,
-  MDBRow,
-  MDBCol,
-} from "mdb-react-ui-kit";
+import React, { useState } from "react";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 import "./SignUpPage.css";
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:5000";
 
 function SignUp() {
-  const [registerInfo, setRegisterInfo] = React.useState({
-    fname: "",
-    lname: "",
+  const [registerInfo, setRegisterInfo] = useState({
+    firstName: "",
+    lastName: "",
     email: "",
     birthday: "",
-    photo: "",
     password: "",
+    confirmPassword: "",
+    image: null,
   });
 
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    birthday: "",
+    image: "",
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRegisterInfo({ ...registerInfo, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setRegisterInfo({ ...registerInfo, [name]: value });
   };
 
-  const isEmailValid: boolean = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-    registerInfo.email
-  );
+  const validateForm = () => {
+    const newErrors = { ...errors };
+    let isValid = true;
 
-  const isValidPassword: boolean =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(
-      registerInfo.password
-    );
+    if (!registerInfo.firstName.trim()) {
+      newErrors.firstName = "First name is required.";
+      isValid = false;
+    } else {
+      newErrors.firstName = "";
+    }
 
-  const isBirthdayValid: boolean = new Date(registerInfo.birthday) < new Date();
+    if (!registerInfo.lastName.trim()) {
+      newErrors.lastName = "Last name is required.";
+      isValid = false;
+    } else {
+      newErrors.lastName = "";
+    }
 
-  const isFormValid: boolean =
-    Object.values(registerInfo).every((value) => value !== "") &&
-    isEmailValid &&
-    isValidPassword &&
-    isBirthdayValid;
+    if (
+      !registerInfo.email.trim() ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerInfo.email)
+    ) {
+      newErrors.email = "Invalid email address.";
+      isValid = false;
+    } else {
+      newErrors.email = "";
+    }
 
-  const onSubmit = async () => {
-    try {
-      const response = await axios.post("/register", registerInfo);
-      console.log("Response:", response.data);
+    if (
+      !registerInfo.password ||
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(
+        registerInfo.password
+      )
+    ) {
+      newErrors.password =
+        "Password must contain at least 8 characters, including uppercase, lowercase, special character and numbers.";
+      isValid = false;
+    } else {
+      newErrors.password = "";
+    }
 
-      if (response.data.success) {
-        console.log("Registration successful");
-        // Optionally, perform any actions after successful registration
-      }
-    } catch (error: any) {
-      console.error("Registration failed:", error);
+    if (registerInfo.password !== registerInfo.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match.";
+      isValid = false;
+    } else {
+      newErrors.confirmPassword = "";
+    }
 
-      if (error.response && error.response.status === 400) {
-        alert(
-          "Registration failed. This email is already registered. Please use a different email or try to login."
-        );
-        const emailInput = document.getElementById("validationEmail");
-        setRegisterInfo({ ...registerInfo, email: "" });
-        if (emailInput) emailInput.focus();
-      } else {
-        alert("An error occurred during registration, try again.");
-      }
+    const today = new Date();
+    const birthDate = new Date(registerInfo.birthday);
+    if (!registerInfo.birthday || birthDate >= today) {
+      newErrors.birthday = "Birthday must be before today.";
+      isValid = false;
+    } else {
+      newErrors.birthday = "";
+    }
+
+    if (!registerInfo.image) {
+      newErrors.image = "Please upload an image.";
+      isValid = false;
+    } else {
+      newErrors.image = "";
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const onSubmit = () => {
+    if (validateForm()) {
+      axios
+        .post("/register", registerInfo)
+        .then((response) => {
+          console.log("Response:", response.data);
+
+          if (response.data.success) {
+            console.log("Registration successful");
+            // todo - go to login page
+          }
+        })
+        .catch((error) => {
+          console.error("Registration failed:", error);
+
+          if (error.response && error.response.status === 400) {
+            alert(
+              "Registration failed. This email is already registered. Please use a different email or try to login."
+            );
+            setRegisterInfo({ ...registerInfo, email: "" });
+          } else {
+            alert("An error occurred during registration, try again.");
+          }
+        });
     }
   };
 
   return (
-    <MDBContainer fluid>
-      <h1 className="text-center mt-5">Sign Up</h1>
-      <MDBRow className="justify-content-center align-items-center m-3">
-        <MDBCard
-          style={{
-            borderRadius: "25px",
-          }}
-        >
-          <MDBCardBody className="px-4">
-            <MDBValidation className="text-black" isValidated>
-              <MDBRow>
-                <MDBCol md="6">
-                  <MDBValidationItem
-                    feedback="Please enter your first name."
-                    invalid
-                  >
-                    <label htmlFor="validationFName">First name</label>
-                    <MDBInput
-                      value={registerInfo.fname}
-                      name="fname"
-                      onChange={onChange}
-                      id="validationFName"
-                      required
-                      type="text"
-                      wrapperClass="mb-4"
-                      size="lg"
-                    />
-                  </MDBValidationItem>
-                </MDBCol>
-                <MDBCol md="6">
-                  <MDBValidationItem
-                    feedback="Please enter your last name."
-                    invalid
-                  >
-                    <label htmlFor="validationLName">Last name</label>
-                    <MDBInput
-                      value={registerInfo.lname}
-                      name="lname"
-                      onChange={onChange}
-                      id="validationLName"
-                      required
-                      type="text"
-                      wrapperClass="mb-4"
-                      size="lg"
-                    />
-                  </MDBValidationItem>
-                </MDBCol>
-              </MDBRow>
-              <MDBRow>
-                <MDBCol md="6">
-                  <MDBValidationItem
-                    feedback="Please enter a valid email with @."
-                    invalid
-                  >
-                    <label htmlFor="validationEmail">Email</label>
-                    <MDBInput
-                      value={registerInfo.email}
-                      name="email"
-                      onChange={onChange}
-                      id="validationEmail"
-                      required
-                      type="email"
-                      wrapperClass="mb-4"
-                      size="lg"
-                    />
-                  </MDBValidationItem>
-                </MDBCol>
-                <MDBCol md="6">
-                  <label htmlFor="validationPassword">Password</label>
-                  <MDBValidationItem
-                    feedback="Please enter a valid password."
-                    invalid
-                  >
-                    <MDBInput
-                      value={registerInfo.password}
-                      name="password"
-                      onChange={onChange}
-                      id="validationPassword"
-                      required
-                      type="password"
-                      size="lg"
-                      title="Password must contain at least 8 characters, including uppercase, lowercase and numbers."
-                    />
-                  </MDBValidationItem>
-                </MDBCol>
-              </MDBRow>
-              <MDBRow>
-                <MDBCol md="6">
-                  <MDBValidationItem
-                    feedback="Please enter your birthday."
-                    invalid
-                  >
-                    <label htmlFor="validationBirthday">Birthday</label>
-                    <div className="form-outline datepicker">
-                      <MDBInput
-                        value={registerInfo.birthday}
-                        name="birthday"
-                        onChange={onChange}
-                        id="validationBirthday"
-                        required
-                        type="date"
-                        className="form-control"
-                        wrapperClass="mb-4"
-                        size="lg"
-                        title="Birthday must be before today."
-                      />
-                    </div>
-                  </MDBValidationItem>
-                </MDBCol>
-                <MDBCol md="6">
-                  <MDBValidationItem
-                    feedback="Please enter your profile image."
-                    invalid
-                  >
-                    <label htmlFor="validationPhoto">Image</label>
-                    <MDBInput
-                      value={registerInfo.photo}
-                      name="photo"
-                      onChange={onChange}
-                      id="validationPhoto"
-                      required
-                      type="file"
-                      wrapperClass="mb-4"
-                      size="lg"
-                    />
-                  </MDBValidationItem>
-                </MDBCol>
-              </MDBRow>
-              <div className="col-12 d-flex justify-content-center">
-                <button
-                  type="submit"
-                  className="submitButton"
-                  disabled={!isFormValid}
-                  onClick={onSubmit}
+    <Box className="cardContainer">
+      <Card className="card">
+        <CardContent>
+          <Typography
+            component="h1"
+            variant="h5"
+            gutterBottom
+            sx={{ textAlign: "center", marginBottom: 2, color: "#333" }}
+          >
+            Sign up
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                onChange={onChange}
+                value={registerInfo.firstName}
+                error={Boolean(errors.firstName)}
+                helperText={errors.firstName}
+                className="inputField"
+                autoComplete="given-name"
+                name="firstName"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                autoFocus
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                onChange={onChange}
+                value={registerInfo.lastName}
+                error={Boolean(errors.lastName)}
+                helperText={errors.lastName}
+                className="inputField"
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                autoComplete="family-name"
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                onChange={onChange}
+                value={registerInfo.email}
+                error={Boolean(errors.email)}
+                helperText={errors.email}
+                required
+                fullWidth
+                className="inputField"
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                onChange={onChange}
+                value={registerInfo.password}
+                error={Boolean(errors.password)}
+                helperText={errors.password}
+                required
+                fullWidth
+                className="inputField"
+                name="password"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                id="password"
+                autoComplete="new-password"
+                InputLabelProps={{ shrink: true }}
+                InputProps={{
+                  endAdornment: (
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                onChange={onChange}
+                value={registerInfo.confirmPassword}
+                error={Boolean(errors.confirmPassword)}
+                helperText={errors.confirmPassword}
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                className="inputField"
+                type={showConfirmPassword ? "text" : "password"}
+                id="confirmPassword"
+                autoComplete="new-password"
+                InputLabelProps={{ shrink: true }}
+                InputProps={{
+                  endAdornment: (
+                    <IconButton
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                onChange={onChange}
+                value={registerInfo.birthday}
+                error={Boolean(errors.birthday)}
+                helperText={errors.birthday}
+                required
+                fullWidth
+                className="inputField"
+                name="birthday"
+                label="Birthday"
+                type="date"
+                id="birthday"
+                autoComplete="birthday"
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <input
+                name="image"
+                type="file"
+                accept="image/*"
+                className="fileInput"
+                onChange={onChange}
+                style={{ display: "none" }}
+                id="image"
+                src={registerInfo.image ?? ""}
+              />
+              <label htmlFor="image" className="fileInputLabel">
+                <Button variant="outlined" component="span" className="MuiButton-root">
+                  {registerInfo.image ? (
+                    <>
+                      <span>{registerInfo.image}</span>
+                      <IconButton
+                        onClick={() =>
+                          setRegisterInfo({ ...registerInfo, image: null })
+                        }
+                        edge="end"
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </>
+                  ) : (
+                    "Upload Profile Picture"
+                  )}
+                </Button>
+              </label>
+              {errors.image && (
+                <Typography
+                  variant="caption"
+                  color="error"
+                  style={{ padding: "10px" }}
                 >
-                  Submit
-                </button>
-              </div>
-            </MDBValidation>
-          </MDBCardBody>
-        </MDBCard>
-      </MDBRow>
-    </MDBContainer>
+                  {errors.image}
+                </Typography>
+              )}
+            </Grid>
+          </Grid>
+        </CardContent>
+        <CardActions>
+          <Button
+            onClick={onSubmit}
+            className="submitButton"
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{
+              backgroundColor: "#F8C794",
+              color: "black",
+              padding: "0.7rem 2rem",
+              "&:hover": { backgroundColor: "#D8AE7E" },
+            }}
+          >
+            Submit
+          </Button>
+        </CardActions>
+      </Card>
+    </Box>
   );
 }
 
