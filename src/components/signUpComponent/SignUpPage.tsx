@@ -29,7 +29,7 @@ function SignUp({ setUserId }: LoginProps) {
     birthday: "",
     password: "",
     confirmPassword: "",
-    image: null,
+    image: undefined as File | undefined,
   });
 
   const [errors, setErrors] = useState({
@@ -48,7 +48,11 @@ function SignUp({ setUserId }: LoginProps) {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setRegisterInfo({ ...registerInfo, [name]: value });
+    if (name === "image") {
+      setRegisterInfo({ ...registerInfo, image: e.target.files?.[0] });
+    } else {
+      setRegisterInfo({ ...registerInfo, [name]: value });
+    }
   };
 
   const validateForm = () => {
@@ -294,7 +298,7 @@ function SignUp({ setUserId }: LoginProps) {
                 onChange={onChange}
                 style={{ display: "none" }}
                 id="image"
-                src={registerInfo.image ?? ""}
+                src={registerInfo.image?.name ?? ""}
               />
               <label htmlFor="image" className="fileInputLabel">
                 <Button
@@ -304,10 +308,10 @@ function SignUp({ setUserId }: LoginProps) {
                 >
                   {registerInfo.image ? (
                     <>
-                      <span>{registerInfo.image}</span>
+                      <span>{registerInfo.image.name}</span>
                       <IconButton
                         onClick={() =>
-                          setRegisterInfo({ ...registerInfo, image: null })
+                          setRegisterInfo({ ...registerInfo, image: undefined })
                         }
                         edge="end"
                       >
