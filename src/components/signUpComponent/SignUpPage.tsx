@@ -85,7 +85,7 @@ function SignUp({ setUserId }: LoginProps) {
 
     if (
       !registerInfo.password ||
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(
         registerInfo.password
       )
     ) {
