@@ -85,16 +85,17 @@ function SignUp({ setUserId }: LoginProps) {
 
     if (
       !registerInfo.password ||
-      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
         registerInfo.password
       )
     ) {
       newErrors.password =
-        "Password must contain at least 8 characters, including uppercase and lowercase letters, special character and numbers.";
+        "Password must contain at least 8 characters, including uppercase and lowercase letters, special character, and numbers.";
       isValid = false;
     } else {
       newErrors.password = "";
     }
+ 
 
     if (registerInfo.password !== registerInfo.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match.";

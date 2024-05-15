@@ -4,17 +4,17 @@ import DataSource from "./database/databasepg";
 import { Amplify } from "aws-amplify";
 import { enviorment } from "./enviorments/enviorment";
 import { signUp, confirmSignUp } from "aws-amplify/auth";
-
+ 
 const signUpRouter = express.Router();
-
+ 
 Amplify.configure({
   Auth: { Cognito: enviorment.Cognito },
 });
-
+ 
 signUpRouter.post("/confirm", async (req, res) => {
   const confirmationInfo = req.body;
-
-  const query = `SELECT u.email FROM usersTable u WHERE u.id = ${confirmationInfo.userId}`;
+ 
+  const query = `SELECT u.email FROM usersTable u WHERE u.id = '${confirmationInfo.userId}'`;
   const email = await DataSource.createQueryRunner().manager.query(query);
 
   try {
@@ -25,13 +25,13 @@ signUpRouter.post("/confirm", async (req, res) => {
     res.status(200).json({ success: true, message: "Confirmation success" });
   } catch (error: any) {
     console.log("Confirmation failed", error);
-    res.status(500).json({ success: false, error: "Confirmation failed" });
+    res.status(500).json({ success: false, error: "Confirmation failed"  });
   }
 });
-
+ 
 signUpRouter.post("/", async (req, res) => {
   const registerInfo = req.body;
-
+ 
   try {
     // const imagePath = registerInfo.photo;
     // const imageBuffer = fs.readFileSync(imagePath);
@@ -40,13 +40,13 @@ signUpRouter.post("/", async (req, res) => {
       username: registerInfo.email,
       password: registerInfo.password,
     });
-
+ 
     const query = `insert into usersTable (fname, lname, email, birthdate, password) values ('${registerInfo.firstName}', '${registerInfo.lastName}', '${registerInfo.email}', '${registerInfo.birthday}', '${registerInfo.password}')`;
     await DataSource.createQueryRunner().manager.query(query);
-
+ 
     const idQuery = `select id from usersTable where email = '${registerInfo.email}'`;
     const userId = await DataSource.createQueryRunner().manager.query(idQuery);
-    
+   
     res
       .status(200)
       .json({
@@ -56,7 +56,7 @@ signUpRouter.post("/", async (req, res) => {
       });
   } catch (error: any) {
     console.log("Registration failed", error);
-
+ 
     if (error.name === "UsernameExistsException") {
       res
         .status(400)
@@ -70,5 +70,6 @@ signUpRouter.post("/", async (req, res) => {
     }
   }
 });
-
+ 
 export default signUpRouter;
+ 

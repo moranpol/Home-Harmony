@@ -22,6 +22,7 @@ function ConfirmPage({ userId }: { userId: number }) {
       setConfirmationError("Confirmation code must be 6 digits.");
       return false;
     }
+    return true;
   };
 
   const handleConfirmationCodeChange = (
@@ -31,6 +32,7 @@ function ConfirmPage({ userId }: { userId: number }) {
   };
 
   const handleConfirm = () => {
+    
     if (validateForm()) {
       axios
         .post("register/confirm", {
