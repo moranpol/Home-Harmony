@@ -23,6 +23,7 @@
     "cors": "^2.8.5",
     "esbuild": "^0.20.2",
     "mdb-react-ui-kit": "^8.0.0",
+    "multer": "^1.4.5-lts.1",
     "pg": "^8.11.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -54,6 +55,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/multer": "^1.4.11",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2"
   }
