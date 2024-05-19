@@ -43,13 +43,12 @@ function SignUp({ setUserId }: LoginProps) {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === "image") {
-      setRegisterInfo({ ...registerInfo, image: e.target.files?.[0] });
+    const { name, value, files } = e.target;
+    if (name === "image" && files) {
+      setRegisterInfo({ ...registerInfo, image: files[0] });
     } else {
       setRegisterInfo({ ...registerInfo, [name]: value });
     }
@@ -95,7 +94,6 @@ function SignUp({ setUserId }: LoginProps) {
     } else {
       newErrors.password = "";
     }
- 
 
     if (registerInfo.password !== registerInfo.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match.";
@@ -125,10 +123,23 @@ function SignUp({ setUserId }: LoginProps) {
   };
 
   const navigate = useNavigate();
+
   const onSubmit = () => {
     if (validateForm()) {
+      const formData = new FormData();
+      formData.append("firstName", registerInfo.firstName);
+      formData.append("lastName", registerInfo.lastName);
+      formData.append("email", registerInfo.email);
+      formData.append("birthday", registerInfo.birthday);
+      formData.append("password", registerInfo.password);
+      formData.append("image", registerInfo.image as File);
+
       axios
-        .post("/register", registerInfo)
+        .post("/register", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then((response) => {
           console.log("Response:", response.data);
 
@@ -226,7 +237,7 @@ function SignUp({ setUserId }: LoginProps) {
                 fullWidth
                 className="inputField"
                 name="password"
-                title="Password must contain at least 8 characters, including uppercase and lowercase letters, special character and numbers."
+                title="Password must contain at least 8 characters, including uppercase and lowercase letters, special character, and numbers."
                 label="Password"
                 type={showPassword ? "text" : "password"}
                 id="password"
@@ -255,7 +266,7 @@ function SignUp({ setUserId }: LoginProps) {
                 name="confirmPassword"
                 label="Confirm Password"
                 className="inputField"
-                title="Password must contain at least 8 characters, including uppercase and lowercase letters, special character and numbers."
+                title="Password must contain at least 8 characters, including uppercase and lowercase letters, special character, and numbers."
                 type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
                 autoComplete="new-password"
@@ -300,7 +311,6 @@ function SignUp({ setUserId }: LoginProps) {
                 onChange={onChange}
                 style={{ display: "none" }}
                 id="image"
-                src={registerInfo.image?.name ?? ""}
               />
               <label htmlFor="image" className="fileInputLabel">
                 <Button
