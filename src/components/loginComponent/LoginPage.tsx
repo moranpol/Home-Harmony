@@ -22,14 +22,15 @@ function Login({setUserId}: LoginProps) {
     const email = (document.getElementById("form1") as HTMLInputElement)?.value;
     const password = (document.getElementById("form2") as HTMLInputElement)?.value;
     await axios.post("/login", {email: email, password: password})
-    .then(function(response) {
-        alert("Login successful");
+    .then((response) => {
+        alert("Login successful: "+ response.data.userId);
         setUserId(response.data.userId);
+        localStorage.setItem("userId", response.data.userId);
         navigate("/expenses");
     })
-    .catch(function(error) {
-        console.error("Login failed:", error.response.data);
-        alert("Login failed. "+ error.response.data.message);
+    .catch((error) => {
+        console.error("Login failed:", error.message);
+        alert("Login failed. "+ error.message);
     });
   };
 

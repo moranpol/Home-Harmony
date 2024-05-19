@@ -1,3 +1,5 @@
+// unnecessary ?? todo: remove
+
 import { Apartment } from './apartment';
 
 export class User {
@@ -62,3 +64,4 @@ export class User {
     }
     
 }
+
