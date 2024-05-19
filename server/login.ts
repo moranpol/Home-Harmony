@@ -30,6 +30,7 @@ router.post("/", async (req, res) => {
   try {
     await signIn({ username: email, password: password });
     const userId = await getId(email);
+    console.log("Login successful, userId: ", userId);
     res.status(200).json({ success: true, message: "Login successful", userId: userId});
   } catch (error) {
     console.error("Login error:", error);

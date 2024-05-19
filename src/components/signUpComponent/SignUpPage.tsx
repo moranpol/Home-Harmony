@@ -135,6 +135,7 @@ function SignUp({ setUserId }: LoginProps) {
           if (response.data.success) {
             console.log("Registration successful");
             setUserId(response.data.userId);
+            localStorage.setItem("userId", response.data.userId);
             navigate("/SignUp/confirm");
           }
         })
