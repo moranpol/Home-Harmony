@@ -1,15 +1,12 @@
 import express from "express";
 import DataSource from "./database/databasepg";
 import multer from "multer";
-import { Request } from 'express';
+import { Request } from "express";
 import { Amplify } from "aws-amplify";
-import { StorageEngine } from 'multer';
 import { enviorment } from "./enviorments/enviorment";
 import { signUp, confirmSignUp } from "aws-amplify/auth";
 import path from "path";
 import fs from "fs";
-import { ParamsDictionary } from "express-serve-static-core";
-import { ParsedQs } from "qs";
 
 const signUpRouter = express.Router();
 
@@ -17,65 +14,21 @@ Amplify.configure({
   Auth: { Cognito: enviorment.Cognito },
 });
 
-const profileImageDir = path.join(
-  __dirname,
-  "..",
-  "document-home-harmony",
-  "profile-image"
-);
+const rootDir = path.parse(process.cwd()).root;
+const profileImageDir = path.join(rootDir, "document-home-harmony", "profile-image");
 
 if (!fs.existsSync(profileImageDir)) {
   fs.mkdirSync(profileImageDir, { recursive: true });
 }
 
-type DestinationFunction = (
-  error: Error | null,
-  destination: string
-) => void;
-
-type FileNameFunction = (
-  error: Error | null,
-  filename: string
-) => void;
-
-interface DiskStorage extends StorageEngine {
-  destination: (
-    req: Request,
-    file: Express.Multer.File,
-    cb: DestinationFunction
-  ) => void;
-  filename: (
-    req: Request,
-    file: Express.Multer.File,
-    cb: FileNameFunction
-  ) => void;
-}
-
-const storage: DiskStorage = {
-  destination: (
-    req: Request,
-    file: Express.Multer.File,
-    cb: DestinationFunction
-  ) => {
+const storage = multer.diskStorage({
+  destination: (req: Request, file: Express.Multer.File, cb) => {
     cb(null, profileImageDir);
   },
-  filename: (
-    req: Request,
-    file: Express.Multer.File,
-    cb: FileNameFunction
-  ) => {
-    const userId = req.body.userId;
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const extension = path.extname(file.originalname);
-    cb(null, `${userId}-${file.fieldname}-${uniqueSuffix}${extension}`);
+  filename: (req: Request, file: Express.Multer.File, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
   },
-  _handleFile: function (req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, file: Express.Multer.File, callback: (error?: any, info?: Partial<Express.Multer.File> | undefined) => void): void {
-    throw new Error("Function not implemented.");
-  },
-  _removeFile: function (req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, file: Express.Multer.File, callback: (error: Error | null) => void): void {
-    throw new Error("Function not implemented.");
-  }
-};
+});
 
 const upload = multer({ storage });
 
@@ -105,26 +58,30 @@ signUpRouter.post("/", upload.single("image"), async (req, res) => {
       password: registerInfo.password,
     });
 
-    const query = `insert into usersTable (fname, lname, email, birthdate, password) values ('${registerInfo.firstName}', '${registerInfo.lastName}', '${registerInfo.email}', '${registerInfo.birthday}', '${registerInfo.password}')`;
-    await DataSource.createQueryRunner().manager.query(query);
+    const query = `INSERT INTO usersTable (fname, lname, email, birthdate, password) VALUES ('${registerInfo.firstName}', '${registerInfo.lastName}', '${registerInfo.email}', '${registerInfo.birthday}', '${registerInfo.password}') RETURNING id`;
+    const result = await DataSource.createQueryRunner().manager.query(query);
+    const userId = result[0].id;
 
-    const idQuery = `select id from usersTable where email = '${registerInfo.email}'`;
-    const userId = await DataSource.createQueryRunner().manager.query(idQuery);
+    if (req.file) {
+      const oldPath = req.file.path;
+      const newFilename = `${userId}.png`;
+      const newPath = path.join(profileImageDir, newFilename);
+      fs.renameSync(oldPath, newPath);
+      req.file.path = newPath;
+    }
 
     res.status(200).json({
       success: true,
       message: "Registration success",
-      userId: userId[0].id,
+      userId: userId,
     });
   } catch (error: any) {
     console.log("Registration failed", error);
 
     if (error.name === "UsernameExistsException") {
-      res
-        .status(400)
-        .json({ success: false, error: "User with this mail already exist" });
+      res.status(400).json({ success: false, error: "User with this email already exists" });
     } else if (error.name === "InvalidParameterException") {
-      res.status(401).json({ success: false, error: "Invalid mail" });
+      res.status(401).json({ success: false, error: "Invalid email" });
     } else if (error.name === "InvalidPasswordException") {
       res.status(401).json({ success: false, error: "Invalid password" });
     } else {
