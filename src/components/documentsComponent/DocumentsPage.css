@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 2em;
+  }
+  
+  p {
+    text-align: center;
+    font-size: 1.2em;
+    margin: 20px 0;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #f8ede3;
+  }
+  
+  .balanceText {
+    align-self: flex-start;
+    margin-left: 20px;
+  }
+  
+  .dataGrid {
+    height: 400px;
+    width: 70%;
+    margin: 20px 0;
+    background: #dad5d2;
+  }
+  
+  .addButtonContainer {
+    width: 70%;
+    display: flex;
+    justify-content: flex-end;
+    margin: 20px 0;
+  }
+  
+  .addButton {
+    margin-right: 20px;
+    background-color: #f8c794;
+    color: black;
+    font-weight: 500;
+    text-transform: none;
+    border: none;
+    border-radius: 0.3125rem;
+    padding: 0.4375rem 1.25rem;
+    cursor: pointer;
+  }
+  
+  .addButton:hover {
+    background: #e4c2ab;
+  }
+  

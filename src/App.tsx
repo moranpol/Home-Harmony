@@ -7,6 +7,7 @@ import SignUp from "./components/signUpComponent/SignUpPage";
 import HomePage from "./components/homeComponent/HomePage";
 import ExpensesPage from "./components/expensesComponent/ExpensesPage";
 import ConfirmPage from "./components/signUpComponent/ConfirmPage";
+import DocumentsPage from "./components/documentsComponent/DocumentsPage";
 
 
 function AppWrapper({userId, setUserId} : {userId: number, setUserId: React.Dispatch<React.SetStateAction<number>>}) {
@@ -38,6 +39,7 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/expenses" element={<ExpensesPage userId={userId} />} />
         <Route path="/signup/confirm" element={<ConfirmPage userId={userId}/>} />
+        <Route path="/documents" element={<DocumentsPage userId={userId}/>} />
       </Routes>
     </BrowserRouter>
   );
