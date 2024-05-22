@@ -26,7 +26,7 @@ function Login({setUserId}: LoginProps) {
         alert("Login successful: "+ response.data.userId);
         setUserId(response.data.userId);
         localStorage.setItem("userId", response.data.userId);
-        navigate("/expenses");
+        navigate("/documents");
     })
     .catch((error) => {
         console.error("Login failed:", error.message);

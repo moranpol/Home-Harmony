@@ -45,8 +45,9 @@ function DocumentsPage({userId} : {userId: number}) {
                 <table>
                     <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Content</th>
+                            <th>Category</th>
+                            <th>Name</th>
+                            <th>Description</th>
                             {/* Add more columns as needed */}
                         </tr>
                     </thead>
@@ -55,6 +56,7 @@ function DocumentsPage({userId} : {userId: number}) {
                             <tr key={document.id}>
                                 <td>{document.category}</td>
                                 <td>{document.name}</td>
+                                <td>{document.description}</td>
                                 {/* Add more cells as needed */}
                             </tr>
                         ))}
@@ -66,7 +68,6 @@ function DocumentsPage({userId} : {userId: number}) {
             </div>
         </div>
     );
-    
 }
 
 export default DocumentsPage;
