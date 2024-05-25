@@ -22,7 +22,7 @@ function DocumentsPage({userId} : {userId: number}) {
                 setDocuments(response.data);
             })
             .catch((error) => {
-                console.error("Failed to fetch expenses:", error.message);
+                console.error("Failed to fetch documents:", error.message);
             });
         };
 
@@ -33,7 +33,7 @@ function DocumentsPage({userId} : {userId: number}) {
         { field: 'name', headerName: 'NAME', width: 150 },
         { field: 'category', headerName: 'CATEGORY', width: 150 },
         { field: 'description', headerName: 'DESCRIPTION', width: 150 },
-        { field: 'document', headerName: 'DOCUMENT', width: 150},
+        //{ field: 'document', headerName: 'DOCUMENT', width: 150},
     ];
     console.log("documents in DocumentsPage: ", documents);
     console.log("userId in DocumentsPage: ", userId);
