@@ -11,6 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 import AddApartmentDialog from "./AddApartmentDialog";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+axios.defaults.baseURL = "http://localhost:5000";
 
 function ApartmentsPage({ userId }: { userId: number }) {
   const [aptId, setAptId] = useState("");
@@ -27,13 +31,36 @@ function ApartmentsPage({ userId }: { userId: number }) {
     if (!aptId) {
       setErrors("Apartment Id is required");
       isValid = false;
+    } else if (aptId.length !== 6) {
+      setErrors("Apartment Id must be 6 characters");
+      isValid = false;
+    } else {
+      setErrors("");
     }
     return isValid;
   };
 
+  const navigate = useNavigate();
+
   const onSubmit = async () => {
     if (validateForm()) {
-      console.log("Submitted");
+      try {
+        const res = await axios.put("/apartments/search", { apartmentId: aptId, userId });
+        if (res.data.success) {
+          console.log("Apartment found");
+          alert("Apartment found successfully, welcome to your new apartment.");
+          navigate("/home");
+        } else {
+          setAptId("");
+          setErrors("Apartment not found, please try again or create a new apartment.");
+          alert("Apartment not found, please try again or create a new apartment.");
+        }
+      } catch (error) {
+        console.log("Apartment search failed", error);
+        setAptId("");
+        setErrors("Apartment search failed, please try again.");
+        alert("Apartment search failed, please try again.");
+      }
     }
   };
 
@@ -41,8 +68,13 @@ function ApartmentsPage({ userId }: { userId: number }) {
     setDialogOpen(true);
   };
 
-  const handleDialogClose = () => {
+  const handleDialogClose = (isCreated: boolean) => {
     setDialogOpen(false);
+
+    if (isCreated) {
+      alert("Apartment created successfully, welcome to your new apartment.");
+      navigate("/home");
+    }
   };
 
   return (
@@ -128,7 +160,9 @@ function ApartmentsPage({ userId }: { userId: number }) {
       <AddApartmentDialog
         userId={userId}
         open={dialogOpen}
-        onClose={handleDialogClose}
+        onClose={(isCreated: boolean) => {
+          handleDialogClose(isCreated);
+        }}
       />
     </Box>
   );
