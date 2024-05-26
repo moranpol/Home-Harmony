@@ -1,6 +1,6 @@
 // unnecessary ?? todo: remove
 
-import { Apartment } from './apartment';
+//import { Apartment } from './apartment';
 
 export class User {
     private readonly id: number;
@@ -8,15 +8,15 @@ export class User {
     private lname: string;
     private email: string;
     private is_admin: boolean;
-    private apartment: Apartment;
+    //private apartment: Apartment;
 
-    constructor(id: number, fname: string, lname: string, email: string, is_admin: boolean, apartment: Apartment) {
+    constructor(id: number, fname: string, lname: string, email: string, is_admin: boolean) {
         this.id = id;
         this.fname = fname;
         this.lname = lname;
         this.email = email;
         this.is_admin = is_admin;
-        this.apartment = apartment;
+        //this.apartment = apartment;
     }
 
     getId(): number {
@@ -39,9 +39,9 @@ export class User {
         return this.is_admin;
     }
 
-    getApartment(): Apartment {
-        return this.apartment;
-    }
+    // getApartment(): Apartment {
+    //     return this.apartment;
+    // }
 
     setFname(fname: string): void {
         this.fname = fname;
@@ -59,9 +59,9 @@ export class User {
         this.is_admin = is_admin;
     }
 
-    setApartment(apartment: Apartment): void {
-        this.apartment = apartment;
-    }
+    // setApartment(apartment: Apartment): void {
+    //     this.apartment = apartment;
+    // }
     
 }
 
