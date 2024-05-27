@@ -38,7 +38,7 @@ const AddApartmentDialog: React.FC<AddApartmentDialogProps> = ({
     let isValid: boolean = true;
     if (!apartmentInfo.address || apartmentInfo.address.split(" ").length < 3) {
       setErrors(
-        "Address is required and should contain at least two words(street, number and city)."
+        "Address is required and should contain at least 3 words(street, number and city)."
       );
       isValid = false;
     }
