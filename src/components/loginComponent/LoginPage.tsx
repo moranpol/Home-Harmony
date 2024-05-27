@@ -69,7 +69,7 @@ function Login({setUserId}: LoginProps) {
             <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
               <p className="mb-0">Don't have an account?</p>
               <MDBBtn outline className="mx-2" color="primary" onClick={handleSignInButtonClick}>
-                Sign in
+                Sign up
               </MDBBtn>
             </div>
           </div>

@@ -1,46 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Button from "@mui/material/Button";
-import { DataGrid } from '@mui/x-data-grid';
 import "./DocumentsPage.css";
+import AddDocumentsDialog from "./AddDocumentsDialog";
+import {
+    Button,
+} from "@mui/material";
 
-function onAddExpenseButtonClick() {
-    console.log("Add Document button clicked");
-}
+function DocumentsPage({ userId } : { userId: number }) {
+    const [documents, setDocuments] = useState<{ id: number; name: string; category: string; description: string; }[]>([]);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
-function AddExpenseButton({userId} : {userId: number}) {
-    return <Button variant="outlined" component="span" className="addButton" onClick={onAddExpenseButtonClick}>Add Document</Button>
-}
-
-function DocumentsPage({userId} : {userId: number}) {
-    const [documents, setDocuments] = useState<{ id: number; name: string; category: string; description: string;/*add documnet*/  }[]>([]);
-
-    useEffect(() => {
-        const fetchDocuments = async () => {
-            await axios.get(`/documents/${userId}`)
+    const fetchDocuments = async () => {
+        await axios.get(`/documents/${userId}`)
             .then((response) => {
                 setDocuments(response.data);
             })
             .catch((error) => {
                 console.error("Failed to fetch documents:", error.message);
             });
-        };
+    };
 
+    useEffect(() => {
         fetchDocuments();
     }, [userId]);
 
-    const columns = [
-        { field: 'name', headerName: 'NAME', width: 150 },
-        { field: 'category', headerName: 'CATEGORY', width: 150 },
-        { field: 'description', headerName: 'DESCRIPTION', width: 150 },
-        //{ field: 'document', headerName: 'DOCUMENT', width: 150},
-    ];
-    console.log("documents in DocumentsPage: ", documents);
-    console.log("userId in DocumentsPage: ", userId);
+    const handleDialogOpen = () => {
+        setDialogOpen(true);
+    };
+
+    const handleDialogClose = (isCreated: boolean) => {
+        setDialogOpen(false);
+        if (isCreated) {
+            alert("Document created successfully.");
+            fetchDocuments();  // Refresh the documents list
+        }
+    };
+
     return (
         <div className="container">
             <h1>Documents</h1>
-            
             <div className="dataGrid" style={{ height: 400, width: '70%' }}>
                 <table>
                     <thead>
@@ -48,7 +46,6 @@ function DocumentsPage({userId} : {userId: number}) {
                             <th>Category</th>
                             <th>Name</th>
                             <th>Description</th>
-                            {/* Add more columns as needed */}
                         </tr>
                     </thead>
                     <tbody>
@@ -57,15 +54,35 @@ function DocumentsPage({userId} : {userId: number}) {
                                 <td>{document.category}</td>
                                 <td>{document.name}</td>
                                 <td>{document.description}</td>
-                                {/* Add more cells as needed */}
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
             <div className="addButtonContainer">
-                <AddExpenseButton userId={userId} />
+                <Button
+                    onClick={handleDialogOpen}
+                    className="button"
+                    variant="contained"
+                    color="primary"
+                    sx={{
+                        backgroundColor: "#F8C794",
+                        color: "black",
+                        fontSize: "0.7rem",
+                        padding: "0.7rem 1rem",
+                        "&:hover": { backgroundColor: "#D8AE7E" },
+                    }}
+                >
+                    Add Document
+                </Button>
             </div>
+            <AddDocumentsDialog
+                aptId={102}
+                open={dialogOpen}
+                onClose={(isCreated: boolean) => {
+                    handleDialogClose(isCreated);
+                }}
+            />
         </div>
     );
 }
