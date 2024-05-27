@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import "./App.css";
 import LoginPage from "./components/loginComponent/LoginPage";
 import SignUp from "./components/signUpComponent/SignUpPage";
@@ -8,7 +7,7 @@ import HomePage from "./components/homeComponent/HomePage";
 import ExpensesPage from "./components/expensesComponent/ExpensesPage";
 import ConfirmPage from "./components/signUpComponent/ConfirmPage";
 import DocumentsPage from "./components/documentsComponent/DocumentsPage";
-
+import ApartmentsPage from "./components/apartmentsComponent/ApartmentsPage";
 
 function AppWrapper({userId, setUserId} : {userId: number, setUserId: React.Dispatch<React.SetStateAction<number>>}) {
   if (userId === -1) {
@@ -17,7 +16,6 @@ function AppWrapper({userId, setUserId} : {userId: number, setUserId: React.Disp
 
   return <HomePage />;
 }
-
 
 function App() {
   const [userId, setUserId] = useState(-1);
@@ -40,6 +38,7 @@ function App() {
         <Route path="/expenses" element={<ExpensesPage userId={userId} />} />
         <Route path="/signup/confirm" element={<ConfirmPage userId={userId}/>} />
         <Route path="/documents" element={<DocumentsPage userId={userId}/>} />
+        <Route path="/join-apartment" element={<ApartmentsPage userId={userId}/>} />
       </Routes>
     </BrowserRouter>
   );

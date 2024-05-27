@@ -1,6 +1,7 @@
 import express from "express";
 import loginRouter from "./login";
 import signUpRouter from "./signUp";
+import apartmentsRouter from "./apartments";
 import expensesRouter from "./expenses";
 import documentsRouter from "./documents";
 import DataSource from "./database/databasepg";
@@ -17,6 +18,7 @@ app.use("/login", loginRouter);
 app.use("/register", signUpRouter);
 app.use("/expenses", expensesRouter);
 app.use("/documents", documentsRouter);
+app.use("/apartments", apartmentsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
