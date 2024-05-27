@@ -34,7 +34,8 @@ router.post("/", async (req, res) => {
     res.status(200).json({ success: true, message: "Login successful", userId: userId});
   } catch (error) {
     console.error("Login error:", error);
-    res.status(401).json({ success: false, message: "Invalid email or password" });
+    console.log("error: ", error);
+    res.status(401).json({ success: false, message: "Invalid email or password",email,password,error });
   }
 });
 
