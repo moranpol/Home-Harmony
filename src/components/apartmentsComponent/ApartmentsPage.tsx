@@ -125,7 +125,6 @@ function ApartmentsPage({ userId }: { userId: number }) {
                 onClick={handleDialogOpen}
                 className="button"
                 variant="contained"
-                color="primary"
                 sx={{
                   backgroundColor: "#F8C794",
                   color: "black",
@@ -145,7 +144,6 @@ function ApartmentsPage({ userId }: { userId: number }) {
             className="button"
             type="submit"
             variant="contained"
-            color="primary"
             sx={{
               backgroundColor: "#F8C794",
               color: "black",

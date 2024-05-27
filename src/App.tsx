@@ -9,16 +9,26 @@ import ConfirmPage from "./components/signUpComponent/ConfirmPage";
 import DocumentsPage from "./components/documentsComponent/DocumentsPage";
 import ApartmentsPage from "./components/apartmentsComponent/ApartmentsPage";
 
+<<<<<<< HEAD
 function AppWrapper({userId, setUserId} : {userId: number, setUserId: React.Dispatch<React.SetStateAction<number>>}) {
   if (userId === -1) {
     return <LoginPage setUserId={setUserId}/>
   }
+=======
 
-  return <HomePage />;
-}
+>>>>>>> 57ad7f46bb263b6965ffdd1ab65fb7c5f69b2103
+
 
 function App() {
   const [userId, setUserId] = useState(-1);
+
+  function AppWrapper({userId, setUserId} : {userId: number, setUserId: React.Dispatch<React.SetStateAction<number>>}) {
+    if (userId === -1) {
+      return <LoginPage setUserId={setUserId}/>
+    }
+  
+    return <HomePage userId={userId}/>;
+  }
   
   useEffect(() => {
     const savedUserId = localStorage.getItem("userId");
@@ -34,7 +44,7 @@ function App() {
         <Route path="/" element={<AppWrapper userId={userId} setUserId={setUserId}/>}/>
         <Route path="/login" element={<LoginPage setUserId={setUserId}/>} />
         <Route path="/signup" element={<SignUp setUserId={setUserId}/>} />
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/home" element={<HomePage userId={userId}/>} />
         <Route path="/expenses" element={<ExpensesPage userId={userId} />} />
         <Route path="/signup/confirm" element={<ConfirmPage userId={userId}/>} />
         <Route path="/documents" element={<DocumentsPage userId={userId}/>} />

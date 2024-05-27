@@ -353,7 +353,6 @@ function SignUp({ setUserId }: LoginProps) {
             className="submitButton"
             type="submit"
             variant="contained"
-            color="primary"
             sx={{
               backgroundColor: "#F8C794",
               color: "black",
