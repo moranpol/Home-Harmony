@@ -3,37 +3,63 @@ import axios from 'axios';
 import Button from "@mui/material/Button";
 import { DataGrid } from '@mui/x-data-grid';
 import "./ExpensesPage.css";
+import AddExpenseForm from "./AddExpenseForm";
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 
-function onAddExpenseButtonClick() {
-    console.log("Add Expense button clicked");
-}
 
-function AddExpenseButton({userId} : {userId: number}) {
+function AddExpenseButton({userId, setShowForm} : {userId: number, setShowForm: React.Dispatch<React.SetStateAction<boolean>>}) {
+    function onAddExpenseButtonClick() {
+        console.log("Add Expense button clicked");
+        setShowForm(true);
+    }
+    
     return <Button variant="outlined" component="span" className="addButton" onClick={onAddExpenseButtonClick}>Add Expense</Button>
 }
 
 
-function CurrentBalanceText({userId} : {userId: number}) {
-    return <p className="balanceText">Current Balance: $1000</p>;
+function CurrentBalanceText({ balance }: { balance: number }) {
+    return <p className="balanceText">Current Balance: ${balance.toFixed(1)}</p>;
 }
 
 
 function ExpensesPage({userId} : {userId: number}) {
     const [expenses, setExpenses] = useState<{ id: number; name: string; date: string; product: string; cost: number; }[]>([]);
+    const [balance, setBalance] = useState(0);
+    const [showForm, setShowForm] = useState(false);
+
+    const fetchAllExpenses = async () => {
+        await axios.get(`/expenses/${userId}`)
+        .then((response) => {
+            setExpenses(response.data);
+        })
+        .catch((error) => {
+            console.error("Failed to fetch expenses:", error.message);
+        });
+    };
+
+    const fetchBalance = async () => {
+        await axios.get(`/expenses/balance/${userId}`)
+        .then((response) => {
+            setBalance(response.data);
+        })
+        .catch((error) => {
+            console.error("Failed to fetch expenses:", error.message);
+        });
+    };
 
     useEffect(() => {
-        const fetchExpenses = async () => {
-            await axios.get(`/expenses/${userId}`)
-            .then((response) => {
-                setExpenses(response.data);
-            })
-            .catch((error) => {
-                console.error("Failed to fetch expenses:", error.message);
-            });
-        };
-
-        fetchExpenses();
+        fetchBalance();
+        fetchAllExpenses();
     }, [userId]);
+
+    const handleExpenseAdded = () => {
+        console.log("Expense added");
+        fetchBalance();
+        fetchAllExpenses();
+    };
 
     const columns = [
         { field: 'fname', headerName: 'NAME', width: 150 },
@@ -44,16 +70,43 @@ function ExpensesPage({userId} : {userId: number}) {
 
     console.log("userId in ExpensesPage: ", userId);
     return (
+        /*
         <div className="container">
             <h1>Expenses Page</h1>
-            <CurrentBalanceText userId={userId}/>
+            <CurrentBalanceText balance={balance}/>
             
             <div className="dataGrid" style={{ height: 400, width: '70%' }}>
                 <DataGrid rows={expenses} columns={columns}   />
             </div>
             <div className="addButtonContainer">
-                <AddExpenseButton userId={userId} />
+                <AddExpenseButton userId={userId} setShowForm={setShowForm} />
             </div>
+            {showForm && <AddExpenseForm userId={userId} />}
+        </div>
+        */
+        <div>
+        
+            <Dialog open={showForm} onClose={() => setShowForm(false)}>
+                <DialogTitle>Add Expense</DialogTitle>
+                <DialogContent>
+                    <AddExpenseForm userId={userId} setShowForm={setShowForm} onExpenseAdded={handleExpenseAdded}/>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setShowForm(false)}>Close</Button>
+                </DialogActions>
+            </Dialog>
+            <div className="container">
+            <h1>Expenses Page</h1>
+            <CurrentBalanceText balance={balance}/>
+            
+            <div className="dataGrid" style={{ height: 400, width: '70%' }}>
+                <DataGrid rows={expenses} columns={columns}   />
+            </div>
+            <div className="addButtonContainer">
+                <AddExpenseButton userId={userId} setShowForm={setShowForm} />
+            </div>
+            {showForm && <AddExpenseForm userId={userId} setShowForm={setShowForm} onExpenseAdded={handleExpenseAdded}/>}
+        </div>
         </div>
     );
 }

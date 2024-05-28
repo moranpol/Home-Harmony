@@ -1,5 +1,5 @@
 import express from "express";
-import DataSource from "./database/databasepg";
+import queryRunner from "./database/databasepg";
 import multer from "multer";
 import { Request } from "express";
 import { Amplify } from "aws-amplify";
@@ -35,7 +35,7 @@ const upload = multer({ storage });
 signUpRouter.post("/confirm", async (req, res) => {
   const confirmationInfo = req.body;
   const query = `SELECT u.email FROM usersTable u WHERE u.id = '${confirmationInfo.userId}'`;
-  const email = await DataSource.createQueryRunner().manager.query(query);
+  const email = await queryRunner.query(query);
 
   try {
     await confirmSignUp({
@@ -59,7 +59,7 @@ signUpRouter.post("/", upload.single("image"), async (req, res) => {
     });
 
     const query = `INSERT INTO usersTable (fname, lname, email, birthdate, password) VALUES ('${registerInfo.firstName}', '${registerInfo.lastName}', '${registerInfo.email}', '${registerInfo.birthday}', '${registerInfo.password}') RETURNING id`;
-    const result = await DataSource.createQueryRunner().manager.query(query);
+    const result = await queryRunner.query(query);
     const userId = result[0].id;
 
     if (req.file) {
