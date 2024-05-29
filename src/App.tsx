@@ -18,15 +18,12 @@ function AppWrapper({userId, setUserId} : {userId: number, setUserId: React.Disp
 }
 
 function App() {
-  const [userId, setUserId] = useState(-1);
-  
-  useEffect(() => {
+  const [userId, setUserId] = useState(() => {
     const savedUserId = localStorage.getItem("userId");
-    if (savedUserId) {
-      console.log("retrieved previous userId: ", savedUserId);
-      setUserId(Number(savedUserId));
-    }
-  }, []);
+    const userId = savedUserId ? Number(savedUserId) : -1;
+    console.log("retrieved previous userId: ", userId);
+    return userId;
+  });
 
   return (
     <BrowserRouter>
