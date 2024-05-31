@@ -1,5 +1,5 @@
 import express from "express";
-import DataSource from "./database/databasepg";
+import queryRunner from "./database/databasepg";
 
 const documentsRouter = express.Router();
 
@@ -8,7 +8,7 @@ documentsRouter.get("/:userId", async (req, res) => {
     const apartmentId = await getAppartmentId(userId);
     
     const query = `SELECT d.id, d.user_id, d.category, d.description, d.name, d.aptid FROM documentstable d WHERE d.aptid = ${apartmentId}`;
-    const result = await DataSource.createQueryRunner().manager.query(query);
+    const result = await queryRunner.query(query);
     console.log("result: ", result);
     res.status(200).json(result);
 });
@@ -22,7 +22,7 @@ documentsRouter.post("/create", async (req, res) => {
 
     try {
         const query = `INSERT INTO documentstable (category, name, description, aptid) VALUES ($1, $2, $3, $4)`;
-        await DataSource.createQueryRunner().manager.query(query, [category, name, description, aptId]);
+        await queryRunner.query(query, [category, name, description, aptId]);
         res.status(201).json({ success: true, message: "Document created successfully" });
     } catch (error) {
         console.error("Error creating document:", error);
@@ -32,7 +32,7 @@ documentsRouter.post("/create", async (req, res) => {
 
 async function getAppartmentId(userId: number): Promise<number> {
     const query = `SELECT u.aptid FROM userstable u WHERE u.id = '${userId}'`;
-    const result = await DataSource.createQueryRunner().manager.query(query);
+    const result = await queryRunner.query(query);
     return result[0]?.aptid || 102;  // Return 102 if no apartment ID is found
 }
 

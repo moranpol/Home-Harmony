@@ -9,55 +9,54 @@ import { Grid } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
 
-interface AddApartmentDialogProps {
+interface AddBulletinDialogProps {
   userId: number;
   open: boolean;
   onClose: (isCreated: boolean) => void;
 }
 
-const AddApartmentDialog: React.FC<AddApartmentDialogProps> = ({
+const AddBulletinDialog: React.FC<AddBulletinDialogProps> = ({
   userId,
   open,
   onClose,
 }) => {
-  const [apartmentInfo, setApartmentInfo] = useState({
-    address: "",
-    name: "",
+  const [bulletinInfo, setBulletinInfo] = useState({
+    info: "",
+    date: undefined as Date | undefined,
   });
 
   const [errors, setErrors] = useState("");
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setApartmentInfo({ ...apartmentInfo, [name]: value });
+    const { value } = e.target;
+    setBulletinInfo({ info: value, date: new Date()});
   };
 
   const validateForm = (): boolean => {
-    let isValid: boolean = true;
-    if (!apartmentInfo.address || apartmentInfo.address.split(" ").length < 3) {
+    if (!bulletinInfo.info) {
       setErrors(
-        "Address is required and should contain at least 3 words(street, number and city)."
+        "Info cannot be empty."
       );
-      isValid = false;
+      return false;
     }
-    return isValid;
+    return true;
   };
 
   const onSubmit = async () => {
     if (validateForm()) {
       axios
-        .post("/apartments/create", { ...apartmentInfo, userId })
+        .post("/bulletin/create", { ...bulletinInfo, userId })
         .then((res) => {
           if (res.data.success) {
-            console.log("Apartment created");
+            console.log("Bulletin created");
             onClose(true);
           } else {
-            alert("Apartment creation failed, please try again.");
+            alert("Bulletin creation failed, please try again.");
           }
         })
         .catch((error: any) => {
-          console.log("Apartment creation failed", error);
-          alert("Apartment creation failed, please try again.");
+          console.log("Bulletin creation failed", error);
+          alert("Bulletin creation failed, please try again.");
         });
     }
   };
@@ -83,7 +82,7 @@ const AddApartmentDialog: React.FC<AddApartmentDialogProps> = ({
           position: "relative",
         }}
       >
-        Create Apartment
+        Create Bulletin
         <span
           style={{
             content: "",
@@ -111,29 +110,16 @@ const AddApartmentDialog: React.FC<AddApartmentDialogProps> = ({
           <Grid item xs={12}>
             <TextField
               onChange={onChange}
-              value={apartmentInfo.address}
+              value={bulletinInfo.info}
               error={Boolean(errors)}
               helperText={errors}
               style={{ marginBottom: "1rem", width: "100%" }}
-              autoComplete="street-address"
-              name="address"
+              autoComplete="bulletin-info"
+              name="info"
               required
               fullWidth
-              id="address"
-              label="Address"
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              onChange={onChange}
-              value={apartmentInfo.name}
-              style={{ marginBottom: "1rem", width: "100%" }}
-              autoComplete="apartment-name"
-              name="name"
-              fullWidth
-              id="name"
-              label="Apartment Name"
+              id="info"
+              label="Info"
               InputLabelProps={{ shrink: true }}
             />
           </Grid>
@@ -174,4 +160,4 @@ const AddApartmentDialog: React.FC<AddApartmentDialogProps> = ({
   );
 };
 
-export default AddApartmentDialog;
+export default AddBulletinDialog;

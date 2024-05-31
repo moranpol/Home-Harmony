@@ -8,6 +8,9 @@ import ExpensesPage from "./components/expensesComponent/ExpensesPage";
 import ConfirmPage from "./components/signUpComponent/ConfirmPage";
 import DocumentsPage from "./components/documentsComponent/DocumentsPage";
 import ApartmentsPage from "./components/apartmentsComponent/ApartmentsPage";
+import axios from "axios";
+
+axios.defaults.baseURL = "http://localhost:5000";
 
 function App() {
   function AppWrapper({

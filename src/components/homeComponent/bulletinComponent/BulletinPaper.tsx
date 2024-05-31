@@ -3,14 +3,7 @@ import React, { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import "./BulletinPaper.css";
-
-interface BulletinPaperProps {
-  id: number;
-  userName: string;
-  info: string;
-  date: Date;
-  onDelete: (id: number) => void;
-}
+import { BulletinProps } from "./bulletin";
 
 function BulletinPaper({
   id,
@@ -18,7 +11,7 @@ function BulletinPaper({
   info,
   date,
   onDelete,
-}: BulletinPaperProps): React.ReactElement {
+}: BulletinProps): React.ReactElement {
   const [isHovering, setIsHovering] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("#AD9999");
 

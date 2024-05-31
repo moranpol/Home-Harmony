@@ -14,8 +14,6 @@ import AddApartmentDialog from "./AddApartmentDialog";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-axios.defaults.baseURL = "http://localhost:5000";
-
 function ApartmentsPage({ userId }: { userId: number }) {
   const [aptId, setAptId] = useState("");
   const [errors, setErrors] = useState("");

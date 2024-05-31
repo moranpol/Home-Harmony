@@ -4,6 +4,7 @@ import signUpRouter from "./signUp";
 import apartmentsRouter from "./apartments";
 import expensesRouter from "./expenses";
 import documentsRouter from "./documents";
+import bulletinsRouter from "./bulletin";
 import bodyParser from "body-parser";
 import cors from "cors";
 
@@ -19,6 +20,7 @@ app.use("/register", signUpRouter);
 app.use("/expenses", expensesRouter);
 app.use("/documents", documentsRouter);
 app.use("/apartments", apartmentsRouter);
+app.use("/bulletins", bulletinsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

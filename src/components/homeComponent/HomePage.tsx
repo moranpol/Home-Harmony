@@ -1,21 +1,67 @@
-import React, { useState } from "react";
-import BulletinPaper from "./BulletinPaper";
-
-const initialBulletins = [
-    { id: 1, userName: "John Doe", info: "Meeting at 3 PM", date: new Date() },
-    { id: 2, userName: "Jane Smith", info: "Party on Friday", date: new Date() },
-  ];
+import React, { useEffect, useState } from "react";
+import BulletinPaper from "./bulletinComponent/BulletinPaper";
+import axios from "axios";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import Bulletin from "./bulletinComponent/bulletin";
+import "./HomePage.css";
+import AddBulletinDialog from "./bulletinComponent/AddBulletinDialog";
+import { IconButton } from "@mui/material";
 
 function HomePage({ userId }: { userId: number }) {
-  const [bulletins, setBulletins] = useState(initialBulletins);
+  const [bulletins, setBulletins] = useState<Bulletin[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get(`/bulletins/${userId}`)
+      .then((res) => {
+        const data = res.data;
+        const bulletinsList: Bulletin[] = data.map((bulletin: any) => ({
+          id: bulletin.id,
+          userName: bulletin.userName,
+          info: bulletin.info,
+          date: new Date(bulletin.date),
+        }));
+        setBulletins(bulletinsList);
+      })
+      .catch((error) => {
+        console.log("Failed to retrieve bulletins", error);
+      });
+  }, [userId]);
 
   const handleDelete = (id: number) => {
-    //todo: delete bulletin with id
+    axios
+      .delete(`/bulletins/${id}`)
+      .then((res) => {
+        if (res.data.success) {
+          setBulletins((prevBulletins) =>
+            prevBulletins.filter((bulletin) => bulletin.id !== id)
+          );
+        } else {
+          console.log("Failed to delete bulletin");
+        }
+      })
+      .catch((error) => {
+        console.log("Failed to delete bulletin", error);
+      });
+  };
+
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = (isCreated: boolean) => {
+    setDialogOpen(false);
+
+    if (isCreated) {
+      alert("Apartment created successfully, welcome to your new apartment.");
+    }
   };
 
   return (
     <div style={{ margin: "10px" }}>
-      {bulletins.map(bulletin => (
+      {bulletins.map((bulletin) => (
         <BulletinPaper
           key={bulletin.id}
           id={bulletin.id}
@@ -25,6 +71,25 @@ function HomePage({ userId }: { userId: number }) {
           onDelete={handleDelete}
         />
       ))}
+      <IconButton
+        onClick={handleDialogOpen}
+        aria-label="add"
+        size="large"
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+      >
+        <AddCircleOutlineIcon
+          fontSize="large"
+          style={{ color: isHovering ? "black" : "" }}
+        />
+      </IconButton>
+      <AddBulletinDialog
+        userId={userId}
+        open={dialogOpen}
+        onClose={(isCreated: boolean) => {
+          handleDialogClose(isCreated);
+        }}
+      />
     </div>
   );
 }

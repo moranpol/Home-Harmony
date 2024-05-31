@@ -15,8 +15,6 @@ import "./SignUpPage.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-axios.defaults.baseURL = "http://localhost:5000";
-
 type LoginProps = {
   setUserId: React.Dispatch<React.SetStateAction<any>>;
 };
