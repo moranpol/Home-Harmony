@@ -26,13 +26,14 @@ function App() {
 
     return <HomePage userId={userId}/>;
   }
-
+/*
   const [userId, setUserId] = useState(() => {
     const savedUserId = localStorage.getItem("userId");
     const userId = savedUserId ? Number(savedUserId) : -1;
     console.log("retrieved previous userId: ", userId);
     return userId;
-  });
+  });*/
+  const [userId, setUserId] = useState((18));
 
   return (
     <BrowserRouter>

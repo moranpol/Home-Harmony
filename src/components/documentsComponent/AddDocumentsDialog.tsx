@@ -11,13 +11,13 @@ import axios from "axios";
 axios.defaults.baseURL = "http://localhost:5000";
 
 interface AddDocumentDialogProps {
-  aptId: number;
+  userId: number;
   open: boolean;
   onClose: (isCreated: boolean) => void;
 }
 
 const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
-  aptId,
+  userId,
   open,
   onClose,
 }) => {
@@ -46,7 +46,7 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
   const onSubmit = async () => {
     if (validateForm()) {
       axios
-        .post("/documents/create", { ...documentInfo, aptId })
+        .post("/documents/create", { ...documentInfo, userId })
         .then((res) => {
           if (res.data.success) {
             console.log("Document created");

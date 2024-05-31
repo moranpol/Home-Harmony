@@ -36,6 +36,21 @@ function DocumentsPage({ userId } : { userId: number }) {
         }
     };
 
+    const handleDeleteDocument = async (documentId: number) => {
+        try {
+            const response = await axios.delete(`/documents/${documentId}`);
+            if (response.data.success) {
+                alert("Document deleted successfully.");
+                fetchDocuments();  // Refresh the documents list
+            } else {
+                alert("Failed to delete document, please try again.");
+            }
+        } catch (error: any) {
+            console.error("Failed to delete document:", error.message);
+            alert("Failed to delete document, please try again.");
+        }
+    };
+    
     return (
         <div className="container">
             <h1>Documents</h1>
@@ -46,6 +61,7 @@ function DocumentsPage({ userId } : { userId: number }) {
                             <th>Category</th>
                             <th>Name</th>
                             <th>Description</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,6 +70,15 @@ function DocumentsPage({ userId } : { userId: number }) {
                                 <td>{document.category}</td>
                                 <td>{document.name}</td>
                                 <td>{document.description}</td>
+                                <td>
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        onClick={() => handleDeleteDocument(document.id)}
+                                    >
+                                        Delete
+                                    </Button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -77,7 +102,7 @@ function DocumentsPage({ userId } : { userId: number }) {
                 </Button>
             </div>
             <AddDocumentsDialog
-                aptId={102}
+                userId={userId}
                 open={dialogOpen}
                 onClose={(isCreated: boolean) => {
                     handleDialogClose(isCreated);
