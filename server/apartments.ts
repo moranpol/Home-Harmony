@@ -1,11 +1,11 @@
 import express from "express";
-import DataSource from "./database/databasepg";
+import queryRunner from "./database/databasepg";
 
 const apartmentsRouter = express.Router();
 
 function updateUserApartment(userId: number, apartmentId: number) {
   const query = `UPDATE usersTable SET aptid = ${apartmentId} WHERE id = ${userId}`;
-  DataSource.createQueryRunner().manager.query(query);
+  queryRunner.query(query);
 }
 
 apartmentsRouter.put("/search", async (req, res) => {
@@ -13,7 +13,7 @@ apartmentsRouter.put("/search", async (req, res) => {
 
   try {
     const query = `SELECT * FROM apartmentsTable WHERE id = ${apartmentInfo.apartmentId}`;
-    const result = await DataSource.createQueryRunner().manager.query(query);
+    const result = await queryRunner.query(query);
 
     if (result.length !== 0) {
       updateUserApartment(apartmentInfo.userId, apartmentInfo.apartmentId);
@@ -31,7 +31,7 @@ apartmentsRouter.post("/create", async (req, res) => {
 
   try {
     const query = `INSERT INTO apartmentsTable (address, name, managerId) VALUES ('${apartmentInfo.address}', '${apartmentInfo.name}', '${apartmentInfo.userId}') RETURNING id`;
-    const result = await DataSource.createQueryRunner().manager.query(query);
+    const result = await queryRunner.query(query);
     const apartmentId = result[0].id;
     updateUserApartment(apartmentInfo.userId, apartmentId);
     res.status(200).json({

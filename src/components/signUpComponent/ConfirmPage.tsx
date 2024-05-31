@@ -11,8 +11,6 @@ import "./SignUpPage.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-axios.defaults.baseURL = "http://localhost:5000";
-
 function ConfirmPage({ userId }: { userId: number }) {
   const [confirmationCode, setConfirmationCode] = useState("");
 
