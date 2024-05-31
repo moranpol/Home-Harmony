@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import LoginPage from "./components/loginComponent/LoginPage";
@@ -10,8 +10,6 @@ import DocumentsPage from "./components/documentsComponent/DocumentsPage";
 import ApartmentsPage from "./components/apartmentsComponent/ApartmentsPage";
 
 function App() {
-  const [userId, setUserId] = useState(-1);
-
   function AppWrapper({
     userId,
     setUserId,
@@ -23,16 +21,15 @@ function App() {
       return <LoginPage setUserId={setUserId} />;
     }
 
-    return <HomePage userId={userId} />;
+    return <HomePage userId={userId}/>;
   }
 
-  useEffect(() => {
+  const [userId, setUserId] = useState(() => {
     const savedUserId = localStorage.getItem("userId");
-    if (savedUserId) {
-      console.log("retrieved previous userId: ", savedUserId);
-      setUserId(Number(savedUserId));
-    }
-  }, []);
+    const userId = savedUserId ? Number(savedUserId) : -1;
+    console.log("retrieved previous userId: ", userId);
+    return userId;
+  });
 
   return (
     <BrowserRouter>

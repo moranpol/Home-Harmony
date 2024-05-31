@@ -4,9 +4,9 @@ import signUpRouter from "./signUp";
 import apartmentsRouter from "./apartments";
 import expensesRouter from "./expenses";
 import documentsRouter from "./documents";
-import DataSource from "./database/databasepg";
 import bodyParser from "body-parser";
 import cors from "cors";
+
 const app = express();
 const PORT = 5000;
 
@@ -22,11 +22,4 @@ app.use("/apartments", apartmentsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
-  DataSource.initialize()
-    .then(() => {
-      console.log("Database connected");
-    })
-    .catch((err) => {
-      console.log("Error connecting to database", err);
-    });
 });

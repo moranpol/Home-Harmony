@@ -1,5 +1,5 @@
 import express from "express";
-import DataSource from "./database/databasepg";
+import queryRunner from "./database/databasepg";
 import { Amplify} from "aws-amplify";
 import { enviorment } from "./enviorments/enviorment";
 import { signIn} from "aws-amplify/auth";
@@ -44,7 +44,7 @@ async function validateLogin1(
   password: string
 ): Promise<boolean> {
   const query = `SELECT u.password FROM usersTable u WHERE u.email = '${email}'`;
-  const result = await DataSource.createQueryRunner().manager.query(query);
+  const result = await queryRunner.query(query);
   const password_from_table = result[0]?.password;
   return password === password_from_table;
 }
@@ -77,7 +77,7 @@ async function validateLogin2(
 
 async function getId(email: string): Promise<number> {
   const query = `SELECT u.id FROM usersTable u WHERE u.email = '${email}'`;
-  const result = await DataSource.createQueryRunner().manager.query(query);
+  const result = await queryRunner.query(query);
   return result[0]?.id;
 }
 export default router;
