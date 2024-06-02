@@ -66,13 +66,12 @@ function AddExpenseForm({ userId, setShowForm, onExpenseAdded  }: { userId: numb
             .then((response) => {
                 console.log("Expense added successfully");
                 console.log("Response: ", response.data);
+                onExpenseAdded();
+                setShowForm(false);
             })
             .catch((error) => {
                 console.error("Failed to add expense:", error.message);
             });
-
-            onExpenseAdded();
-            setShowForm(false);
         }
     };
 
