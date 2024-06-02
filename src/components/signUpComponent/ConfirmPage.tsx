@@ -9,8 +9,7 @@ import Grid from "@mui/material/Grid";
 import { TextField } from '@mui/material';
 import "./SignUpPage.css";
 import axios from "axios";
-
-axios.defaults.baseURL = "http://localhost:5000";
+import { useNavigate } from "react-router-dom";
 
 function ConfirmPage({ userId }: { userId: number }) {
   const [confirmationCode, setConfirmationCode] = useState("");
@@ -31,8 +30,9 @@ function ConfirmPage({ userId }: { userId: number }) {
     setConfirmationCode(event.target.value);
   };
 
+  const navigate = useNavigate();
+
   const handleConfirm = () => {
-    
     if (validateForm()) {
       axios
         .post("register/confirm", {
@@ -43,6 +43,7 @@ function ConfirmPage({ userId }: { userId: number }) {
           console.log(response);
           if (response.data.success) {
             alert("Confirmation success");
+            navigate("/join-apartment");
           }
         })
         .catch((error) => {

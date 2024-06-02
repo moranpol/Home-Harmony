@@ -26,7 +26,7 @@ function Login({setUserId}: LoginProps) {
         alert("Login successful: "+ response.data.userId);
         setUserId(response.data.userId);
         localStorage.setItem("userId", response.data.userId);
-        navigate("/expenses");
+        navigate("/home");
     })
     .catch((error) => {
         console.error("Login failed:", error.message);
@@ -69,7 +69,7 @@ function Login({setUserId}: LoginProps) {
             <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
               <p className="mb-0">Don't have an account?</p>
               <MDBBtn outline className="mx-2" color="primary" onClick={handleSignInButtonClick}>
-                Sign in
+                Sign up
               </MDBBtn>
             </div>
           </div>

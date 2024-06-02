@@ -72,8 +72,6 @@ function AddExpenseForm({ userId, setShowForm, onExpenseAdded  }: { userId: numb
             .catch((error) => {
                 console.error("Failed to add expense:", error.message);
             });
-
-            
         }
     };
 

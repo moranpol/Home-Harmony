@@ -15,8 +15,6 @@ import "./SignUpPage.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-axios.defaults.baseURL = "http://localhost:5000";
-
 type LoginProps = {
   setUserId: React.Dispatch<React.SetStateAction<any>>;
 };
@@ -353,7 +351,6 @@ function SignUp({ setUserId }: LoginProps) {
             className="submitButton"
             type="submit"
             variant="contained"
-            color="primary"
             sx={{
               backgroundColor: "#F8C794",
               color: "black",
