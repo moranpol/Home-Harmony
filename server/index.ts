@@ -4,7 +4,7 @@ import signUpRouter from "./signUp";
 import apartmentsRouter from "./apartments";
 import expensesRouter from "./expenses";
 import documentsRouter from "./documents";
-import bulletinsRouter from "./bulletin";
+import bulletinsRouter from "./bulletins";
 import bodyParser from "body-parser";
 import cors from "cors";
 

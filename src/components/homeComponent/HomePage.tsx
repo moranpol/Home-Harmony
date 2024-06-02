@@ -12,7 +12,7 @@ function HomePage({ userId }: { userId: number }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
-  useEffect(() => {
+  const getBulletins = () => {
     axios
       .get(`/bulletins/${userId}`)
       .then((res) => {
@@ -28,6 +28,10 @@ function HomePage({ userId }: { userId: number }) {
       .catch((error) => {
         console.log("Failed to retrieve bulletins", error);
       });
+  }
+
+  useEffect(() => {
+    getBulletins();
   }, [userId]);
 
   const handleDelete = (id: number) => {
@@ -55,7 +59,8 @@ function HomePage({ userId }: { userId: number }) {
     setDialogOpen(false);
 
     if (isCreated) {
-      alert("Apartment created successfully, welcome to your new apartment.");
+      alert("Bulletin created successfully.");
+      getBulletins();
     }
   };
 

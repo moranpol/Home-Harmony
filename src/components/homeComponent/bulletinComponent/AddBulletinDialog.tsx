@@ -29,14 +29,12 @@ const AddBulletinDialog: React.FC<AddBulletinDialogProps> = ({
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setBulletinInfo({ info: value, date: new Date()});
+    setBulletinInfo({ info: value, date: new Date() });
   };
 
   const validateForm = (): boolean => {
     if (!bulletinInfo.info) {
-      setErrors(
-        "Info cannot be empty."
-      );
+      setErrors("Info cannot be empty.");
       return false;
     }
     return true;
@@ -45,7 +43,7 @@ const AddBulletinDialog: React.FC<AddBulletinDialogProps> = ({
   const onSubmit = async () => {
     if (validateForm()) {
       axios
-        .post("/bulletin/create", { ...bulletinInfo, userId })
+        .post("/bulletins/create", { ...bulletinInfo, userId })
         .then((res) => {
           if (res.data.success) {
             console.log("Bulletin created");
@@ -70,13 +68,15 @@ const AddBulletinDialog: React.FC<AddBulletinDialogProps> = ({
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
+        maxWidth: "50rem", 
+        margin: "auto",
       }}
     >
       <DialogTitle
         style={{
           textAlign: "center",
           color: "#333333",
-          fontSize: "2rem",
+          fontSize: "2.5rem",
           letterSpacing: "0.125rem",
           textShadow: "0.125rem 0.125rem 0.25rem rgba(0, 0, 0, 0.2)",
           position: "relative",
@@ -85,23 +85,23 @@ const AddBulletinDialog: React.FC<AddBulletinDialogProps> = ({
         Create Bulletin
         <span
           style={{
-            content: "",
+            content: '""',
             position: "absolute",
-            bottom: "-0.625rem",
+            bottom: "-0.625rem", 
             left: "50%",
             transform: "translateX(-50%)",
-            width: "5rem",
-            height: "0.1875rem",
+            width: "5rem", 
+            height: "0.1875rem", 
             backgroundColor: "#f8c794",
-            borderRadius: "0.125rem",
+            borderRadius: "0.125rem", 
           }}
         />
       </DialogTitle>
       <DialogContent
         style={{
           width: "100%",
-          maxWidth: "37.5rem",
-          padding: "2rem",
+          maxWidth: "37.5rem", 
+          padding: "2rem", 
           boxSizing: "border-box",
           overflow: "visible",
         }}
@@ -113,7 +113,12 @@ const AddBulletinDialog: React.FC<AddBulletinDialogProps> = ({
               value={bulletinInfo.info}
               error={Boolean(errors)}
               helperText={errors}
-              style={{ marginBottom: "1rem", width: "100%" }}
+              style={{
+                marginBottom: "1rem", 
+                width: "100%",
+                border: "0.125rem solid #ccc", 
+                borderRadius: "0.25rem", 
+              }}
               autoComplete="bulletin-info"
               name="info"
               required
@@ -121,6 +126,7 @@ const AddBulletinDialog: React.FC<AddBulletinDialogProps> = ({
               id="info"
               label="Info"
               InputLabelProps={{ shrink: true }}
+              variant="outlined"
             />
           </Grid>
         </Grid>
@@ -131,7 +137,7 @@ const AddBulletinDialog: React.FC<AddBulletinDialogProps> = ({
           style={{
             textTransform: "none",
             border: "none",
-            borderRadius: "0.3125rem",
+            borderRadius: "0.3125rem", 
             cursor: "pointer",
             fontWeight: "500",
             transition: "background-color 0.3s ease",
@@ -146,7 +152,7 @@ const AddBulletinDialog: React.FC<AddBulletinDialogProps> = ({
           style={{
             textTransform: "none",
             border: "none",
-            borderRadius: "0.3125rem",
+            borderRadius: "0.3125rem", 
             cursor: "pointer",
             fontWeight: "500",
             transition: "background-color 0.3s ease",
