@@ -11,7 +11,6 @@ interface Bulletin {
 }
 
 bulletinsRouter.get("/:userId", async (req, res) => {
-  console.log("bulletinsRouter.get, userId: ", req.params.userId);
   try {
     const userId = Number(req.params.userId);
     const query = `SELECT b.id, uc.fname, uc.lname, b.info, b.date FROM bulletinstable b JOIN userstable u ON b.aptid = u.aptid JOIN userstable uc ON b.userid = uc.id WHERE u.id = ${userId} ORDER BY b.date DESC;`;
@@ -30,7 +29,6 @@ bulletinsRouter.get("/:userId", async (req, res) => {
 });
 
 bulletinsRouter.delete("/:id", async (req, res) => {
-  console.log("bulletinsRouter.delete, id: ", req.params.id);
   try {
     const id = Number(req.params.id);
     const query = `DELETE FROM bulletinstable WHERE id = ${id};`;
@@ -39,6 +37,18 @@ bulletinsRouter.delete("/:id", async (req, res) => {
   } catch (err) {
     console.error("Failed to delete bulletin:", err);
     res.status(500).send("Failed to delete bulletin");
+  }
+});
+
+bulletinsRouter.post("/create", async (req, res) => {
+  try {
+    const { info, date, userId } = req.body;
+    const query = `INSERT INTO bulletinstable (info, date, userid, aptid) VALUES ('${info}', '${date}', ${userId}, (SELECT aptid FROM userstable WHERE id = ${userId}));`;
+    await queryRunner.query(query);
+    res.status(200).json({ success: true });
+  } catch (err) {
+    console.error("Failed to create bulletin:", err);
+    res.status(500).send("Failed to create bulletin");
   }
 });
 
