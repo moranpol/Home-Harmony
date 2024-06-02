@@ -10,8 +10,7 @@ import DocumentsPage from "./components/documentsComponent/DocumentsPage";
 import ApartmentsPage from "./components/apartmentsComponent/ApartmentsPage";
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:5000";
-
+axios.defaults.baseURL = "http://54.145.47.237:5000";
 function App() {
   function AppWrapper({
     userId,
