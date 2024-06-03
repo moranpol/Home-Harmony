@@ -6,6 +6,7 @@ import Bulletin from "./bulletinComponent/bulletin";
 import "./HomePage.css";
 import AddBulletinDialog from "./bulletinComponent/AddBulletinDialog";
 import { IconButton } from "@mui/material";
+import NavigateBar from "../navigateBarComponent/NavigateBar";
 
 function HomePage({ userId }: { userId: number }) {
   const [bulletins, setBulletins] = useState<Bulletin[]>([]);
@@ -66,6 +67,7 @@ function HomePage({ userId }: { userId: number }) {
 
   return (
     <div style={{ margin: "10px" }}>
+      <NavigateBar userId={userId}/>
       {bulletins.map((bulletin) => (
         <BulletinPaper
           key={bulletin.id}
