@@ -14,13 +14,15 @@ documentsRouter.get("/:userId", async (req, res) => {
 });
 
 documentsRouter.post("/create", async (req, res) => {
-    const { category, name, description, aptId } = req.body;
+    const { category, name, description, userId } = req.body;
     
-    if (!category || !name || !description || !aptId) {
+    if (!category || !name || !description || !userId) {
         return res.status(400).json({ success: false, message: "All fields are required" });
     }
 
     try {
+        const aptId = await getAppartmentId(userId);
+
         const query = `INSERT INTO documentstable (category, name, description, aptid) VALUES ($1, $2, $3, $4)`;
         await queryRunner.query(query, [category, name, description, aptId]);
         res.status(201).json({ success: true, message: "Document created successfully" });
@@ -30,10 +32,24 @@ documentsRouter.post("/create", async (req, res) => {
     }
 });
 
+documentsRouter.delete("/:documentId", async (req, res) => {
+    const documentId = Number(req.params.documentId);
+    
+    try {
+        const query = `DELETE FROM documentstable WHERE id = $1`;
+        await queryRunner.query(query, [documentId]);
+        res.status(200).json({ success: true, message: "Document deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting document:", error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+});
+
 async function getAppartmentId(userId: number): Promise<number> {
     const query = `SELECT u.aptid FROM userstable u WHERE u.id = '${userId}'`;
     const result = await queryRunner.query(query);
-    return result[0]?.aptid || 102;  // Return 102 if no apartment ID is found
+    console.log("aptId: ", result[0]?.aptid);
+    return result[0]?.aptid;
 }
 
 export class Documents {
