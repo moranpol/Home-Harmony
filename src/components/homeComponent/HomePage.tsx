@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import BulletinPaper from "./bulletinComponent/BulletinPaper";
 import axios from "axios";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -12,7 +12,7 @@ function HomePage({ userId }: { userId: number }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
-  useEffect(() => {
+  const getBulletins = useCallback(() => {
     axios
       .get(`/bulletins/${userId}`)
       .then((res) => {
@@ -29,6 +29,10 @@ function HomePage({ userId }: { userId: number }) {
         console.log("Failed to retrieve bulletins", error);
       });
   }, [userId]);
+
+  useEffect(() => {
+    getBulletins();
+  }, [getBulletins]);
 
   const handleDelete = (id: number) => {
     axios
@@ -55,7 +59,8 @@ function HomePage({ userId }: { userId: number }) {
     setDialogOpen(false);
 
     if (isCreated) {
-      alert("Apartment created successfully, welcome to your new apartment.");
+      alert("Bulletin created successfully.");
+      getBulletins();
     }
   };
 

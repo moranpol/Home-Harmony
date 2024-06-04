@@ -8,9 +8,10 @@ import ExpensesPage from "./components/expensesComponent/ExpensesPage";
 import ConfirmPage from "./components/signUpComponent/ConfirmPage";
 import DocumentsPage from "./components/documentsComponent/DocumentsPage";
 import ApartmentsPage from "./components/apartmentsComponent/ApartmentsPage";
+import NavigateBar from "./components/navigateBarComponent/NavigateBar";
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "http://54.145.47.237:5000";
 
 function App() {
   function AppWrapper({
@@ -24,7 +25,12 @@ function App() {
       return <LoginPage setUserId={setUserId} />;
     }
 
-    return <HomePage userId={userId}/>;
+    return (
+      <div>
+        <NavigateBar userId={userId} setUserId={setUserId} />
+        <HomePage userId={userId} />
+      </div>
+    );
   }
 
   const [userId, setUserId] = useState(() => {
@@ -43,13 +49,37 @@ function App() {
         />
         <Route path="/login" element={<LoginPage setUserId={setUserId} />} />
         <Route path="/signup" element={<SignUp setUserId={setUserId} />} />
-        <Route path="/home" element={<HomePage userId={userId} />} />
-        <Route path="/expenses" element={<ExpensesPage userId={userId} />} />
+        <Route
+          path="/home"
+          element={
+            <>
+              <NavigateBar userId={userId} setUserId={setUserId} />
+              <HomePage userId={userId} />
+            </>
+          }
+        />
+        <Route
+          path="/expenses"
+          element={
+            <>
+              <NavigateBar userId={userId} setUserId={setUserId} />
+              <ExpensesPage userId={userId} />
+            </>
+          }
+        />
         <Route
           path="/signup/confirm"
           element={<ConfirmPage userId={userId} />}
         />
-        <Route path="/documents" element={<DocumentsPage userId={userId} />} />
+        <Route
+          path="/documents"
+          element={
+            <>
+              <NavigateBar userId={userId} setUserId={setUserId} />
+              <DocumentsPage userId={userId} />
+            </>
+          }
+        />
         <Route
           path="/join-apartment"
           element={<ApartmentsPage userId={userId} />}
