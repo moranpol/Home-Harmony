@@ -17,10 +17,6 @@ Amplify.configure({
 const rootDir = path.parse(process.cwd()).root;
 const profileImageDir = path.join(rootDir, "document-home-harmony", "profile-image");
 
-if (!fs.existsSync(profileImageDir)) {
-  fs.mkdirSync(profileImageDir, { recursive: true });
-}
-
 const storage = multer.diskStorage({
   destination: (req: Request, file: Express.Multer.File, cb) => {
     cb(null, profileImageDir);

@@ -119,6 +119,7 @@ const AddApartmentDialog: React.FC<AddApartmentDialogProps> = ({
               name="address"
               required
               fullWidth
+              multiline
               id="address"
               label="Address"
               InputLabelProps={{ shrink: true }}
@@ -132,6 +133,7 @@ const AddApartmentDialog: React.FC<AddApartmentDialogProps> = ({
               autoComplete="apartment-name"
               name="name"
               fullWidth
+              multiline
               id="name"
               label="Apartment Name"
               InputLabelProps={{ shrink: true }}

@@ -120,6 +120,7 @@ const AddBulletinDialog: React.FC<AddBulletinDialogProps> = ({
               name="info"
               required
               fullWidth
+              multiline
               id="info"
               label="Info"
               InputLabelProps={{ shrink: true }}

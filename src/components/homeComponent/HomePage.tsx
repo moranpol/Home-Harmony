@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import BulletinPaper from "./bulletinComponent/BulletinPaper";
 import axios from "axios";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -6,14 +6,13 @@ import Bulletin from "./bulletinComponent/bulletin";
 import "./HomePage.css";
 import AddBulletinDialog from "./bulletinComponent/AddBulletinDialog";
 import { IconButton } from "@mui/material";
-import NavigateBar from "../navigateBarComponent/NavigateBar";
 
 function HomePage({ userId }: { userId: number }) {
   const [bulletins, setBulletins] = useState<Bulletin[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
-  const getBulletins = () => {
+  const getBulletins = useCallback(() => {
     axios
       .get(`/bulletins/${userId}`)
       .then((res) => {
@@ -29,11 +28,11 @@ function HomePage({ userId }: { userId: number }) {
       .catch((error) => {
         console.log("Failed to retrieve bulletins", error);
       });
-  }
+  }, [userId]);
 
   useEffect(() => {
     getBulletins();
-  }, [userId]);
+  }, [getBulletins]);
 
   const handleDelete = (id: number) => {
     axios
@@ -67,7 +66,6 @@ function HomePage({ userId }: { userId: number }) {
 
   return (
     <div style={{ margin: "10px" }}>
-      <NavigateBar userId={userId}/>
       {bulletins.map((bulletin) => (
         <BulletinPaper
           key={bulletin.id}
