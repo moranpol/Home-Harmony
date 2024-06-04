@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 
 function DocumentsPage({ userId } : { userId: number }) {
-    const [documents, setDocuments] = useState<{ id: number; name: string; category: string; description: string; }[]>([]);
+    const [documents, setDocuments] = useState<{ id: number; name: string; category: string; description: string; document: string; }[]>([]);
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const fetchDocuments = async () => {
@@ -50,7 +50,7 @@ function DocumentsPage({ userId } : { userId: number }) {
             alert("Failed to delete document, please try again.");
         }
     };
-    
+
     return (
         <div className="container">
             <h1>Documents</h1>
@@ -71,6 +71,9 @@ function DocumentsPage({ userId } : { userId: number }) {
                                 <td>{document.name}</td>
                                 <td>{document.description}</td>
                                 <td>
+                                    <a href={`http://localhost:5000/documents/files/${document.document}`} target="_blank" rel="noopener noreferrer">
+                                        View Document
+                                    </a>
                                     <Button
                                         variant="contained"
                                         color="secondary"
