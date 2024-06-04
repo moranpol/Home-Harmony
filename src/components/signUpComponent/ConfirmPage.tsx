@@ -72,7 +72,9 @@ function ConfirmPage({ userId }: { userId: number }) {
                 className="inputField"
                 label="Confirmation Code"
                 variant="outlined"
+                multiline
                 fullWidth
+                required
                 value={confirmationCode}
                 onChange={handleConfirmationCodeChange}
                 InputLabelProps={{ shrink: true }}

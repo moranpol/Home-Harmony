@@ -187,6 +187,7 @@ function SignUp({ setUserId }: LoginProps) {
                 name="firstName"
                 required
                 fullWidth
+                multiline
                 id="firstName"
                 label="First Name"
                 autoFocus
@@ -202,6 +203,7 @@ function SignUp({ setUserId }: LoginProps) {
                 className="inputField"
                 required
                 fullWidth
+                multiline
                 id="lastName"
                 label="Last Name"
                 name="lastName"
@@ -217,6 +219,7 @@ function SignUp({ setUserId }: LoginProps) {
                 helperText={errors.email}
                 required
                 fullWidth
+                multiline
                 className="inputField"
                 id="email"
                 label="Email Address"
@@ -291,6 +294,7 @@ function SignUp({ setUserId }: LoginProps) {
                 helperText={errors.birthday}
                 required
                 fullWidth
+                multiline
                 className="inputField"
                 name="birthday"
                 label="Birthday"

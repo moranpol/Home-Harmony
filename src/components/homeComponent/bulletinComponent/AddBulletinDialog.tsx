@@ -114,15 +114,13 @@ const AddBulletinDialog: React.FC<AddBulletinDialogProps> = ({
               error={Boolean(errors)}
               helperText={errors}
               style={{
-                marginBottom: "1rem", 
                 width: "100%",
-                border: "0.125rem solid #ccc", 
-                borderRadius: "0.25rem", 
               }}
               autoComplete="bulletin-info"
               name="info"
               required
               fullWidth
+              multiline
               id="info"
               label="Info"
               InputLabelProps={{ shrink: true }}

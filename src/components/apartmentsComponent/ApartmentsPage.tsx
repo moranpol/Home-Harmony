@@ -99,6 +99,7 @@ function ApartmentsPage({ userId }: { userId: number }) {
                 name="aptId"
                 required
                 fullWidth
+                multiline
                 id="aptId"
                 label="Apartment Id"
                 autoFocus
