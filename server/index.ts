@@ -14,13 +14,11 @@ import fs from "fs";
 const app = express();
 const PORT = 5000;
 
-const profileImageDir = path.join(__dirname, "document-home-harmony", "profile-image");
+const profileImageDir = path.join(__dirname, "..", "app_documents", "profile_image");
 
 if (!fs.existsSync(profileImageDir)) {
   fs.mkdirSync(profileImageDir, { recursive: true });
 }
-
-app.use('/profile-images', express.static(profileImageDir));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

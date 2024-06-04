@@ -6,7 +6,7 @@ import fs from "fs";
 
 const navigateBarRouter = express.Router();
 
-const profileImageDir = path.join(__dirname, "document-home-harmony", "profile-image");
+const profileImageDir = path.join(__dirname, "..", "app_documents", "profile_image");
 
 navigateBarRouter.get("/:userId", async (req, res) => {
   try {
@@ -16,15 +16,18 @@ navigateBarRouter.get("/:userId", async (req, res) => {
     const navigateBarInfo = {
       address: result[0].address,
       userName: result[0].fname,
-      profileImage:"" as string | null,
+      profileImage: null as string | null,
     };
 
     const profileImagePath = path.join(profileImageDir, `${userId}.png`);
     if (fs.existsSync(profileImagePath)) {
-      navigateBarInfo.profileImage = `document-home-harmony/profile-images/${userId}.png`;
+      const fileBuffer = fs.readFileSync(profileImagePath);
+      const base64Image = fileBuffer.toString('base64');
+      navigateBarInfo.profileImage = `data:image/png;base64,${base64Image}`;
+      res.status(200).json(navigateBarInfo);
+    } else {
+      res.status(200).json(navigateBarInfo);
     }
-
-    res.status(200).json(navigateBarInfo);
   } catch (err) {
     console.error("Failed to fetch navigate bar:", err);
     res.status(500).send("Failed to fetch navigate bar");
