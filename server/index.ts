@@ -12,12 +12,17 @@ import path from "path";
 import fs from "fs";
 
 const app = express();
+
 const PORT = 5000;
 
 const profileImageDir = path.join(__dirname, "..", "app_documents", "profile_image");
+const documentDir = path.join(__dirname, "..", "app_documents", "document_files");
 
 if (!fs.existsSync(profileImageDir)) {
   fs.mkdirSync(profileImageDir, { recursive: true });
+}
+if (!fs.existsSync(documentDir)) {
+  fs.mkdirSync(documentDir, { recursive: true });
 }
 
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -5,7 +5,8 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Grid } from "@mui/material";
+import { Grid, IconButton, Typography } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:5000";
@@ -25,18 +26,27 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
     category: "",
     name: "",
     description: "",
+    file: undefined as File | undefined,
   });
 
   const [errors, setErrors] = useState("");
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setDocumentInfo({ ...documentInfo, [name]: value });
+    const { name, value, files } = e.target;
+    if (name === "file" && files) {
+      setDocumentInfo({ ...documentInfo, file: files[0] });
+    } else {
+      setDocumentInfo({ ...documentInfo, [name]: value });
+    }
   };
 
   const validateForm = (): boolean => {
     let isValid: boolean = true;
-    if (!documentInfo.category || !documentInfo.name || !documentInfo.description) {
+    if (
+      !documentInfo.category ||
+      !documentInfo.name ||
+      !documentInfo.description
+    ) {
       setErrors("All fields are required.");
       isValid = false;
     }
@@ -44,9 +54,19 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
   };
 
   const onSubmit = async () => {
+   
     if (validateForm()) {
+      const formData = new FormData();
+      formData.append("category", documentInfo.category);
+      formData.append("name", documentInfo.name);
+      formData.append("description", documentInfo.description);
+      formData.append("file", documentInfo.file as File);
+      formData.append("userId", userId.toString());
       axios
-        .post("/documents/create", { ...documentInfo, userId })
+      .post("/documents/create", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },})
         .then((res) => {
           if (res.data.success) {
             console.log("Document created");
@@ -151,6 +171,49 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
               label="Description"
               InputLabelProps={{ shrink: true }}
             />
+          </Grid>
+          <Grid item xs={12}>
+            <input
+              name="file"
+              type="file"
+              accept="*" // Accept all file types by default
+              className="fileInput"
+              onChange={onChange}
+              style={{ display: "none" }}
+              id="file"
+            />
+            <label htmlFor="file" className="fileInputLabel">
+              <Button
+                variant="outlined"
+                component="span"
+                className="MuiButton-root"
+              >
+                {documentInfo.file ? (
+                  <>
+                    <span>{documentInfo.file.name}</span>
+                    <IconButton
+                      onClick={() =>
+                        setDocumentInfo({ ...documentInfo, file: undefined })
+                      }
+                      edge="end"
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </>
+                ) : (
+                  "Upload File"
+                )}
+              </Button>
+            </label>
+            {errors && (
+              <Typography
+                variant="caption"
+                color="error"
+                style={{ padding: "10px" }}
+              >
+                {errors}
+              </Typography>
+            )}
           </Grid>
         </Grid>
       </DialogContent>
