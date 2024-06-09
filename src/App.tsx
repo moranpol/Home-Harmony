@@ -11,7 +11,7 @@ import ApartmentsPage from "./components/apartmentsComponent/ApartmentsPage";
 import NavigateBar from "./components/navigateBarComponent/NavigateBar";
 import axios from "axios";
 
-axios.defaults.baseURL = "http://54.145.47.237:5000";
+axios.defaults.baseURL = "http://34.235.151.81:5000";
 
 function App() {
   function AppWrapper({
