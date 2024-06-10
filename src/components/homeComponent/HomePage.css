@@ -22,3 +22,17 @@
 .button:hover .plus {
   color: #000; 
 }
+
+.home-page {
+  padding: 20px;
+}
+
+.section-title {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.MuiGrid-container {
+  flex-wrap: nowrap;
+}
+

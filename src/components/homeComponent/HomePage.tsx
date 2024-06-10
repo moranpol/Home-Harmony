@@ -5,7 +5,8 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import Bulletin from "./bulletinComponent/bulletin";
 import "./HomePage.css";
 import AddBulletinDialog from "./bulletinComponent/AddBulletinDialog";
-import { IconButton } from "@mui/material";
+import { Grid, IconButton, Typography } from "@mui/material";
+import MyChoresTable from "../choresComponent/MyChoresTable";
 
 function HomePage({ userId }: { userId: number }) {
   const [bulletins, setBulletins] = useState<Bulletin[]>([]);
@@ -65,29 +66,49 @@ function HomePage({ userId }: { userId: number }) {
   };
 
   return (
-    <div style={{ margin: "10px" }}>
-      {bulletins.map((bulletin) => (
-        <BulletinPaper
-          key={bulletin.id}
-          id={bulletin.id}
-          userName={bulletin.userName}
-          info={bulletin.info}
-          date={bulletin.date}
-          onDelete={handleDelete}
-        />
-      ))}
-      <IconButton
-        onClick={handleDialogOpen}
-        aria-label="add"
-        size="large"
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-      >
-        <AddCircleOutlineIcon
-          fontSize="large"
-          style={{ color: isHovering ? "black" : "" }}
-        />
-      </IconButton>
+    <div className="home-page">
+      <Grid container spacing={3}>
+        <Grid item xs={4}>
+          <Typography variant="h6" className="section-title">
+            MY CHORES
+          </Typography>
+          <MyChoresTable userId={userId} />
+        </Grid>
+        <Grid item xs={8}>
+          <Typography variant="h6" className="section-title">
+            BULLETIN BOARD
+          </Typography>
+          <Grid container spacing={2}>
+            {bulletins.map((bulletin) => (
+              <Grid item xs={4} key={bulletin.id}>
+                <BulletinPaper
+                  id={bulletin.id}
+                  userName={bulletin.userName}
+                  info={bulletin.info}
+                  date={bulletin.date}
+                  onDelete={handleDelete}
+                />
+              </Grid>
+            ))}
+            <Grid item xs={4}>
+              <IconButton
+                onClick={handleDialogOpen}
+                aria-label="add"
+                size="large"
+                className="button-plus"
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+              >
+                <AddCircleOutlineIcon
+                  className="plus"
+                  fontSize="large"
+                  style={{ color: isHovering ? "black" : "" }}
+                />
+              </IconButton>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
       <AddBulletinDialog
         userId={userId}
         open={dialogOpen}
