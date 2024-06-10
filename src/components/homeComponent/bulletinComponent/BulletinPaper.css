@@ -6,15 +6,15 @@ body {
 
 /* BulletinBox */
 .bulletin-paper {
-  height: 15.625rem; /* 250px */
+  height: 15.625rem; 
   width: 100%;
-  max-width: 15.625rem; /* 250px */
-  margin: 1rem 0; /* 16px */
+  max-width: 15.625rem;
+  margin: 1rem 1rem; 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem; /* 16px */
+  padding: 1rem; 
   border-radius: 0;
 }
 

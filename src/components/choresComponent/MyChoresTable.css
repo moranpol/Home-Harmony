@@ -1,0 +1,17 @@
+.MuiDataGrid-root {
+    border: none;
+    font-family: Arial, sans-serif;
+  }
+  
+  .MuiDataGrid-cell {
+    padding: 10px;
+  }
+  
+  .MuiDataGrid-columnHeaders {
+    display: none;
+  }
+  
+  .MuiDataGrid-columnHeader {
+    display: none !important;
+  }
+  

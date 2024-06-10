@@ -25,7 +25,7 @@ choresRouter.get("/:userId", async (req, res) => {
       await checkAndUpdateChore(chore);
     }
     res.status(200).json({ success: true, chores });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -66,3 +66,17 @@ async function getAppartmentId(userId: number): Promise<number> {
   console.log("aptId: ", result[0]?.aptid);
   return result[0]?.aptid;
 }
+
+choresRouter.put("/:id", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const { isDone } = req.body;
+    const query = `UPDATE choresTable SET isDone = ${isDone} WHERE id = ${id}`;
+    await queryRunner.query(query);
+    res.status(200).json({ success: true });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+export default choresRouter;
