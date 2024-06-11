@@ -29,7 +29,12 @@ if (!fs.existsSync(documentDir)) {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://frontend-home-harmony.s3.amazonaws.com',
+  methods: ['GET', 'POST','PUT','DELETE'], // Adjust as needed
+  allowedHeaders: ['Content-Type', 'Authorization'], // Adjust as needed
+  credentials: true, // Adjust as needed
+}));
 app.use("/login", loginRouter);
 app.use("/register", signUpRouter);
 app.use("/expenses", expensesRouter);
