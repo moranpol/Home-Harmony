@@ -294,12 +294,11 @@ function SignUp({ setUserId }: LoginProps) {
                 helperText={errors.birthday}
                 required
                 fullWidth
-                multiline
                 className="inputField"
                 name="birthday"
                 label="Birthday"
                 type="date"
-                id="birthday"
+                id="birthDateInput"
                 autoComplete="birthday"
                 InputLabelProps={{ shrink: true }}
               />

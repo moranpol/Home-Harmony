@@ -30,10 +30,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors({
-  origin: 'https://frontend-home-harmony.s3.amazonaws.com',
-  methods: ['GET', 'POST','PUT','DELETE'], // Adjust as needed
-  allowedHeaders: ['Content-Type', 'Authorization'], // Adjust as needed
-  credentials: true, // Adjust as needed
+  origin: 'http://frontend-home-harmony.s3-website-us-east-1.amazonaws.com',
+  methods: ['GET', 'POST','PUT','DELETE'], 
+  allowedHeaders: ['Content-Type', 'Authorization'], 
+  credentials: true, 
 }));
 app.use("/login", loginRouter);
 app.use("/register", signUpRouter);

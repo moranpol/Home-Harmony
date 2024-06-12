@@ -1,6 +1,6 @@
 /* General Styles */
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   background-color: #f8f8f8;
 }
 
@@ -19,7 +19,7 @@ body {
   width: 100%;
   max-width: 37.5rem;
   padding: 2rem;
-  background: linear-gradient(135deg, #FFF2D7, #f7e2b3);
+  background: linear-gradient(135deg, #fff2d7, #f7e2b3);
   border-radius: 0.625rem;
   box-shadow: 0rem 0.25rem 1rem rgba(0, 0, 0, 0.1);
   display: flex;
@@ -69,7 +69,15 @@ body {
   border-color: #f8c794;
 }
 
-.inputField .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+#birthDateInput {
+  border-block: none;
+  border-left: none;
+  border-right: none;
+}
+
+.inputField
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
   border-color: #f8c794;
   border-width: 0.125rem;
 }
