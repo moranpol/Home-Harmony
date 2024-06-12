@@ -53,7 +53,7 @@ signUpRouter.post("/", upload.single("image"), async (req, res) => {
       password: registerInfo.password,
     });
 
-    const query = `INSERT INTO usersTable (fname, lname, email, birthdate, password) VALUES ('${registerInfo.firstName}', '${registerInfo.lastName}', '${registerInfo.email}', '${registerInfo.birthday}', '${registerInfo.password}') RETURNING id`;
+    const query = `INSERT INTO usersTable (fname, lname, email, birthdate) VALUES ('${registerInfo.firstName}', '${registerInfo.lastName}', '${registerInfo.email}', '${registerInfo.birthday}') RETURNING id`;
     const result = await queryRunner.query(query);
     const userId = result[0].id;
 
