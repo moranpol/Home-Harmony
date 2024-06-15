@@ -19,13 +19,30 @@ function AddExpenseButton({userId, setShowForm} : {userId: number, setShowForm: 
     return <Button variant="outlined" component="span" className="addButton" onClick={onAddExpenseButtonClick}>Add Expense</Button>
 }
 
+function ClearTableButton({ isManager, update} : { isManager: boolean, update: () => void}) {
+    function onClearTableButtonClick() {
+        console.log("Clear Table button clicked");
+        axios.delete(`/expenses/delete`) ///////////////
+        .then((response) => {
+            console.log("Table cleared");
+            update();
+        })
+        .catch((error) => {
+            console.error("Failed to clear table:", error.message);
+        });
+    }
+    
+    return isManager ? <Button variant="outlined" component="span" className="clearButton" onClick={onClearTableButtonClick}>Clear Table</Button> : null;
+
+     
+}
 
 function CurrentBalanceText({ balance }: { balance: number }) {
     return <p className="balanceText">Current Balance: ${balance.toFixed(1)}</p>;
 }
 
 
-function ExpensesPage({userId} : {userId: number}) {
+function ExpensesPage({userId, isManager} : {userId: number, isManager: boolean}) {
     const [expenses, setExpenses] = useState<{ id: number; name: string; date: string; product: string; cost: number; }[]>([]);
     const [balance, setBalance] = useState(0);
     const [showForm, setShowForm] = useState(false);
@@ -102,8 +119,9 @@ function ExpensesPage({userId} : {userId: number}) {
             <div className="dataGrid" style={{ height: 400, width: '70%' }}>
                 <DataGrid rows={expenses} columns={columns}   />
             </div>
-            <div className="addButtonContainer">
+            <div className="ButtonContainer">
                 <AddExpenseButton userId={userId} setShowForm={setShowForm} />
+                <ClearTableButton isManager={isManager} update={handleExpenseAdded}/>
             </div>
             {showForm && <AddExpenseForm userId={userId} setShowForm={setShowForm} onExpenseAdded={handleExpenseAdded}/>}
         </div>

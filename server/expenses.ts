@@ -1,6 +1,7 @@
 import express from "express";
 import queryRunner from "./database/databasepg";
 import exp from "constants";
+import e from "express";
 
 const expensesRouter = express.Router();
 
@@ -40,8 +41,6 @@ expensesRouter.get("/balance/:userId", async (req, res) => {
 });
 
 expensesRouter.post("/add", async (req, res) => {
-    await queryRunner.query('SELECT 1');
-    console.log("expensesRouter.post, body: ", req.body);
     try {
         console.log("trytry add expenseId: ", req.body.userId)
         const userId = Number(req.body.userId);
@@ -68,6 +67,17 @@ expensesRouter.post("/add", async (req, res) => {
     }
 });
 
+expensesRouter.delete("/delete", async (req, res) => {
+    try{
+        await queryRunner.query('DELETE FROM expenses');
+        console.log("Table cleared");
+        res.status(200).send("Table cleared");
+        }
+        catch(err){
+            console.error("Failed to delete expenses:", err);
+            res.status(500).send("Failed to delete expenses");
+        }
+});
 
 // probably should be moved to user.ts or apartment.ts - todo
 async function getAppartmentId(userId: number): Promise<number> {
