@@ -33,7 +33,7 @@ p {
   background: #dad5d2;
 }
 
-.addButtonContainer {
+.ButtonContainer {
   width: 70%;
   display: flex;
   justify-content: flex-end;

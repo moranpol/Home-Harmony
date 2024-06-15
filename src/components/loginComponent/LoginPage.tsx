@@ -12,9 +12,10 @@ import { useNavigate } from 'react-router-dom';
 
 type LoginProps = {
   setUserId: React.Dispatch<React.SetStateAction<any>>;
+  setIsManager: React.Dispatch<React.SetStateAction<any>>;
 }
 
-function Login({setUserId}: LoginProps) {
+function Login({setUserId, setIsManager}: LoginProps) {
   
   const navigate = useNavigate();
   const handleSignInButtonClick = () => {navigate("/SignUp");};
@@ -25,6 +26,8 @@ function Login({setUserId}: LoginProps) {
     .then((response) => {
         alert("Login successful: "+ response.data.userId);
         setUserId(response.data.userId);
+        setIsManager(response.data.isManager);
+        localStorage.setItem("isManager", response.data.isManager);
         localStorage.setItem("userId", response.data.userId);
         navigate("/home");
     })

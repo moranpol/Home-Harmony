@@ -15,7 +15,7 @@ import axios from "axios";
 
 const pages = ["HOME", "CALENDAR", "EXPENSES", "CHORES", "DOCUMENTS", "SETTINGS"];
 
-function NavigateBar({ userId, setUserId }: { userId: number; setUserId: React.Dispatch<React.SetStateAction<number>> }) {
+function NavigateBar({ userId, setUserId ,isManager, setIsManager}: { userId: number; setUserId: React.Dispatch<React.SetStateAction<number>> ,isManager: boolean, setIsManager: React.Dispatch<React.SetStateAction<boolean>>}) {
   const [navigateBarInfo, setNavigateBarInfo] = React.useState<any>({
     address: "",
     userName: "",
@@ -39,7 +39,9 @@ function NavigateBar({ userId, setUserId }: { userId: number; setUserId: React.D
       .then((res) => {
         console.log("Logged out");
         setUserId(-1);
+        setIsManager(false);
         localStorage.removeItem("userId");
+        localStorage.removeItem("isManager");
         handleMenuClose();
         navigate("/login");
       })

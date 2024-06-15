@@ -12,23 +12,23 @@ import NavigateBar from "./components/navigateBarComponent/NavigateBar";
 import axios from "axios";
 
 axios.defaults.baseURL = "http://54.87.10.241:5000";
+//axios.defaults.baseURL = "http://localhost:5000";
 
 function App() {
-  function AppWrapper({
-    userId,
-    setUserId,
-  }: {
+  function AppWrapper({userId,setUserId,isManager,setIsManager}: {
     userId: number;
     setUserId: React.Dispatch<React.SetStateAction<number>>;
+    isManager: boolean;
+    setIsManager: React.Dispatch<React.SetStateAction<boolean>>;
   }) {
     if (userId === -1) {
-      return <LoginPage setUserId={setUserId} />;
+      return <LoginPage setUserId={setUserId} setIsManager={setIsManager}/>;
     }
 
     return (
       <div>
-        <NavigateBar userId={userId} setUserId={setUserId} />
-        <HomePage userId={userId} />
+        <NavigateBar userId={userId} setUserId={setUserId} isManager={isManager} setIsManager={setIsManager} />
+        <HomePage userId={userId}/>
       </div>
     );
   }
@@ -40,20 +40,27 @@ function App() {
     return userId;
   });
 
+  const [isManager, setIsManager] = useState(() => {
+    const savedIsManager = localStorage.getItem("isManager");
+    const isManager = savedIsManager ? Boolean(savedIsManager) : false;
+    console.log("retrieved previous is manager: ", isManager);
+    return isManager;
+  });
+
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path="/"
-          element={<AppWrapper userId={userId} setUserId={setUserId} />}
+          element={<AppWrapper userId={userId} setUserId={setUserId} isManager={isManager} setIsManager={setIsManager}/>}
         />
-        <Route path="/login" element={<LoginPage setUserId={setUserId} />} />
+        <Route path="/login" element={<LoginPage setUserId={setUserId} setIsManager={setIsManager}/>} />
         <Route path="/signup" element={<SignUp setUserId={setUserId} />} />
         <Route
           path="/home"
           element={
             <>
-              <NavigateBar userId={userId} setUserId={setUserId} />
+              <NavigateBar userId={userId} setUserId={setUserId} isManager={isManager} setIsManager={setIsManager} />
               <HomePage userId={userId} />
             </>
           }
@@ -62,8 +69,8 @@ function App() {
           path="/expenses"
           element={
             <>
-              <NavigateBar userId={userId} setUserId={setUserId} />
-              <ExpensesPage userId={userId} />
+              <NavigateBar userId={userId} setUserId={setUserId} isManager={isManager} setIsManager={setIsManager}/>
+              <ExpensesPage userId={userId} isManager={isManager} />
             </>
           }
         />
@@ -75,7 +82,7 @@ function App() {
           path="/documents"
           element={
             <>
-              <NavigateBar userId={userId} setUserId={setUserId} />
+              <NavigateBar userId={userId} setUserId={setUserId} isManager={isManager} setIsManager={setIsManager}/>
               <DocumentsPage userId={userId} />
             </>
           }
