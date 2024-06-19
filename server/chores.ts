@@ -10,15 +10,15 @@ choresRouter.get("/:userId", async (req, res) => {
     const query = `SELECT c.*, u.fname, u.lname FROM choresTable c JOIN usersTable u ON c.userid = u.id WHERE c.aptid = ${apartmentId}`;
     const result = await queryRunner.query(query);
     const chores: Chore[] = result.map((row: any) => ({
-      isDone: row.isDone,
-      isRepeat: row.isRepeat,
+      isDone: row.isdone,
+      isRepeat: row.isrepeat,
       repeat: row.repeat,
-      startDate: new Date(row.startDate),
+      startDate: new Date(row.startdate),
       id: row.id,
       fname: row.fname,
       lname: row.lname,
       description: row.description,
-      userId: row.userId
+      userId: row.userid
     }));
 
     for (const chore of chores) {
