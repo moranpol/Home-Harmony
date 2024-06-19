@@ -23,11 +23,16 @@ const MyChoresTable = ({ userId }: { userId: number }) => {
         const data = res.data;
         console.log(data);
         if (data.success && Array.isArray(data.chores)) {
-          const choresList: Row[] = data.chores.map((chore: any) => ({
-            id: chore.id,
-            isDone: chore.isDone || false,
-            task: chore.description || "",
-          }));
+          const choresList: Row[] = data.chores.map((chore: any) => {
+            if(chore.userId === userId){
+              return {
+                id: chore.id,
+                isDone: chore.isDone,
+                task: chore.description,
+              };
+            }
+            return null;
+          }).filter((chore: any) => chore !== null);;
           setRows(choresList);
         } else {
           console.error("Expected an array but got", data);
