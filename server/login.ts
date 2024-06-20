@@ -33,22 +33,14 @@ async function getId(email: string): Promise<number> {
 }
 
 async function getIsManager(userId: Number): Promise<boolean> {
-  const query = `SELECT
-  CASE
-      WHEN a.managerid IS NOT NULL THEN 'Yes'
-      ELSE 'No'
-  END AS IsManager
-FROM
-  userstable u
-LEFT JOIN
-  apartmentstable a
-ON
-  u.id = a.managerid
-WHERE
-  u.id = '${userId}'`;
+  const query = `SELECT EXISTS (
+    SELECT 1
+    FROM apartmentstable
+    WHERE managerid = '${userId}');`;
   const result = await queryRunner.query(query);
-  return result[0]?.isManager === "Yes" ? true : false;
+  return result[0]?.exists;
+  
+  
 }
-
 
 export default router;

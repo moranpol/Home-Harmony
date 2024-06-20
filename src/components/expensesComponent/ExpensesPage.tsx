@@ -22,7 +22,7 @@ function AddExpenseButton({userId, setShowForm} : {userId: number, setShowForm: 
 function ClearTableButton({ isManager, update} : { isManager: boolean, update: () => void}) {
     function onClearTableButtonClick() {
         console.log("Clear Table button clicked");
-        axios.delete(`/expenses/delete`) ///////////////
+        axios.delete(`/expenses/delete`)
         .then((response) => {
             console.log("Table cleared");
             update();
@@ -31,10 +31,7 @@ function ClearTableButton({ isManager, update} : { isManager: boolean, update: (
             console.error("Failed to clear table:", error.message);
         });
     }
-    
-    return isManager ? <Button variant="outlined" component="span" className="clearButton" onClick={onClearTableButtonClick}>Clear Table</Button> : null;
-
-     
+    return isManager ? <Button variant="outlined" component="span" className="clearButton" onClick={onClearTableButtonClick}>Clear Table</Button> : null;   
 }
 
 function CurrentBalanceText({ balance }: { balance: number }) {
@@ -87,22 +84,8 @@ function ExpensesPage({userId, isManager} : {userId: number, isManager: boolean}
 
     console.log("userId in ExpensesPage: ", userId);
     return (
-        /*
-        <div className="container">
-            <h1>Expenses Page</h1>
-            <CurrentBalanceText balance={balance}/>
-            
-            <div className="dataGrid" style={{ height: 400, width: '70%' }}>
-                <DataGrid rows={expenses} columns={columns}   />
-            </div>
-            <div className="addButtonContainer">
-                <AddExpenseButton userId={userId} setShowForm={setShowForm} />
-            </div>
-            {showForm && <AddExpenseForm userId={userId} />}
-        </div>
-        */
-        <div>
         
+        <div>
             <Dialog open={showForm} onClose={() => setShowForm(false)}>
                 <DialogTitle>Add Expense</DialogTitle>
                 <DialogContent>
@@ -117,7 +100,8 @@ function ExpensesPage({userId, isManager} : {userId: number, isManager: boolean}
             <CurrentBalanceText balance={balance}/>
             
             <div className="dataGrid" style={{ height: 400, width: '70%' }}>
-                <DataGrid rows={expenses} columns={columns}   />
+                <DataGrid rows={expenses} columns={columns} classes={{
+                        columnHeaders: 'customHeader' }} />
             </div>
             <div className="ButtonContainer">
                 <AddExpenseButton userId={userId} setShowForm={setShowForm} />
@@ -126,6 +110,7 @@ function ExpensesPage({userId, isManager} : {userId: number, isManager: boolean}
             {showForm && <AddExpenseForm userId={userId} setShowForm={setShowForm} onExpenseAdded={handleExpenseAdded}/>}
         </div>
         </div>
+       
     );
 }
 

@@ -31,6 +31,14 @@ p {
   width: 70%;
   margin: 20px 0;
   background: #dad5d2;
+  margin-top: 20px;
+}
+
+.customHeader {
+  background-color: #f0f0f0; /* Background color for the headers */
+  color: #333; /* Text color for the headers */
+  font-size: 16px; /* Font size for the headers */
+  border-bottom: 2px solid #ccc; /* Bottom border for the headers */
 }
 
 .ButtonContainer {
