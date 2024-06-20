@@ -42,7 +42,8 @@ function App() {
 
   const [isManager, setIsManager] = useState(() => {
     const savedIsManager = localStorage.getItem("isManager");
-    const isManager = savedIsManager ? Boolean(savedIsManager) : false;
+    const isManager = savedIsManager === "true";
+
     console.log("retrieved previous is manager: ", isManager);
     return isManager;
   });
