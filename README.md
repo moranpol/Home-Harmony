@@ -42,3 +42,8 @@ To set up the project locally, follow these steps:
 2. Install the dependencies: npm install
 3. Set up the environment variables as specified in the .env.example file.
 4. Start the development server: npm start
+
+## Project Team:
+* Moran Pol
+* Ofir Koren
+* Adi Cohen
