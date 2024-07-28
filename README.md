@@ -1,46 +1,44 @@
-# Getting Started with Create React App
+# Home Harmony
+## Project Overview
+Home Harmony is a web application designed to make shared living easier and more enjoyable. It helps with communication, organization, and building a sense of community among roommates. The platform includes features for managing chores, planning events, organizing documents, and tracking expenses.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Features
+1. Chores Roulette: Fairly distributes household tasks among roommates in a gamified system.
+2. Event Planning and Notifications: Simplifies the coordination of household events with automatic reminders.
+3. Document Repository and Contact Hub: Stores crucial household documents and important contacts.
+4. Virtual Bulletin Board and Home Inventory Management: Allows roommates to post messages and track household items.
+5. Expense Tracking and Shared Purchases: Enables transparent financial management and expense tracking.
+   
+## System Architecture
+Home Harmony utilizes AWS cloud services for data storage, push notifications, and more. The main components include:
+* EC2: For scalable computing capacity.
+* Cognito: For user authentication.
+* RDS (PostgreSQL): For reliable and scalable database management.
 
-## Available Scripts
+## Database Schema
+We use PostgreSQL with the following data tables:
+* UsersTable: Stores user information.
+* ApartmentsTable: Stores apartment details.
+* ExpensesTable: Tracks shared expenses.
+* DocumentsTable: Manages household documents.
+* BulletinsTable: Handles messages on the virtual bulletin board.
+* ChoresTable: Manages household chores.
 
-In the project directory, you can run:
+## Development Tools
+* React: For building the user interface.
+* PostgreSQL: For database management.
+* AWS: For cloud services.
+* TypeScript: For type safety in JavaScript.
+* VS Code: As the development environment.
+* GitHub: For version control.
+* Postman: For API testing.
+* Node.js: For server-side development.
+* GPT/CoPilot: For coding assistance.
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Installation
+To set up the project locally, follow these steps:
+1. Clone the repository: git clone https://github.com/moranpol/Home-Harmony.git
+2. Navigate to the project directory: cd Home-Harmony
+2. Install the dependencies: npm install
+3. Set up the environment variables as specified in the .env.example file.
+4. Start the development server: npm start
