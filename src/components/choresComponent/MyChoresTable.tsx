@@ -23,16 +23,18 @@ const MyChoresTable = ({ userId }: { userId: number }) => {
         const data = res.data;
         console.log(data);
         if (data.success && Array.isArray(data.chores)) {
-          const choresList: Row[] = data.chores.map((chore: any) => {
-            if(chore.userId === userId){
-              return {
-                id: chore.id,
-                isDone: chore.isDone,
-                task: chore.description,
-              };
-            }
-            return null;
-          }).filter((chore: any) => chore !== null);;
+          const choresList: Row[] = data.chores
+            .map((chore: any) => {
+              if (chore.userId === userId) {
+                return {
+                  id: chore.id,
+                  isDone: chore.isDone,
+                  task: chore.description,
+                };
+              }
+              return null;
+            })
+            .filter((chore: any) => chore !== null);
           setRows(choresList);
         } else {
           console.error("Expected an array but got", data);
@@ -80,20 +82,33 @@ const MyChoresTable = ({ userId }: { userId: number }) => {
       field: "task",
       headerName: "",
       width: 250,
-      editable: true,
+      editable: false,
+      renderCell: (params) => (
+        <div style={{ wordWrap: 'break-word', whiteSpace: 'normal' }}>
+          {params.value}
+        </div>
+      ),
     },
   ];
 
+  const getRowClassName = (params: any) => {
+    return params.row.isDone ? "completedRow" : "incompleteRow";
+  };
+
   return (
     <ThemeProvider theme={theme}>
-      <div style={{ height: 400, width: "100%" }}>
+      <div style={{ height: "100%", width: "100%" }}>
         <DataGrid
           rows={rows}
           columns={columns}
           hideFooter
           disableColumnMenu
+          scrollbarSize={0}
           checkboxSelection={false}
           className="MyChoresTable"
+          density="comfortable"
+          getRowClassName={getRowClassName}
+          style={{ marginTop: "1rem", border: "none" }}
         />
       </div>
     </ThemeProvider>

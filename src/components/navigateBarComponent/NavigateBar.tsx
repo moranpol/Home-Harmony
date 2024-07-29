@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import MenuIcon from "@mui/icons-material/Menu";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Avatar from "@mui/material/Avatar";
@@ -13,9 +14,26 @@ import { useNavigate } from "react-router-dom";
 import "./NavigateBar.css";
 import axios from "axios";
 
-const pages = ["HOME", "CALENDAR", "EXPENSES", "CHORES", "DOCUMENTS", "SETTINGS"];
+const pages = [
+  "HOME",
+  "CALENDAR",
+  "EXPENSES",
+  "CHORES",
+  "DOCUMENTS",
+  "SETTINGS",
+];
 
-function NavigateBar({ userId, setUserId ,isManager, setIsManager}: { userId: number; setUserId: React.Dispatch<React.SetStateAction<number>> ,isManager: boolean, setIsManager: React.Dispatch<React.SetStateAction<boolean>>}) {
+function NavigateBar({
+  userId,
+  setUserId,
+  isManager,
+  setIsManager,
+}: {
+  userId: number;
+  setUserId: React.Dispatch<React.SetStateAction<number>>;
+  isManager: boolean;
+  setIsManager: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [navigateBarInfo, setNavigateBarInfo] = React.useState<any>({
     address: "",
     userName: "",
@@ -56,7 +74,7 @@ function NavigateBar({ userId, setUserId ,isManager, setIsManager}: { userId: nu
       .then((res) => {
         const data = res.data;
         setNavigateBarInfo({
-          address: data.address,
+          address: data.aptName === '' ? data.address : data.aptName,
           userName: data.userName,
           profileImage: data.profileImage,
         });
@@ -92,18 +110,25 @@ function NavigateBar({ userId, setUserId ,isManager, setIsManager}: { userId: nu
     }
   };
 
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
   return (
     <AppBar
       position="static"
+      className="appBar"
       sx={{
         backgroundColor: "#F6F6F6",
         color: "#000",
         boxShadow: "none",
       }}
-      className="appBar"
     >
       <Toolbar
         disableGutters
+        className="toolbar"
         sx={{
           flexDirection: "column",
           alignItems: "center",
@@ -111,15 +136,22 @@ function NavigateBar({ userId, setUserId ,isManager, setIsManager}: { userId: nu
           width: "100%",
           maxWidth: "none",
         }}
-        className="toolbar"
       >
-        <Box className="userInfo">
+        <Box
+          className="userInfo"
+          sx={{
+            fontFamily: "Roboto, sans-serif",
+            fontWeight: 500,
+            textTransform: "uppercase",
+            fontSize: "0.9rem",
+          }}
+        >
           <Typography
             className="helloText"
             sx={{
               fontFamily: "Roboto, sans-serif",
               fontWeight: 500,
-              display: { xs: "none", md: "block" },
+              display: "block",
               textTransform: "uppercase",
               fontSize: "0.9rem",
             }}
@@ -146,8 +178,15 @@ function NavigateBar({ userId, setUserId ,isManager, setIsManager}: { userId: nu
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </Box>
-        <Box className="menuButtonsContainer" sx={{ flexGrow: 1 }}>
-          <Box className="menuButtonsLeft" sx={{ flexGrow: 1 }}>
+        <Box className="menuButtonsContainer">
+          <IconButton
+            className="hamburger-menu"
+            onClick={toggleMobileMenu}
+            sx={{ display: { md: "none" } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Box className={`menuButtonsLeft ${mobileMenuOpen ? "active" : ""}`}>
             {pages.slice(0, 3).map((page) => (
               <Button
                 key={page}
@@ -176,22 +215,16 @@ function NavigateBar({ userId, setUserId ,isManager, setIsManager}: { userId: nu
               textTransform: "uppercase",
               flexShrink: 1,
               wordBreak: "break-word",
-              whiteSpace: "pre-wrap",
+              whiteSpace: "wrap",
               lineHeight: "1.2",
               maxWidth: "100%",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              "@media (max-width: 600px)": {
-                fontSize: "1.2rem",
-              },
-              "@media (max-width: 400px)": {
-                fontSize: "1rem",
-              },
             }}
           >
             {navigateBarInfo.address}
           </Typography>
-          <Box className="menuButtonsRight" sx={{ flexGrow: 1 }}>
+          <Box className={`menuButtonsRight ${mobileMenuOpen ? "active" : ""}`}>
             {pages.slice(3, 6).map((page) => (
               <Button
                 key={page}
@@ -201,7 +234,7 @@ function NavigateBar({ userId, setUserId ,isManager, setIsManager}: { userId: nu
                   color: "#31241E",
                   fontFamily: "Roboto, sans-serif",
                   fontWeight: 400,
-                  padding: { xs: "0.5rem 1rem", md: "0 2rem" },
+                  padding: { xs: "0.5rem 1rem", md: "0 1.5rem", lg: "0 2rem" },
                   textTransform: "uppercase",
                   fontSize: "1.2rem",
                 }}
@@ -213,12 +246,10 @@ function NavigateBar({ userId, setUserId ,isManager, setIsManager}: { userId: nu
         </Box>
         <Typography
           className="homeHarmonyText"
-          noWrap
           sx={{
             fontFamily: "Roboto, sans-serif",
-            fontSize: "4rem",
             color: "black",
-            textAlign: "center",
+            fontSize: { xs: "2rem", sm: "4rem" },
             textTransform: "uppercase",
             letterSpacing: "0.2rem",
           }}

@@ -16,10 +16,11 @@ const profileImageDir = path.join(
 navigateBarRouter.get("/:userId", async (req, res) => {
   try {
     const userId = Number(req.params.userId);
-    const query = `SELECT u.fname, apt.address FROM apartmentsTable apt JOIN userstable u ON apt.id = u.aptid WHERE u.id = ${userId};`;
+    const query = `SELECT u.fname, apt.address, apt.name FROM apartmentsTable apt JOIN userstable u ON apt.id = u.aptid WHERE u.id = ${userId};`;
     const result = await queryRunner.query(query);
     const navigateBarInfo = {
       address: result[0].address,
+      aptName: result[0].name,
       userName: result[0].fname,
       profileImage: null as string | null,
     };
