@@ -66,21 +66,21 @@ function HomePage({ userId }: { userId: number }) {
   };
 
   return (
-    <div className="home-page">
-      <Grid container spacing={3}>
-        <Grid item xs={4}>
+      <div className="home-page">
+      <Grid container spacing={4} >
+        <Grid item xs={11} sm={9} md={4}>
           <Typography variant="h6" className="section-title">
             MY CHORES
           </Typography>
           <MyChoresTable userId={userId} />
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={12} md={8}>
           <Typography variant="h6" className="section-title">
             BULLETIN BOARD
           </Typography>
           <Grid container spacing={2}>
             {bulletins.map((bulletin) => (
-              <Grid item xs={4} key={bulletin.id}>
+              <Grid item xs={6} sm={5} md={4} key={bulletin.id}>
                 <BulletinPaper
                   id={bulletin.id}
                   userName={bulletin.userName}
@@ -90,7 +90,7 @@ function HomePage({ userId }: { userId: number }) {
                 />
               </Grid>
             ))}
-            <Grid item xs={4}>
+            <Grid item xs={12} sm={6} md={4} className="center-content">
               <IconButton
                 onClick={handleDialogOpen}
                 aria-label="add"

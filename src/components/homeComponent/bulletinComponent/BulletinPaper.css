@@ -9,7 +9,7 @@ body {
   height: 15.625rem; 
   width: 100%;
   max-width: 15.625rem;
-  margin: 1rem 1rem; 
+  margin: 1rem 0; 
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,14 +34,16 @@ body {
 
 /* Media Queries for Responsive Design */
 
-/* Small devices (phones, 600px and down) */
-@media screen and (max-width: 37.5rem) { /* 600px */
+@media screen and (max-width: 40rem) { 
   .container {
     padding: 0.625rem; /* 10px */
   }
 
   .bulletin-paper {
     height: auto;
+    width: auto;
+    max-width: 10rem;
+    min-height: 9rem;
     padding: 0.625rem; /* 10px */
   }
 
@@ -70,7 +72,6 @@ body {
   }
 
   .bulletin-paper {
-    height: auto;
     padding: 0.875rem; /* 14px */
   }
 
@@ -99,7 +100,6 @@ body {
   }
 
   .bulletin-paper {
-    height: auto;
     padding: 0.625rem; /* 10px */
   }
 
@@ -112,7 +112,7 @@ body {
   }
 
   .bulletin-footer {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
   }
 
@@ -128,7 +128,6 @@ body {
   }
 
   .bulletin-paper {
-    height: auto;
     padding: 0.3125rem; /* 5px */
   }
 
@@ -141,7 +140,7 @@ body {
   }
 
   .bulletin-footer {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
   }
 

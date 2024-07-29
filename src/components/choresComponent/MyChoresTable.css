@@ -1,17 +1,62 @@
 .MuiDataGrid-root {
-    border: none;
-    font-family: Arial, sans-serif;
-  }
-  
-  .MuiDataGrid-cell {
-    padding: 10px;
-  }
-  
-  .MuiDataGrid-columnHeaders {
-    display: none;
-  }
-  
-  .MuiDataGrid-columnHeader {
-    display: none !important;
-  }
-  
+  border: none;
+  font-family: Arial, sans-serif;
+}
+
+.MuiDataGrid-cell {
+  padding: 10px;
+  font-size: 18px;
+  word-wrap: break-word; 
+  white-space: normal;
+}
+
+.MuiDataGrid-columnHeaders {
+  display: none;
+}
+
+.MuiDataGrid-scrollbar,
+.MuiDataGrid-scrollbar--vertical,
+.MuiDataGrid-scrollbar--horizontal {
+  display: none !important;
+}
+
+.MuiDataGrid-columnHeader {
+  display: none !important;
+}
+
+.MuiDataGrid-row {
+  background-color: #d1c8c1;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  margin-right: 10px;
+}
+
+.MuiDataGrid-row:hover {
+  cursor: pointer;
+}
+
+.MuiCheckbox-root {
+  color: #000 !important; 
+  border: none !important;
+}
+
+.completedRow {
+  background-color: #d1c8c1 !important; 
+}
+
+.incompleteRow {
+  background-color: #d1c8c1 !important; 
+}
+
+.MuiDataGrid-footer {
+  display: none; 
+}
+
+.MuiDataGrid-virtualScrollerContent {
+  overflow: hidden; 
+}
+
+.MuiDataGrid-toolbarContainer {
+  display: none; 
+}

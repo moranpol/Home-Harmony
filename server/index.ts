@@ -30,8 +30,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors({
-  origin: 'http://frontend-home-harmony.s3-website-us-east-1.amazonaws.com',
-  //origin: 'http://localhost:3000',
+  //origin: 'http://frontend-home-harmony.s3-website-us-east-1.amazonaws.com',
+  origin: 'http://localhost:3000',
   methods: ['GET', 'POST','PUT','DELETE'], 
   allowedHeaders: ['Content-Type', 'Authorization'], 
   credentials: true, 

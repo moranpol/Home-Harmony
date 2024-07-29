@@ -1,121 +1,146 @@
 .appBar {
-    background-color: #F6F6F6;
-    color: #000;
-    box-shadow: none;
-  }
-  
-  .toolbar {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: none;
-  }
-  
-  .userInfo {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-    align-items: center;
-  }
-  
-  .helloText {
-    padding: 0 0.5rem;
-  }
-  
-  .menuButtonsContainer {
-    width: 100%;
-    border-bottom: 0.0625rem solid #000;
-    margin-bottom: 0.625rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .menuButtonsLeft {
-    margin-right: 1rem;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 0.625rem 0;
-    display: flex;
-  }
-
-  .menuButtons{
-    padding: 0.625rem 0;
-    display: flex;
-    padding: 0 2rem 0 2rem,
-  }
-  
-  .menuButtonsRight {
-    margin-left: 1rem;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 0.625rem 0;
-    display: flex;
-  }
-  
-  .logoText {
-    padding: 0.3125rem 1rem;
-    border-left: 0.0625rem solid #000;
-    border-right: 0.0625rem solid #000;
-  }
-  
-  .homeHarmonyText {
-    width: 100%;
-    border-bottom: 0.0625rem solid #000;
-  }
-  
-  /* Media Queries */
-@media screen and (max-width: 48rem) {
-    /* Adjust styles for screens with a maximum width of 48rem */
-    .toolbar {
-        padding: 2rem 0;
-    }
-
-    .logoText {
-        font-size: 1.5rem;
-        padding: 0.3125rem 4rem;
-    }
-
-    .menuButtons {
-        padding: 0.625rem 0;
-        display: flex;
-        padding: 0 2rem 0 2rem;
-    }
+  background-color: #F6F6F6;
+  color: #000;
+  box-shadow: none;
 }
 
-@media screen and (max-width: 30rem) {
-    /* Adjust styles for screens with a maximum width of 30rem */
-    .toolbar {
-        padding: 1rem 0;
-    }
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: none;
+}
 
-    .logoText {
-        font-size: 1.2rem;
-        padding: 0.3125rem 2rem;
-    }
+.userInfo {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  align-items: center;
+}
 
-    .menuButtons {
-        padding: 0.625rem 0;
-        display: flex;
-        padding: 0 1rem 0 1rem;
-    }
+.helloText {
+  padding: 0 0.5rem;
+}
+
+.menuButtonsContainer {
+  width: 100%;
+  border-bottom: 0.0625rem solid #000;
+  margin-bottom: 0.625rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menuButtonsLeft,
+.menuButtonsRight {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 0;
+}
+
+.menuButtons {
+  display: flex;
+  padding: 0.625rem 2rem;
+}
+
+.logoText {
+  padding: 0.3125rem 1rem;
+  border-left: 0.0625rem solid #000;
+  border-right: 0.0625rem solid #000;
+  writing-mode: horizontal-tb;
+  text-orientation: upright;
+  white-space: nowrap;
+  height: 100%;
+}
+
+.homeHarmonyText {
+  width: 100%;
+  border-bottom: 0.0625rem solid #000;
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.hamburger-menu {
+  display: none;
+  align-self: flex-start;
+  
+}
+
+@media screen and (max-width: 70rem) {
+  .hamburger-menu {
+    display: flex;
+    align-self: flex-start;
+  }
+
+  .menuButtonsLeft,
+  .menuButtonsRight {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .menuButtonsLeft.active,
+  .menuButtonsRight.active {
+    display: flex;
+  }
+
+  .menuButton {
+    width: 100%;
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+
+  .logoText {
+    border-left: none;
+    border-right: none;
+    border-top: 0.0625rem solid #000;
+    border-bottom: 0.0625rem solid #000;
+    width: 100%;
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+
+  .menuButtonsContainer {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 40rem) {
+  .toolbar {
+    padding: 0.5rem 0;
+  }
+
+  .logoText {
+    font-size: 1.2rem;
+    padding: 0.3125rem 1rem;
+  }
+
+  .menuButtons {
+    padding: 0.625rem 0.5rem;
+  }
+
+  .menuButtonsLeft,
+  .menuButtonsRight,
+  .menuButtons {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 @media screen and (max-width: 20rem) {
-    /* Adjust styles for screens with a maximum width of 20rem */
-    .toolbar {
-        padding: 0.5rem 0;
-    }
+  .toolbar {
+    padding: 0.25rem 0;
+  }
 
-    .logoText {
-        font-size: 1rem;
-        padding: 0.3125rem 1rem;
-    }
+  .logoText {
+    font-size: 1rem;
+    padding: 0.3125rem 0.5rem;
+  }
 
-    .menuButtons {
-        padding: 0.625rem 0;
-        display: flex;
-        padding: 0 0.5rem 0 0.5rem;
-    }
+  .menuButtons {
+    padding: 0.3125rem 0.25rem;
+  }
 }
