@@ -9,26 +9,37 @@ import ConfirmPage from "./components/signUpComponent/ConfirmPage";
 import DocumentsPage from "./components/documentsComponent/DocumentsPage";
 import ApartmentsPage from "./components/apartmentsComponent/ApartmentsPage";
 import NavigateBar from "./components/navigateBarComponent/NavigateBar";
+import SettingsPage from "./components/settingsComponent/SettingsPage";
 import axios from "axios";
 
 //axios.defaults.baseURL = "http://54.87.10.241:5000";
 axios.defaults.baseURL = "http://localhost:5000";
 
 function App() {
-  function AppWrapper({userId,setUserId,isManager,setIsManager}: {
+  function AppWrapper({
+    userId,
+    setUserId,
+    isManager,
+    setIsManager,
+  }: {
     userId: number;
     setUserId: React.Dispatch<React.SetStateAction<number>>;
     isManager: boolean;
     setIsManager: React.Dispatch<React.SetStateAction<boolean>>;
   }) {
     if (userId === -1) {
-      return <LoginPage setUserId={setUserId} setIsManager={setIsManager}/>;
+      return <LoginPage setUserId={setUserId} setIsManager={setIsManager} />;
     }
 
     return (
       <div>
-        <NavigateBar userId={userId} setUserId={setUserId} isManager={isManager} setIsManager={setIsManager} />
-        <HomePage userId={userId}/>
+        <NavigateBar
+          userId={userId}
+          setUserId={setUserId}
+          isManager={isManager}
+          setIsManager={setIsManager}
+        />
+        <HomePage userId={userId} />
       </div>
     );
   }
@@ -53,15 +64,32 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<AppWrapper userId={userId} setUserId={setUserId} isManager={isManager} setIsManager={setIsManager}/>}
+          element={
+            <AppWrapper
+              userId={userId}
+              setUserId={setUserId}
+              isManager={isManager}
+              setIsManager={setIsManager}
+            />
+          }
         />
-        <Route path="/login" element={<LoginPage setUserId={setUserId} setIsManager={setIsManager}/>} />
+        <Route
+          path="/login"
+          element={
+            <LoginPage setUserId={setUserId} setIsManager={setIsManager} />
+          }
+        />
         <Route path="/signup" element={<SignUp setUserId={setUserId} />} />
         <Route
           path="/home"
           element={
             <>
-              <NavigateBar userId={userId} setUserId={setUserId} isManager={isManager} setIsManager={setIsManager} />
+              <NavigateBar
+                userId={userId}
+                setUserId={setUserId}
+                isManager={isManager}
+                setIsManager={setIsManager}
+              />
               <HomePage userId={userId} />
             </>
           }
@@ -70,7 +98,12 @@ function App() {
           path="/expenses"
           element={
             <>
-              <NavigateBar userId={userId} setUserId={setUserId} isManager={isManager} setIsManager={setIsManager}/>
+              <NavigateBar
+                userId={userId}
+                setUserId={setUserId}
+                isManager={isManager}
+                setIsManager={setIsManager}
+              />
               <ExpensesPage userId={userId} isManager={isManager} />
             </>
           }
@@ -83,7 +116,12 @@ function App() {
           path="/documents"
           element={
             <>
-              <NavigateBar userId={userId} setUserId={setUserId} isManager={isManager} setIsManager={setIsManager}/>
+              <NavigateBar
+                userId={userId}
+                setUserId={setUserId}
+                isManager={isManager}
+                setIsManager={setIsManager}
+              />
               <DocumentsPage userId={userId} />
             </>
           }
@@ -91,6 +129,25 @@ function App() {
         <Route
           path="/join-apartment"
           element={<ApartmentsPage userId={userId} />}
+        />
+        <Route
+          path="/settings"
+          element={
+            <>
+              <NavigateBar
+                userId={userId}
+                setUserId={setUserId}
+                isManager={isManager}
+                setIsManager={setIsManager}
+              />
+              <SettingsPage
+                userId={userId}
+                setUserId={setUserId}
+                isManager={isManager}
+                setIsManager={setIsManager}
+              />
+            </>
+          }
         />
       </Routes>
     </BrowserRouter>

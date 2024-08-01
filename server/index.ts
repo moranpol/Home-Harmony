@@ -7,6 +7,7 @@ import documentsRouter from "./documents";
 import bulletinsRouter from "./bulletins";
 import navigateBarRouter from "./navigateBar";
 import ChoresRouter from "./chores";
+import settingsRouter from "./settings";
 import bodyParser from "body-parser";
 import cors from "cors";
 import path from "path";
@@ -44,6 +45,7 @@ app.use("/apartments", apartmentsRouter);
 app.use("/bulletins", bulletinsRouter);
 app.use("/navigate-bar", navigateBarRouter);
 app.use("/chores", ChoresRouter);
+app.use("/settings", settingsRouter);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server listening on port ${PORT}`);
