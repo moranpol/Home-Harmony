@@ -1,0 +1,21 @@
+.MuiRadio-root {
+  color: #ccc;
+}
+
+.css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
+  color: #f8c794 !important;
+}
+
+.MuiRadio-root .MuiSvgIcon-root {
+  width: 24px;
+  height: 24px;
+}
+
+.MuiFormControlLabel-root {
+  margin-bottom: 15px;
+}
+
+.css-u4tvz2-MuiFormLabel-root{
+    font-size: 16px;
+    color: #000000 !important;
+}

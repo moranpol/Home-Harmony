@@ -103,7 +103,7 @@ function NavigateBar({
         navigate("/documents");
         break;
       case "SETTINGS":
-        console.log("Settings");
+        navigate("/settings");
         break;
       default:
         navigate("/home");
