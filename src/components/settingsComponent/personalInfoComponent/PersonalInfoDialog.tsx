@@ -165,7 +165,7 @@ const PersonalInfoDialog: React.FC<PersonalInfoDialogProps> = ({
             transform: "translateX(-50%)",
             width: "5rem",
             height: "0.1875rem",
-            backgroundColor: "#f8c794",
+            backgroundColor: "#C3A6A0",
             borderRadius: "0.125rem",
           }}
         />
@@ -316,7 +316,7 @@ const PersonalInfoDialog: React.FC<PersonalInfoDialogProps> = ({
             cursor: "pointer",
             fontWeight: "500",
             transition: "background-color 0.3s ease",
-            color: "#f8c794",
+            color: "#C3A6A0",
           }}
         >
           Cancel
@@ -331,7 +331,7 @@ const PersonalInfoDialog: React.FC<PersonalInfoDialogProps> = ({
             cursor: "pointer",
             fontWeight: "500",
             transition: "background-color 0.3s ease",
-            color: "#f8c794",
+            color: "#C3A6A0",
           }}
         >
           Save

@@ -1,100 +1,205 @@
-import React, { useState } from 'react';
-import {
-  MDBBtn,
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBInput,
-} from "mdb-react-ui-kit";
-import logo from "../../images/logo.png";
-import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
-
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
+import "./LoginPage.css";
+import logo from "../../images/logo.png";
 
 type LoginProps = {
   setUserId: React.Dispatch<React.SetStateAction<any>>;
   setIsManager: React.Dispatch<React.SetStateAction<any>>;
-}
-
-function LoginForm({ handleLoginButtonClick }: { handleLoginButtonClick: () => void }) {
-  return (
-    <>
-      <div className="text-center">
-        <img src={logo} style={{ width: "300px" }} alt="logo" />
-      </div>
-      <p>Please login to your account</p>
-      <div className="mb-4">
-        <label htmlFor="form1">Email address</label>
-        <MDBInput id="form1" type="email" />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="form2">Password</label>
-        <MDBInput id="form2" type="password" />
-      </div>
-      <div className="text-center pt-1 mb-5 pb-1">
-        <Button variant="contained" color="primary" className="mb-4 w-100" onClick={handleLoginButtonClick}>
-          Login
-        </Button>
-      </div>
-    </>
-  );
-}
-
-function SignUpPrompt({ handleSignInButtonClick }: { handleSignInButtonClick: () => void }) {
-  return (
-    <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
-      <p className="mb-0">Don't have an account?</p>
-      <Button variant="outlined" color="primary" className="mx-2" onClick={handleSignInButtonClick}>
-        Sign up
-      </Button>
-    </div>
-  );
-}
+};
 
 function Login({ setUserId, setIsManager }: LoginProps) {
   const navigate = useNavigate();
-  const handleSignInButtonClick = () => { navigate("/SignUp"); };
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [errors, setErrors] = React.useState({
+    email: "",
+    password: "",
+  });
+
+  const handleSignInButtonClick = () => {
+    navigate("/SignUp");
+  };
+
+  const validateForm = () => {
+    const newErrors = { ...errors };
+    let isValid = true;
+
+    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = "Invalid email address.";
+      isValid = false;
+    } else {
+      newErrors.email = "";
+    }
+
+    if (
+      !password ||
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+        password
+      )
+    ) {
+      newErrors.password =
+        "Must contain at least 8 characters, including uppercase, lowercase letters, special character, and numbers.";
+      isValid = false;
+    } else {
+      newErrors.password = "";
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleLoginButtonClick = async () => {
-    const email = (document.getElementById("form1") as HTMLInputElement)?.value;
-    const password = (document.getElementById("form2") as HTMLInputElement)?.value;
-    await axios.post("/login", {email: email, password: password})
-    .then((response) => {
-        alert("Login successful: "+ response.data.userId);
+    if (validateForm()) {
+      try {
+        const response = await axios.post("/login", { email, password });
         setUserId(response.data.userId);
         setIsManager(response.data.isManager);
-        localStorage.setItem("isManager", response.data.isManager);
         localStorage.setItem("userId", response.data.userId);
+        localStorage.setItem("isManager", response.data.isManager);
         navigate("/home");
-    })
-    .catch((error) => {
-        console.error("Login failed:", error.message);
-        alert("Login failed. "+ error.message);
-    });
+      } catch (error) {
+        alert("Login failed. Invalid password or email.");
+      }
+    }
   };
 
   return (
-    <MDBContainer className="my-5 gradient-form" style={{ backgroundColor: "#D0B8A8" }}>
-      <MDBRow>
-        <MDBCol col="6" className="mb-5">
-          <div className="d-flex flex-column ms-5">
-            <LoginForm handleLoginButtonClick={handleLoginButtonClick} />
-            <SignUpPrompt handleSignInButtonClick={handleSignInButtonClick} />
-          </div>
-        </MDBCol>
-        <MDBCol col="6" className="mb-5">
-          <div className="d-flex flex-column justify-content-center gradient-custom-2 h-100 mb-4">
-            <div className="text-white px-3 py-4 p-md-5 mx-md-4">
-              <h4 className="mb-4">Home Harmony</h4>
-              <p className="medium mb-0">
-                Home Harmony is a solution designed to make life easier for people sharing living spaces. There's a growing need for a tool that can help with communication, organization, and building a sense of community. Home Harmony does just that. It's a platform that not only helps with day-to-day tasks but also aims to create a strong bond among roommates. Our goal is to go beyond just managing chores and expenses, we want to make shared living enjoyable and organized for everyone involved.
-              </p>
-            </div>
-          </div>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+    <Box className="cardContainer">
+      <Card className="card" sx={{ maxWidth: "60rem", background: "transparent" }}>
+        <Grid container>
+          <Grid item xs={12} md={6} className="leftSide">
+            <CardContent>
+              <Typography
+                component="h1"
+                variant="h5"
+                gutterBottom
+                sx={{
+                  textAlign: "center",
+                  marginBottom: "2rem",
+                  color: "#333",
+                }}
+              >
+                Login
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                    fullWidth
+                    required
+                    multiline
+                    label="Email Address"
+                    variant="outlined"
+                    autoComplete="email"
+                    className="inputField"
+                    error={Boolean(errors.email)}
+                    helperText={errors.email}
+                    InputLabelProps={{ shrink: true }}
+                    sx={{ height: "3.5rem", marginTop: "1rem" }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                    error={Boolean(errors.password)}
+                    helperText={errors.password}
+                    title="Password must contain at least 8 characters, including uppercase and lowercase letters, special character, and numbers."
+                    fullWidth
+                    required
+                    label="Password"
+                    type={showPassword ? "text" : "password"}
+                    variant="outlined"
+                    className="inputField"
+                    InputLabelProps={{ shrink: true }}
+                    InputProps={{
+                      endAdornment: (
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      ),
+                    }}
+                    sx={{ height: "3.5rem" }}
+                  />
+                </Grid>
+              </Grid>
+            </CardContent>
+            <CardActions
+              sx={{ justifyContent: "center", flexDirection: "column" }}
+            >
+              <Button
+                onClick={handleLoginButtonClick}
+                variant="contained"
+                className="loginButton"
+                sx={{
+                  backgroundColor: "#C3A6A0",
+                  color: "black",
+                  padding: "0.7rem 2rem",
+                  "&:hover": { backgroundColor: "#8a7874" },
+                  marginTop: "1rem",
+                }}
+              >
+                Login
+              </Button>
+              <Typography
+                variant="body2"
+                sx={{ marginTop: "2rem", fontSize: "1rem" }}
+              >
+                Don't have an account?{" "}
+                <Button
+                  onClick={handleSignInButtonClick}
+                  variant="text"
+                  sx={{
+                    color: "#C3A6A0",
+                    textDecoration: "underline",
+                    padding: 0,
+                  }}
+                >
+                  Sign Up
+                </Button>
+              </Typography>
+            </CardActions>
+          </Grid>
+          <Grid item xs={12} md={6} className="rightSide">
+            <Box className="logoContainer">
+              <img src={logo} alt="Home Harmony Logo" className="logo" />
+              <Typography
+                variant="body1"
+                sx={{ marginTop: "1rem", color: "#666" }}
+              >
+                Home Harmony is a solution designed to make life easier for
+                people sharing living spaces. There's a growing need for a tool
+                that can help with communication, organization, and building a
+                sense of community. Home Harmony does just that. It's a platform
+                that not only helps with day-to-day tasks but also aims to
+                create a strong bond among roommates. Our goal is to go beyond
+                just managing chores and expenses, we want to make shared living
+                enjoyable and organized for everyone involved.
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </Card>
+    </Box>
   );
 }
+
 export default Login;
