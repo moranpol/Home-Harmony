@@ -182,7 +182,6 @@ function NavigateBar({
           <IconButton
             className="hamburger-menu"
             onClick={toggleMobileMenu}
-            sx={{ display: { md: "none" } }}
           >
             <MenuIcon />
           </IconButton>

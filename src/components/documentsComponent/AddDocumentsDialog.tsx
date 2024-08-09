@@ -29,7 +29,12 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
     file: undefined as File | undefined,
   });
 
-  const [errors, setErrors] = useState("");
+  const [errors, setErrors] = useState({
+    category: "",
+    name: "",
+    description: "",
+    file: "",
+  });
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
@@ -42,19 +47,33 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
 
   const validateForm = (): boolean => {
     let isValid: boolean = true;
-    if (
-      !documentInfo.category ||
-      !documentInfo.name ||
-      !documentInfo.description
-    ) {
-      setErrors("All fields are required.");
+    const errorsObj: { category: string; name: string; description: string; file: string } = {
+      category: "",
+      name: "",
+      description: "",
+      file: "",
+    };
+    if (!documentInfo.category) {
+      errorsObj.category = "Category is required.";
       isValid = false;
     }
+    if (!documentInfo.name) {
+      errorsObj.name = "Name is required.";
+      isValid = false;
+    }
+    if (!documentInfo.description) {
+      errorsObj.description = "Description is required.";
+      isValid = false;
+    }
+    if (!documentInfo.file) {
+      errorsObj.file = "File is required.";
+      isValid = false;
+    }
+    setErrors(errorsObj);
     return isValid;
   };
 
   const onSubmit = async () => {
-   
     if (validateForm()) {
       const formData = new FormData();
       formData.append("category", documentInfo.category);
@@ -63,10 +82,11 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
       formData.append("file", documentInfo.file as File);
       formData.append("userId", userId.toString());
       axios
-      .post("/documents/create", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },})
+        .post("/documents/create", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then((res) => {
           if (res.data.success) {
             console.log("Document created");
@@ -108,12 +128,12 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
           style={{
             content: "",
             position: "absolute",
-            bottom: "-0.625rem",
+            bottom: "-0.1rem",
             left: "50%",
             transform: "translateX(-50%)",
             width: "5rem",
             height: "0.1875rem",
-            backgroundColor: "#f8c794",
+            backgroundColor: "#C3A6A0",
             borderRadius: "0.125rem",
           }}
         />
@@ -121,8 +141,8 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
       <DialogContent
         style={{
           width: "100%",
-          maxWidth: "37.5rem",
-          padding: "2rem",
+          maxWidth: "30rem",
+          padding: "1.3rem",
           boxSizing: "border-box",
           overflow: "visible",
         }}
@@ -132,13 +152,14 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
             <TextField
               onChange={onChange}
               value={documentInfo.category}
-              error={Boolean(errors)}
-              helperText={errors}
+              error={Boolean(errors.category)}
+              helperText={errors.category}
               style={{ marginBottom: "1rem", width: "100%" }}
               autoComplete="category"
               name="category"
               required
               fullWidth
+              multiline
               id="category"
               label="Category"
               InputLabelProps={{ shrink: true }}
@@ -148,11 +169,14 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
             <TextField
               onChange={onChange}
               value={documentInfo.name}
+              error={Boolean(errors.name)}
+              helperText={errors.name}
               style={{ marginBottom: "1rem", width: "100%" }}
               autoComplete="name"
               name="name"
               required
               fullWidth
+              multiline
               id="name"
               label="Name"
               InputLabelProps={{ shrink: true }}
@@ -162,11 +186,14 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
             <TextField
               onChange={onChange}
               value={documentInfo.description}
+              error={Boolean(errors.description)}
+              helperText={errors.description}
               style={{ marginBottom: "1rem", width: "100%" }}
               autoComplete="description"
               name="description"
               required
               fullWidth
+              multiline
               id="description"
               label="Description"
               InputLabelProps={{ shrink: true }}
@@ -176,10 +203,10 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
             <input
               name="file"
               type="file"
-              accept="*" // Accept all file types by default
+              accept="*"
               className="fileInput"
               onChange={onChange}
-              style={{ display: "none" }}
+              style={{ display: "none", marginBottom: "0.5rem" }}
               id="file"
             />
             <label htmlFor="file" className="fileInputLabel">
@@ -211,7 +238,7 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
                 color="error"
                 style={{ padding: "10px" }}
               >
-                {errors}
+                {errors.file}
               </Typography>
             )}
           </Grid>
@@ -227,7 +254,7 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
             cursor: "pointer",
             fontWeight: "500",
             transition: "background-color 0.3s ease",
-            color: "#f8c794",
+            color: "#C3A6A0",
           }}
         >
           Cancel
@@ -242,7 +269,7 @@ const AddDocumentsDialog: React.FC<AddDocumentDialogProps> = ({
             cursor: "pointer",
             fontWeight: "500",
             transition: "background-color 0.3s ease",
-            color: "#f8c794",
+            color: "#C3A6A0",
           }}
         >
           Create

@@ -43,15 +43,22 @@ function ApartmentsPage({ userId }: { userId: number }) {
   const onSubmit = async () => {
     if (validateForm()) {
       try {
-        const res = await axios.put("/apartments/search", { apartmentId: aptId, userId });
+        const res = await axios.put("/apartments/search", {
+          apartmentId: aptId,
+          userId,
+        });
         if (res.data.success) {
           console.log("Apartment found");
           alert("Apartment found successfully, welcome to your new apartment.");
           navigate("/home");
         } else {
           setAptId("");
-          setErrors("Apartment not found, please try again or create a new apartment.");
-          alert("Apartment not found, please try again or create a new apartment.");
+          setErrors(
+            "Apartment not found, please try again or create a new apartment."
+          );
+          alert(
+            "Apartment not found, please try again or create a new apartment."
+          );
         }
       } catch (error) {
         console.log("Apartment search failed", error);
@@ -77,7 +84,7 @@ function ApartmentsPage({ userId }: { userId: number }) {
 
   return (
     <Box className="cardContainer">
-      <Card className="card">
+      <Card className="card" sx={{ maxWidth: "36rem" }}>
         <CardContent>
           <Typography
             component="h1"
@@ -125,11 +132,11 @@ function ApartmentsPage({ userId }: { userId: number }) {
                 className="button"
                 variant="contained"
                 sx={{
-                  backgroundColor: "#F8C794",
+                  backgroundColor: "#C3A6A0",
                   color: "black",
                   fontSize: "0.7rem",
                   padding: "0.7rem 1rem",
-                  "&:hover": { backgroundColor: "#D8AE7E" },
+                  "&:hover": { backgroundColor: "#8a7874" },
                 }}
               >
                 Create Apartment
@@ -144,10 +151,11 @@ function ApartmentsPage({ userId }: { userId: number }) {
             type="submit"
             variant="contained"
             sx={{
-              backgroundColor: "#F8C794",
+              marginTop: "1rem",
+              backgroundColor: "#C3A6A0",
               color: "black",
               padding: "0.7rem 2rem",
-              "&:hover": { backgroundColor: "#D8AE7E" },
+              "&:hover": { backgroundColor: "#8a7874" },
             }}
           >
             Submit

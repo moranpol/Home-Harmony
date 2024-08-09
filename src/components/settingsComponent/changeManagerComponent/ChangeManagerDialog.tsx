@@ -50,7 +50,7 @@ const ChangeManagerDialog: React.FC<ChangeManagerDialogProps> = ({
       .catch((error) => {
         console.log("Failed to retrieve users", error);
       });
-  }, []);
+  }, [userId]);
 
   const onSave = async () => {
     if (userChosen === "") {
@@ -107,7 +107,7 @@ const ChangeManagerDialog: React.FC<ChangeManagerDialogProps> = ({
             transform: "translateX(-50%)",
             width: "5rem",
             height: "0.1875rem",
-            backgroundColor: "#f8c794",
+            backgroundColor: "#C3A6A0",
             borderRadius: "0.125rem",
           }}
         />
@@ -174,7 +174,7 @@ const ChangeManagerDialog: React.FC<ChangeManagerDialogProps> = ({
             cursor: "pointer",
             fontWeight: "500",
             transition: "background-color 0.3s ease",
-            color: "#f8c794",
+            color: "#C3A6A0",
           }}
         >
           Cancel
@@ -189,7 +189,7 @@ const ChangeManagerDialog: React.FC<ChangeManagerDialogProps> = ({
             cursor: "pointer",
             fontWeight: "500",
             transition: "background-color 0.3s ease",
-            color: "#f8c794",
+            color: "#C3A6A0",
           }}
         >
           Save

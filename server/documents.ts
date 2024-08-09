@@ -7,7 +7,6 @@ import multer from "multer";
 const documentsRouter = express.Router();
 const documentDir = path.join(__dirname, "..", "app_documents", "document_files");
 
-// Serve static files from the documentDir
 documentsRouter.use('/files', express.static(documentDir));
 
 interface Document {
@@ -27,13 +26,11 @@ documentsRouter.get("/:userId", async (req, res) => {
     const query = `SELECT d.id, d.user_id, d.category, d.description, d.name, d.aptid, d.document FROM documentstable d WHERE d.aptid = ${apartmentId}`;
     const result: Document[] = await queryRunner.query(query);
 
-    // Map results to include only filename instead of full path
     const modifiedResult = result.map((doc: Document) => ({
         ...doc,
-        document: path.basename(doc.document)  // Extract filename from full path
+        document: path.basename(doc.document) 
     }));
 
-    console.log("result: ", modifiedResult);
     res.status(200).json(modifiedResult);
 });
 
@@ -57,7 +54,7 @@ documentsRouter.post("/create", upload.single("file"), async (req, res) => {
     try {
         const aptId = await getAppartmentId(userId);
 
-        const uploadedFile = req.file; // Access uploaded file information
+        const uploadedFile = req.file; 
 
         if (!uploadedFile) {
             return res.status(400).json({ success: false, message: "No file uploaded" });

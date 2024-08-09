@@ -165,7 +165,7 @@ function SignUp({ setUserId }: LoginProps) {
 
   return (
     <Box className="cardContainer">
-      <Card className="card">
+      <Card className="card" sx={{maxWidth: "40rem", background: "transparent" }}>
         <CardContent>
           <Typography
             component="h1"
@@ -355,10 +355,10 @@ function SignUp({ setUserId }: LoginProps) {
             type="submit"
             variant="contained"
             sx={{
-              backgroundColor: "#F8C794",
+              backgroundColor: "#C3A6A0",
               color: "black",
               padding: "0.7rem 2rem",
-              "&:hover": { backgroundColor: "#D8AE7E" },
+              "&:hover": { backgroundColor: "#8a7874" },
             }}
           >
             Submit

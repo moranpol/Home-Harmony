@@ -43,6 +43,8 @@
 
 .menuButtons {
   display: flex;
+  margin-left: auto;
+  margin-right: auto;
   padding: 0.625rem 2rem;
 }
 
@@ -64,14 +66,13 @@
 }
 
 .hamburger-menu {
-  display: none;
+  display: none !important;
   align-self: flex-start;
-  
 }
 
-@media screen and (max-width: 70rem) {
+@media screen and (max-width: 1120px) {
   .hamburger-menu {
-    display: flex;
+    display: flex !important;
     align-self: flex-start;
   }
 

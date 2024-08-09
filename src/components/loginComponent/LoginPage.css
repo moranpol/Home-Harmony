@@ -1,22 +1,73 @@
-.gradient-custom-2 {
-    /* fallback for old browsers */
-    background: #fccb90;
-  
-    /* Chrome 10-25, Safari 5.1-6 */
-    background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
-  
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+/* General Styles */
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #f8f8f8;
+}
+
+/* Container */
+.cardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+/* Card */
+.card {
+  display: flex;
+  width: 100%;
+  border-radius: 0.625rem;
+  background-color: #F2EBE5 !important;
+  box-shadow: 0rem 0.25rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+/* Left Side */
+.leftSide {
+  padding: 2rem;
+  border-radius: 0.625rem 0 0 0.625rem;
+}
+
+.leftSide .inputField {
+  margin-bottom: 1rem;
+}
+
+/* Right Side */
+.rightSide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border-radius: 0 0.625rem 0.625rem 0;
+}
+
+.logoContainer {
+  text-align: center;
+}
+
+.logo {
+  width: 400px; /* Increase logo size here */
+  height: auto;
+}
+
+.loginButton {
+  text-transform: none;
+  border: none;
+  border-radius: 0.3125rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+/* Media Queries */
+@media screen and (max-width: 48rem) {
+  .card {
+    flex-direction: column;
   }
-  
-  @media (min-width: 768px) {
-    .gradient-form {
-      height: 100vh !important;
-    }
+
+  .leftSide, .rightSide {
+    width: 100%;
+    padding: 1.5rem;
   }
-  @media (min-width: 769px) {
-    .gradient-custom-2 {
-      border-top-right-radius: .3rem;
-      border-bottom-right-radius: .3rem;
-    }
-  }
+}
