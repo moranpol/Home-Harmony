@@ -127,11 +127,11 @@ body {
   /* Adjust styles for screens with a maximum width of 48rem */
   .cardContainer {
     height: auto;
-    padding: 2rem 0;
+    padding: 1.5rem 1rem; /* Adjust padding for better fit */
   }
 
   .card {
-    max-width: 90%;
+    max-width: 95%; /* Increase max-width slightly for smaller screens */
     padding: 1.5rem;
   }
 
@@ -155,25 +155,25 @@ body {
   }
 
   .inputField {
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem; /* Slightly reduce margin for better spacing */
   }
 
   .inputField .MuiOutlinedInput-root {
-    font-size: 0.5625rem;
+    font-size: 0.75rem; /* Slightly increase font-size for readability */
   }
 
   .fileInputLabel .MuiButton-root {
-    font-size: 0.5625rem;
-    padding: 0.3125rem 0.9375rem;
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
   }
 
   .errorText {
-    font-size: 0.5rem;
+    font-size: 0.75rem;
   }
 
   .submitButton {
-    font-size: 0.5625rem;
-    padding: 0.3125rem 0.9375rem;
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
   }
 }
 
@@ -185,32 +185,33 @@ body {
   }
 
   .card {
-    padding: 0.5rem;
+    padding: 0.75rem;
   }
 
   .card h1 {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
 
   .inputField {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem; /* Further reduce margin */
   }
 
   .inputField .MuiOutlinedInput-root {
-    font-size: 0.5rem;
+    font-size: 0.625rem; /* Maintain readability */
   }
 
   .fileInputLabel .MuiButton-root {
-    font-size: 0.5rem;
-    padding: 0.25rem 0.75rem;
+    font-size: 0.625rem;
+    padding: 0.5rem 0.875rem;
   }
 
   .errorText {
-    font-size: 0.4375rem;
+    font-size: 0.625rem;
   }
 
   .submitButton {
-    font-size: 0.5rem;
-    padding: 0.25rem 0.75rem;
+    font-size: 0.625rem;
+    padding: 0.5rem 0.875rem;
   }
 }
+

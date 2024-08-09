@@ -70,14 +70,4 @@ body {
     width: 100%;
     padding: 1.5rem;
   }
-
-  .rightSide {
-    display: none; /* Hide right side on smaller screens if needed */
-  }
-}
-
-@media screen and (max-width: 30rem) {
-  .logo {
-    width: 250px; /* Adjust logo size for smaller screens if needed */
-  }
 }

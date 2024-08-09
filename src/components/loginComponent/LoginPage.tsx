@@ -34,6 +34,30 @@ function Login({ setUserId, setIsManager }: LoginProps) {
     navigate("/SignUp");
   };
 
+  const [isPhone, setIsPhone] = React.useState(false);
+
+  React.useEffect(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        if (entry.contentRect.width < 768) {
+          console.log("phone");
+          setIsPhone(true);
+        } else {
+          setIsPhone(false);
+        }
+      }
+    });
+
+    const element = document.documentElement;
+    if (element) {
+      resizeObserver.observe(element);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
   const validateForm = () => {
     const newErrors = { ...errors };
     let isValid = true;
@@ -79,7 +103,10 @@ function Login({ setUserId, setIsManager }: LoginProps) {
 
   return (
     <Box className="cardContainer">
-      <Card className="card" sx={{ maxWidth: "60rem", background: "transparent" }}>
+      <Card
+        className="card"
+        sx={{ maxWidth: "60rem", background: "transparent" }}
+      >
         <Grid container>
           <Grid item xs={12} md={6} className="leftSide">
             <CardContent>
@@ -179,22 +206,25 @@ function Login({ setUserId, setIsManager }: LoginProps) {
             </CardActions>
           </Grid>
           <Grid item xs={12} md={6} className="rightSide">
-            <Box className="logoContainer">
-              <img src={logo} alt="Home Harmony Logo" className="logo" />
-              <Typography
-                variant="body1"
-                sx={{ marginTop: "1rem", color: "#666" }}
-              >
-                Home Harmony is a solution designed to make life easier for
-                people sharing living spaces. There's a growing need for a tool
-                that can help with communication, organization, and building a
-                sense of community. Home Harmony does just that. It's a platform
-                that not only helps with day-to-day tasks but also aims to
-                create a strong bond among roommates. Our goal is to go beyond
-                just managing chores and expenses, we want to make shared living
-                enjoyable and organized for everyone involved.
-              </Typography>
-            </Box>
+            {!isPhone && (
+              <Box className="logoContainer">
+                <img src={logo} alt="Home Harmony Logo" className="logo" />
+                <Typography
+                  variant="body1"
+                  sx={{ marginTop: "1rem", color: "#666" }}
+                >
+                  Home Harmony is a solution designed to make life easier for
+                  people sharing living spaces. There's a growing need for a
+                  tool that can help with communication, organization, and
+                  building a sense of community. Home Harmony does just that.
+                  It's a platform that not only helps with day-to-day tasks but
+                  also aims to create a strong bond among roommates. Our goal is
+                  to go beyond just managing chores and expenses, we want to
+                  make shared living enjoyable and organized for everyone
+                  involved.
+                </Typography>
+              </Box>
+            )}
           </Grid>
         </Grid>
       </Card>
