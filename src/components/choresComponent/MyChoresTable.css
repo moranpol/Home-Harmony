@@ -60,3 +60,14 @@
 .MuiDataGrid-toolbarContainer {
   display: none; 
 }
+
+.noChoresMessage {
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  color: #000;
+  text-align: center;
+  padding: 20px;
+  background-color: #d1c8c1;
+  border-radius: 5px;
+  margin-top: 1rem;
+}

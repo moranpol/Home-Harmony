@@ -128,7 +128,13 @@ function App() {
         />
         <Route
           path="/join-apartment"
-          element={<ApartmentsPage userId={userId} />}
+          element={
+            <ApartmentsPage
+              userId={userId}
+              setUserId={setUserId}
+              setIsManager={setIsManager}
+            />
+          }
         />
         <Route
           path="/settings"

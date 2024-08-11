@@ -84,7 +84,7 @@ const MyChoresTable = ({ userId }: { userId: number }) => {
       width: 250,
       editable: false,
       renderCell: (params) => (
-        <div style={{ wordWrap: 'break-word', whiteSpace: 'normal' }}>
+        <div style={{ wordWrap: "break-word", whiteSpace: "normal" }}>
           {params.value}
         </div>
       ),
@@ -98,18 +98,22 @@ const MyChoresTable = ({ userId }: { userId: number }) => {
   return (
     <ThemeProvider theme={theme}>
       <div style={{ height: "100%", width: "100%" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          hideFooter
-          disableColumnMenu
-          scrollbarSize={0}
-          checkboxSelection={false}
-          className="MyChoresTable"
-          density="comfortable"
-          getRowClassName={getRowClassName}
-          style={{ marginTop: "1rem", border: "none" }}
-        />
+        {rows.length > 0 ? (
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            hideFooter
+            disableColumnMenu
+            scrollbarSize={0}
+            checkboxSelection={false}
+            className="MyChoresTable"
+            density="comfortable"
+            getRowClassName={getRowClassName}
+            style={{ marginTop: "1rem", border: "none" }}
+          />
+        ) : (
+          <div className="noChoresMessage">You have no chores to do :)</div>
+        )}
       </div>
     </ThemeProvider>
   );

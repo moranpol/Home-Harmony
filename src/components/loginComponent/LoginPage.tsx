@@ -94,7 +94,12 @@ function Login({ setUserId, setIsManager }: LoginProps) {
         setIsManager(response.data.isManager);
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem("isManager", response.data.isManager);
-        navigate("/home");
+        if(response.data.aptId) {
+          navigate("/home");
+        }
+        else {
+          navigate("/join-apartment");
+        }
       } catch (error) {
         alert("Login failed. Invalid password or email.");
       }
