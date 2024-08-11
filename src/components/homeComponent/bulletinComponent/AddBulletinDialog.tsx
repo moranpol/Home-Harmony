@@ -47,6 +47,7 @@ const AddBulletinDialog: React.FC<AddBulletinDialogProps> = ({
         .then((res) => {
           if (res.data.success) {
             console.log("Bulletin created");
+            setBulletinInfo({ info: "", date: undefined });
             onClose(true);
           } else {
             alert("Bulletin creation failed, please try again.");
@@ -62,7 +63,10 @@ const AddBulletinDialog: React.FC<AddBulletinDialogProps> = ({
   return (
     <Dialog
       open={open}
-      onClose={() => onClose(false)}
+      onClose={() => {
+        setBulletinInfo({ info: "", date: undefined });
+        onClose(true);
+      }}
       style={{
         display: "flex",
         justifyContent: "center",

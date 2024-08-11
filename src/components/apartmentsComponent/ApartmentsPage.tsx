@@ -13,11 +13,25 @@ import {
 import AddApartmentDialog from "./AddApartmentDialog";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import DeleteAccountDialog from "../settingsComponent/deleteAccountComponent/DeleteAccountDialog";
 
-function ApartmentsPage({ userId }: { userId: number }) {
+function ApartmentsPage({
+  userId,
+  setUserId,
+  setIsManager,
+}: {
+  userId: number;
+  setUserId: React.Dispatch<React.SetStateAction<number>>;
+  setIsManager: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [aptId, setAptId] = useState("");
   const [errors, setErrors] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [createApartmentDialogOpen, setCreateApartmentDialogOpen] =
+    useState(false);
+  const [IsDeleteAccountDialogOpen, setIsDeleteAccountDialogOpen] =
+    useState(false);
+
+  const navigate = useNavigate();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -37,8 +51,6 @@ function ApartmentsPage({ userId }: { userId: number }) {
     }
     return isValid;
   };
-
-  const navigate = useNavigate();
 
   const onSubmit = async () => {
     if (validateForm()) {
@@ -69,12 +81,12 @@ function ApartmentsPage({ userId }: { userId: number }) {
     }
   };
 
-  const handleDialogOpen = () => {
-    setDialogOpen(true);
+  const handleCreateApartmentDialogOpen = () => {
+    setCreateApartmentDialogOpen(true);
   };
 
-  const handleDialogClose = (isCreated: boolean) => {
-    setDialogOpen(false);
+  const handleCreateApartmentDialogClose = (isCreated: boolean) => {
+    setCreateApartmentDialogOpen(false);
 
     if (isCreated) {
       alert("Apartment created successfully, welcome to your new apartment.");
@@ -82,9 +94,41 @@ function ApartmentsPage({ userId }: { userId: number }) {
     }
   };
 
+  function handleDeleteAccountDialogOpen(): void {
+    setIsDeleteAccountDialogOpen(true);
+  }
+
+  function handleDeleteAccountDialogClose(isCreated: boolean): void {
+    setIsDeleteAccountDialogOpen(false);
+  }
+
+  const handleLogout = () => {
+    axios
+      .post("/navigate-bar/logout")
+      .then((res) => {
+        console.log("Logged out");
+        setUserId(-1);
+        setIsManager(false);
+        localStorage.removeItem("userId");
+        localStorage.removeItem("isManager");
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.log("Failed to logout", error);
+      });
+  };
+
   return (
     <Box className="cardContainer">
-      <Card className="card" sx={{ maxWidth: "36rem" }}>
+      <Card
+        className="card"
+        sx={{
+          maxWidth: "36rem",
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+        }}
+      >
         <CardContent>
           <Typography
             component="h1"
@@ -128,15 +172,14 @@ function ApartmentsPage({ userId }: { userId: number }) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <Button
-                onClick={handleDialogOpen}
+                onClick={handleCreateApartmentDialogOpen}
                 className="button"
-                variant="contained"
+                variant="outlined"
                 sx={{
-                  backgroundColor: "#C3A6A0",
-                  color: "black",
-                  fontSize: "0.7rem",
-                  padding: "0.7rem 1rem",
-                  "&:hover": { backgroundColor: "#8a7874" },
+                  marginRight: "1rem",
+                  color: "#C3A6A0",
+                  borderColor: "#C3A6A0",
+                  "&:hover": { borderColor: "#8a7874", color: "#8a7874" },
                 }}
               >
                 Create Apartment
@@ -144,30 +187,86 @@ function ApartmentsPage({ userId }: { userId: number }) {
             </Grid>
           </Grid>
         </CardContent>
-        <CardActions>
-          <Button
-            onClick={onSubmit}
-            className="button"
-            type="submit"
-            variant="contained"
-            sx={{
-              marginTop: "1rem",
-              backgroundColor: "#C3A6A0",
-              color: "black",
-              padding: "0.7rem 2rem",
-              "&:hover": { backgroundColor: "#8a7874" },
-            }}
-          >
-            Submit
-          </Button>
+        <CardActions
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            padding: "1rem",
+          }}
+        >
+          <Grid container justifyContent="center" spacing={2}>
+            <Grid item>
+              <Button
+                onClick={onSubmit}
+                className="button"
+                type="submit"
+                variant="contained"
+                sx={{
+                  backgroundColor: "#C3A6A0",
+                  color: "black",
+                  padding: "0.7rem 2rem",
+                  "&:hover": { backgroundColor: "#8a7874" },
+                }}
+              >
+                Submit
+              </Button>
+            </Grid>
+          </Grid>
         </CardActions>
+        <Grid
+          container
+          sx={{
+            marginTop: "1rem",
+            borderTop: "1px solid #C3A6A0",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Grid item>
+            <Button
+              onClick={handleLogout}
+              variant="outlined"
+              sx={{
+                marginTop: "2rem",
+                marginRight: "1rem",
+                color: "#C3A6A0",
+                borderColor: "#C3A6A0",
+                "&:hover": { borderColor: "#8a7874", color: "#8a7874" },
+              }}
+            >
+              Log Out
+            </Button>
+            <Button
+              onClick={handleDeleteAccountDialogOpen}
+              variant="outlined"
+              sx={{
+                marginTop: "2rem",
+                color: "#C3A6A0",
+                borderColor: "#C3A6A0",
+                "&:hover": { borderColor: "#8a7874", color: "#8a7874" },
+              }}
+            >
+              Delete Account
+            </Button>
+          </Grid>
+        </Grid>
       </Card>
       <AddApartmentDialog
         userId={userId}
-        open={dialogOpen}
+        open={createApartmentDialogOpen}
         onClose={(isCreated: boolean) => {
-          handleDialogClose(isCreated);
+          handleCreateApartmentDialogClose(isCreated);
         }}
+      />
+      <DeleteAccountDialog
+        open={IsDeleteAccountDialogOpen}
+        onClose={(isCreated: boolean) => {
+          handleDeleteAccountDialogClose(isCreated);
+        }}
+        userId={userId}
+        setUserId={setUserId}
+        setIsManager={setIsManager}
       />
     </Box>
   );

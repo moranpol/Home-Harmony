@@ -64,7 +64,6 @@ function HomePage({ userId }: { userId: number }) {
     setDialogOpen(false);
 
     if (isCreated) {
-      alert("Bulletin created successfully.");
       getBulletins();
     }
   };
