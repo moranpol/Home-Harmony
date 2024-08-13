@@ -2,14 +2,31 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { TextField } from '@mui/material';
 import './ExpenseForm.css';
+import { Expense } from './ExpensesPage'; 
 
-function AddExpenseForm({ userId, setShowAddForm, onExpenseAdded  }: { userId: number, setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>, onExpenseAdded: () => void}) {
+function EditExpenseForm({rowinfo, userId, setShowForm, onExpenseEdited}: { rowinfo: Expense, userId: number, setShowForm: React.Dispatch<React.SetStateAction<boolean>>, onExpenseEdited: () => void}) { 
+    
+    useEffect(() => {
+        const [day, month, year] = rowinfo.date.split('/');
+        const formattedDate = `20${year}-${month}-${day}`;
+        console.log("formattedDate: ", formattedDate);
+        setExpenseInfo(prevInfo => ({
+            ...prevInfo,
+            date: formattedDate
+        }));
+    }, [rowinfo]);
+
+    console.log("EditExpenseForm rowinfo: ", rowinfo);
+
     const [expenseInfo, setExpenseInfo] = useState({
+        rowinfo: rowinfo,
         userId: userId,
-        date: "",
-        product: "",
-        cost: 0
+        date: rowinfo.date,
+        product: rowinfo.product,
+        cost: rowinfo.cost
     });
+
+    
     
     const [errors, setErrors] = useState({
         date: "",
@@ -46,23 +63,23 @@ function AddExpenseForm({ userId, setShowAddForm, onExpenseAdded  }: { userId: n
         return isValid;
     }
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleEdit = (event: React.FormEvent) => {
         event.preventDefault();
-        console.log("Form submitted");
+        console.log("Form edited");
         if (validateForm()) {
             
-
-            axios.post("/expenses/add", {
-                userId: expenseInfo.userId,
+            axios.post("/expenses/edit", { ////
+                rowId: rowinfo.id,
+                userId: userId,
                 date: expenseInfo.date,
                 product: expenseInfo.product,
                 cost: expenseInfo.cost})
             
             .then((response) => {
-                console.log("Expense added successfully");
+                console.log("Expense edit successfully");
                 console.log("Response: ", response.data);
-                onExpenseAdded();
-                setShowAddForm(false);
+                onExpenseEdited();
+                setShowForm(false);
             })
             .catch((error) => {
                 console.error("Failed to add expense:", error.message);
@@ -71,7 +88,7 @@ function AddExpenseForm({ userId, setShowAddForm, onExpenseAdded  }: { userId: n
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleEdit}>
             <label>
                 Date:
                 <TextField type="date" value={expenseInfo.date} error={Boolean(errors.date)} onChange={e => setExpenseInfo({...expenseInfo, date: e.target.value})} />
@@ -90,4 +107,5 @@ function AddExpenseForm({ userId, setShowAddForm, onExpenseAdded  }: { userId: n
     );
 
 }
-export default AddExpenseForm;
+
+export default EditExpenseForm;

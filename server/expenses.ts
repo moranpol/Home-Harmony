@@ -13,7 +13,7 @@ expensesRouter.get("/:userId", async (req, res) => {
     console.log("in get: apartmentId: ", apartmentId);
     const query = `SELECT e.id, e.user_id, e.product, e.cost, to_char(e.date, 'dd/MM/yy') as date, u.fname FROM expenses e INNER JOIN userstable u ON e.user_id=u.id WHERE e.apt_id='${apartmentId}'`;
     const result = await queryRunner.query(query);
-    console.log("expenses result: ", result);
+    //console.log("expenses result: ", result);
     res.status(200).json(result);
     }
     catch(err){
@@ -79,6 +79,37 @@ expensesRouter.delete("/delete", async (req, res) => {
         }
 });
 
+expensesRouter.delete("/delete/:rowId", async (req, res) => {
+    console.log("delete rowId: ", req.params.rowId);
+    try{
+        const rowId = Number(req.params.rowId);
+        const query = `DELETE FROM expenses WHERE id=${rowId}`;
+        await queryRunner.query(query);
+        console.log("Row deleted");
+        res.status(200).send("Row deleted");
+    }
+    catch(err){
+        console.error("Failed to delete row:", err);
+        res.status(500).send("Failed to delete row");
+    }
+});
+
+expensesRouter.post("/edit", async (req, res) => {
+    console.log("edit rowId: ", req.body);
+    try{
+        const query = `UPDATE expenses SET product='${req.body.product}', cost='${req.body.cost}', date='${req.body.date}' WHERE id=${req.body.rowId}`;
+        await queryRunner.query(query);
+        console.log("Row edited");
+        res.status(200).send("Row edited");
+    }
+    catch(err){
+        console.error("Failed to edit row:", err);
+        res.status(500).send("Failed to edit row");
+    }
+});
+
+
+
 // probably should be moved to user.ts or apartment.ts - todo
 async function getAppartmentId(userId: number): Promise<number> {
     console.log("getAppartmentId userId: ", userId);
@@ -101,15 +132,5 @@ async function getLastExpenseId(): Promise<number> {
     console.log("getLastExpenseId result: ", result);
     return result[0]?.max;
 }   
-/*
-export class Expenses {
-    private userId: number;
-    private apartmentId: number;
 
-    constructor(userId: number, apartmentId: number) {
-        this.userId = userId;
-        this.apartmentId = apartmentId;
-    }
-}
-*/
 export default expensesRouter;
