@@ -4,18 +4,25 @@ import Button from "@mui/material/Button";
 import { DataGrid } from '@mui/x-data-grid';
 import "./ExpensesPage.css";
 import AddExpenseForm from "./AddExpenseForm";
+import EditExpenseForm from "./EditExpenseForm";
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 
+export interface Expense { 
+    id: number;
+    name: string; 
+    date: string;
+    product: string;
+    cost: number;
+}
 
-function AddExpenseButton({userId, setShowForm} : {userId: number, setShowForm: React.Dispatch<React.SetStateAction<boolean>>}) {
+function AddExpenseButton({userId, setShowAddForm} : {userId: number, setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>}) {
     function onAddExpenseButtonClick() {
         console.log("Add Expense button clicked");
-        setShowForm(true);
+        setShowAddForm(true);
     }
-    
     return <Button variant="outlined" component="span" className="addButton" onClick={onAddExpenseButtonClick}>Add Expense</Button>
 }
 
@@ -40,9 +47,11 @@ function CurrentBalanceText({ balance }: { balance: number }) {
 
 
 function ExpensesPage({userId, isManager} : {userId: number, isManager: boolean}) {
-    const [expenses, setExpenses] = useState<{ id: number; name: string; date: string; product: string; cost: number; }[]>([]);
+    const [expenses, setExpenses] = useState<Expense[]>([]);
     const [balance, setBalance] = useState(0);
-    const [showForm, setShowForm] = useState(false);
+    const [ShowAddForm, setShowAddForm] = useState(false);
+    const [ShowEditForm, setShowEditForm] = useState(false);
+    const [selectedRow, setSelectedRow] = useState<Expense | null>(null);
 
     const fetchAllExpenses = async () => {
         await axios.get(`/expenses/${userId}`)
@@ -64,37 +73,113 @@ function ExpensesPage({userId, isManager} : {userId: number, isManager: boolean}
         });
     };
 
-    useEffect(() => {
-        fetchBalance();
-        fetchAllExpenses();
-    }, [userId]);
-
-    const handleExpenseAdded = () => {
-        console.log("Expense added");
+    const refreshExpenses = () => {
         fetchBalance();
         fetchAllExpenses();
     };
 
+    useEffect(() => {
+        refreshExpenses();
+    }, [userId]);
+
+    const handleExpenseAdded = () => {
+        console.log("Expense added");
+        refreshExpenses();
+    };
+
+    const handleExpenseDelete = async (rowId: number) => {
+        console.log("Delete row with id:", rowId);
+        await axios.delete(`/expenses/delete/${rowId}`)
+        .then((response) => {
+            console.log("Row deleted");
+            refreshExpenses();
+        })
+        .catch ((error) => {
+            console.error("Failed to delete row:", error.message);
+        });
+    }
+
+    const handleEdit = (row: Expense) => {
+        console.log("Edit row:", row);
+        setSelectedRow(row);
+        setShowEditForm(true);         
+    };
+
+    const handleExpenseEdited = () => {
+        console.log("Expense edited");
+        refreshExpenses();
+    };
+
     const columns = [
-        { field: 'fname', headerName: 'NAME', width: 150 },
-        { field: 'date', headerName: 'DATE', width: 150 },
-        { field: 'product', headerName: 'PRODUCT', width: 300 },
-        { field: 'cost', headerName: 'COST', width: 50},
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            width: 150,
+            renderCell: (params: any) => {
+                console.log("params.row: ", params.row);
+                const canEditDelete = params.row.user_id === userId; 
+                return canEditDelete ? (
+                <div>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        onClick={() => handleEdit(params.row)}
+                        style={{ marginRight: 8 }}
+                    >
+                        Edit
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                        onClick={() => handleExpenseDelete(params.row.id)}
+                    >
+                        Delete
+                    </Button>
+                </div>
+            ) : null;
+            }
+        },
+        { field: 'fname', headerName: 'NAME', width: 150, headerClassName: 'customHeader'},
+        { field: 'date', headerName: 'DATE', width: 150, headerClassName: 'customHeader' },
+        { field: 'product', headerName: 'PRODUCT', width: 250, headerClassName: 'customHeader' },
+        { field: 'cost', headerName: 'COST', width: 50, headerClassName: 'customHeader'},
+        
     ];
 
     console.log("userId in ExpensesPage: ", userId);
     return (
-        
         <div>
-            <Dialog open={showForm} onClose={() => setShowForm(false)}>
+            <Dialog open={ShowAddForm} onClose={() => setShowAddForm(false)}>
                 <DialogTitle>Add Expense</DialogTitle>
                 <DialogContent>
-                    <AddExpenseForm userId={userId} setShowForm={setShowForm} onExpenseAdded={handleExpenseAdded}/>
+                    <AddExpenseForm userId={userId} setShowAddForm={setShowAddForm} onExpenseAdded={handleExpenseAdded}/>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setShowForm(false)}>Close</Button>
+                    <Button onClick={() => setShowAddForm(false)}>Close</Button>
                 </DialogActions>
             </Dialog>
+
+            <Dialog open={ShowEditForm} onClose={() => setShowEditForm(false)}>
+                <DialogTitle>Edit Expense</DialogTitle>
+                <DialogContent>
+                    {selectedRow && (
+                        <EditExpenseForm
+                            rowinfo={selectedRow} 
+                            userId={userId}
+                            setShowForm={setShowEditForm}
+                            onExpenseEdited={handleExpenseAdded} 
+                        />
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setShowEditForm(false)}>Close</Button>
+                </DialogActions>
+            </Dialog>
+
+
+
             <div className="container">
             <h1>Expenses Page</h1>
             <CurrentBalanceText balance={balance}/>
@@ -104,10 +189,10 @@ function ExpensesPage({userId, isManager} : {userId: number, isManager: boolean}
                         columnHeaders: 'customHeader' }} />
             </div>
             <div className="ButtonContainer">
-                <AddExpenseButton userId={userId} setShowForm={setShowForm} />
+                <AddExpenseButton userId={userId} setShowAddForm={setShowAddForm} />
                 <ClearTableButton isManager={isManager} update={handleExpenseAdded}/>
             </div>
-            {showForm && <AddExpenseForm userId={userId} setShowForm={setShowForm} onExpenseAdded={handleExpenseAdded}/>}
+            {ShowAddForm && <AddExpenseForm userId={userId} setShowAddForm={setShowAddForm} onExpenseAdded={handleExpenseAdded}/>}
         </div>
         </div>
        
