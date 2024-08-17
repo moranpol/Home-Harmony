@@ -67,6 +67,13 @@ tbody td {
   word-wrap: break-word;
 }
 
+.iconTd{
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #f8f8f8;
+}
+
 .document a {
   color: black;
   text-decoration: underline;
@@ -151,6 +158,11 @@ tbody td {
   thead th, tbody td {
     padding: 0.5rem;
     font-size: 0.875rem;
+  }
+
+  .iconTd{
+    display: flex;
+    background-color: #d1c8c1;
   }
 }
 
