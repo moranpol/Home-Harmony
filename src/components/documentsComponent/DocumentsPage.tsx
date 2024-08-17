@@ -107,7 +107,7 @@ function DocumentsPage({ userId }: { userId: number }) {
                         View Document
                       </a>
                     </td>
-                    <td>
+                    <td className="iconTd">
                       <IconButton
                         className="deleteIconButton"
                         onClick={() => handleDeleteDocument(document.id)}

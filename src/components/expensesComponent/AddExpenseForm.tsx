@@ -1,93 +1,192 @@
+import React, { useState } from 'react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { TextField } from '@mui/material';
+import {
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+  Grid
+} from '@mui/material';
 import './ExpenseForm.css';
 
-function AddExpenseForm({ userId, setShowAddForm, onExpenseAdded  }: { userId: number, setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>, onExpenseAdded: () => void}) {
-    const [expenseInfo, setExpenseInfo] = useState({
-        userId: userId,
-        date: "",
-        product: "",
-        cost: 0
-    });
-    
-    const [errors, setErrors] = useState({
-        date: "",
-        product: "",
-        cost: ""
-    });
+interface AddExpenseFormProps {
+  userId: number;
+  setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>;
+  onExpenseAdded: () => void;
+}
 
-    const validateForm = () => {
-        const newErrors = { ...errors };
-        let isValid = true;
+const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ userId, setShowAddForm, onExpenseAdded }) => {
+  const [expenseInfo, setExpenseInfo] = useState({
+    userId: userId,
+    date: "",
+    product: "",
+    cost: 0
+  });
 
-        if(!expenseInfo.date.trim()) {
-            newErrors.date = "Date is required.";
-            isValid = false;
-        } else {
-            newErrors.date = "";
-        }
+  const [errors, setErrors] = useState({
+    date: "",
+    product: "",
+    cost: ""
+  });
 
-        if(!expenseInfo.product.trim()) {
-            newErrors.product = "Product is required.";
-            isValid = false;
-        } else {
-            newErrors.product = "";
-        }
+  const validateForm = () => {
+    const newErrors = { ...errors };
+    let isValid = true;
 
-        if(expenseInfo.cost <= 0) {
-            newErrors.cost = "Cost must be greater than 0.";
-            isValid = false;
-        } else {
-            newErrors.cost = "";
-        }
-        
-        setErrors(newErrors);
-        return isValid;
+    if (!expenseInfo.date.trim()) {
+      newErrors.date = "Date is required.";
+      isValid = false;
+    } else if (new Date(expenseInfo.date) > new Date()) {
+        newErrors.date = "Date cannot be in the future.";
+        isValid = false;
+    }else {
+      newErrors.date = "";
     }
 
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        console.log("Form submitted");
-        if (validateForm()) {
-            
+    if (!expenseInfo.product.trim()) {
+      newErrors.product = "Product is required.";
+      isValid = false;
+    } else {
+      newErrors.product = "";
+    }
 
-            axios.post("/expenses/add", {
-                userId: expenseInfo.userId,
-                date: expenseInfo.date,
-                product: expenseInfo.product,
-                cost: expenseInfo.cost})
-            
-            .then((response) => {
-                console.log("Expense added successfully");
-                console.log("Response: ", response.data);
-                onExpenseAdded();
-                setShowAddForm(false);
-            })
-            .catch((error) => {
-                console.error("Failed to add expense:", error.message);
-            });
-        }
-    };
+    if (expenseInfo.cost <= 0) {
+      newErrors.cost = "Cost must be greater than 0.";
+      isValid = false;
+    } else {
+      newErrors.cost = "";
+    }
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <label>
-                Date:
-                <TextField type="date" value={expenseInfo.date} error={Boolean(errors.date)} onChange={e => setExpenseInfo({...expenseInfo, date: e.target.value})} />
-            </label>
-            <label>
-                Product:
-                <TextField type="text" value={expenseInfo.product} error={Boolean(errors.product)} onChange={e => setExpenseInfo({...expenseInfo, product: e.target.value})} />
-            </label>
-            <label>
-                Cost:
-                <TextField type="number" value={expenseInfo.cost} error={Boolean(errors.cost)} onChange={e => setExpenseInfo({...expenseInfo, cost: parseFloat(e.target.value)})} 
-                inputProps={{ step:"0.1", min:"0.1"}}/>
-            </label>
-            <input type="submit" value="Submit" />
-        </form>
-    );
+    setErrors(newErrors);
+    return isValid;
+  };
 
-}
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (validateForm()) {
+      axios.post("/expenses/add", {
+        userId: expenseInfo.userId,
+        date: expenseInfo.date,
+        product: expenseInfo.product,
+        cost: expenseInfo.cost
+      })
+      .then((response) => {
+        console.log("Expense added successfully");
+        onExpenseAdded();
+        setShowAddForm(false);
+      })
+      .catch((error) => {
+        console.error("Failed to add expense:", error.message);
+      });
+    }
+  };
+
+  return (
+    <Dialog
+      open
+      onClose={() => setShowAddForm(false)}
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <DialogTitle
+        style={{ textAlign: "center", fontSize: "2rem", color: "#333333" }}
+      >
+        Add Expense
+        <span
+          style={{
+            display: "block",
+            height: "0.1875rem",
+            backgroundColor: "#C3A6A0",
+            width: "5rem",
+            margin: "0.5rem auto",
+            borderRadius: "0.125rem",
+          }}
+        />
+      </DialogTitle>
+      <DialogContent
+        style={{
+          padding: "1.3rem",
+          boxSizing: "border-box",
+          maxWidth: "30rem",
+        }}
+      >
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              type="date"
+              label="Date"
+              value={expenseInfo.date}
+              error={Boolean(errors.date)}
+              helperText={errors.date}
+              InputProps={{
+                sx: { "& .MuiInputBase-input": { border: "hidden" } },
+              }}
+              fullWidth
+              required
+              InputLabelProps={{ shrink: true }}
+              onChange={(e) =>
+                setExpenseInfo({ ...expenseInfo, date: e.target.value })
+              }
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              type="text"
+              label="Product"
+              value={expenseInfo.product}
+              error={Boolean(errors.product)}
+              helperText={errors.product}
+              fullWidth
+              multiline
+              onChange={(e) =>
+                setExpenseInfo({ ...expenseInfo, product: e.target.value })
+              }
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              type="number"
+              label="Cost"
+              value={expenseInfo.cost}
+              error={Boolean(errors.cost)}
+              helperText={errors.cost}
+              fullWidth
+              multiline
+              onChange={(e) => {
+                const value = e.target.value;
+                setExpenseInfo({
+                  ...expenseInfo,
+                  cost: value === "" ? 0 : parseFloat(value),
+                });
+              }}
+              inputProps={{ step: "0.1", min: "0.1" }}
+            />
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={() => setShowAddForm(false)}
+          style={{ color: "#C3A6A0", textTransform: "none" }}
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          type="submit"
+          style={{ color: "#C3A6A0", textTransform: "none" }}
+        >
+          Submit
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 export default AddExpenseForm;
