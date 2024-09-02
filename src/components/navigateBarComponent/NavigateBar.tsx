@@ -91,7 +91,7 @@ function NavigateBar({
         navigate("/home");
         break;
       case "CALENDAR":
-        console.log("Calendar");
+        navigate("/calendar");
         break;
       case "EXPENSES":
         navigate("/expenses");

@@ -3,6 +3,7 @@ import loginRouter from "./login";
 import signUpRouter from "./signUp";
 import apartmentsRouter from "./apartments";
 import expensesRouter from "./expenses";
+import calendarRouter from "./calendar";
 import documentsRouter from "./documents";
 import bulletinsRouter from "./bulletins";
 import navigateBarRouter from "./navigateBar";
@@ -46,6 +47,7 @@ app.use("/bulletins", bulletinsRouter);
 app.use("/navigate-bar", navigateBarRouter);
 app.use("/chores", ChoresRouter);
 app.use("/settings", settingsRouter);
+app.use('/calendar', calendarRouter);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server listening on port ${PORT}`);
