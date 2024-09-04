@@ -9,7 +9,6 @@ import {
   Button,
   Grid
 } from '@mui/material';
-import './ExpenseForm.css';
 
 interface AddExpenseFormProps {
   userId: number;

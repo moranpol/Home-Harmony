@@ -1,14 +1,7 @@
 import express from "express";
 import queryRunner from "./database/databasepg";
+import transporter from "./enviorments/mailConnect";
 import nodemailer from "nodemailer";
-
-let transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'Home.harmony.supp@gmail.com',
-    pass: 'owcx fxeh mhgm iqmo',
-  },
-});
 
 const apartmentsRouter = express.Router();
 

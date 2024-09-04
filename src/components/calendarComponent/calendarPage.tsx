@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import axios from 'axios';
+import React, { useCallback, useEffect, useState } from "react";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import axios from "axios";
 import Button from "@mui/material/Button";
-import EventForm from './AddEventForm';
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { format } from 'date-fns';  // Import format function
-import EditEventForm from './EditEventForm';
-
+import { CircularProgress, Typography } from "@mui/material";
+import { format } from "date-fns";
+import EventForm from "./AddEventForm";
+import EditEventForm from "./EditEventForm";
+import "./CalendarPage.css";
 
 export interface Event {
   id: number;
@@ -20,31 +21,36 @@ export interface Event {
   end: string;
 }
 
-
-function CalendarPage({userId, isManager} : {userId: number, isManager: boolean}){
+function CalendarPage({
+  userId,
+  isManager,
+}: {
+  userId: number;
+  isManager: boolean;
+}) {
   const [events, setEvents] = useState<Event[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [ShowEditForm, setShowEditForm] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const fetchAllEvents = async () => {
-    await axios.get(`/calendar/${userId}`) 
-    .then((response) => {
+  const fetchAllEvents = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`/calendar/${userId}`);
       setEvents(response.data);
-    })
-    .catch((error) => {
-        console.error("Failed to fetch calendar:", error.message);
-    });
-};
+    } catch (error: any) {
+      console.error("Failed to fetch calendar:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [userId]);
 
   const handleAddEventClick = () => {
-    console.log("clicked add");
     setSelectedEvent(null);
     setShowEditForm(false);
     setShowAddForm(true);
-    console.log("showAddForm state: ", showAddForm);
   };
-
 
   const handleFormClose = () => {
     setShowAddForm(false);
@@ -66,19 +72,17 @@ function CalendarPage({userId, isManager} : {userId: number, isManager: boolean}
     }
   };
 
-  /////////
   const handleEditEvent = () => {
     setShowEditForm(true);
     setShowAddForm(false);
   };
 
   const handleEventAdded = () => {
-    console.log("Event addedddddd tring close");
     handleFormClose();
   };
 
   const handleEventClick = (clickInfo: any) => {
-    const event = events.find(e => e.id === parseInt(clickInfo.event.id));
+    const event = events.find((e) => e.id === parseInt(clickInfo.event.id));
     if (event) {
       setSelectedEvent(event);
     }
@@ -88,30 +92,41 @@ function CalendarPage({userId, isManager} : {userId: number, isManager: boolean}
     setSelectedEvent(null);
   };
 
-useEffect(() => {
-  console.log("request events");
-  fetchAllEvents();
-}, [userId]);
-
+  useEffect(() => {
+    fetchAllEvents();
+  }, [fetchAllEvents]);
 
   return (
-    <div>
-      <button className="addButton" onClick={handleAddEventClick}>
-      Add Event
-      </button>
-      <FullCalendar
-        plugins={[dayGridPlugin]}
-        initialView="dayGridMonth"
-        events={events.map(event => ({
-          id: event.id.toString(),
-          title: event.title,
-          start: event.start,
-          end: event.end,
-        }))}
-        eventClick={handleEventClick}
-      />
-      
-      <Dialog open={showAddForm} onClose={() => handleFormClose()}>
+    <div className="calendarContainer">
+      {loading ? (
+        <div className="loading-container">
+          <CircularProgress />
+          <Typography variant="h6" className="loading-text">
+            Loading...
+          </Typography>
+        </div>
+      ) : (
+        <>
+          <div className="buttonContainer">
+            <button className="addEventButton" onClick={handleAddEventClick}>
+              Add Event
+            </button>
+          </div>
+          <FullCalendar
+            plugins={[dayGridPlugin]}
+            initialView="dayGridMonth"
+            events={events.map((event) => ({
+              id: event.id.toString(),
+              title: event.title,
+              start: event.start,
+              end: event.end,
+            }))}
+            eventClick={handleEventClick}
+          />
+        </>
+      )}
+
+      <Dialog open={showAddForm} onClose={handleFormClose}>
         <DialogTitle>Add Event</DialogTitle>
         <DialogContent>
           <EventForm
@@ -121,27 +136,39 @@ useEffect(() => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleFormClose()} color="primary">
+          <Button onClick={handleFormClose} color="primary">
             Cancel
           </Button>
         </DialogActions>
       </Dialog>
 
-
-      <Dialog open={!!selectedEvent && !ShowEditForm} onClose={handleEventDetailsClose}>
+      <Dialog
+        open={!!selectedEvent && !ShowEditForm}
+        onClose={handleEventDetailsClose}
+      >
         <DialogTitle>Event Details</DialogTitle>
         <DialogContent>
           {selectedEvent && (
             <div>
-              <p><strong>Title:</strong> {selectedEvent.title}</p>
-              <p><strong>Description:</strong> {selectedEvent.description}</p>
-              <p><strong>Start:</strong> {format(new Date(selectedEvent.start), 'MMMM d, yyyy, h:mm a')}</p>
-              <p><strong>End:</strong> {format(new Date(selectedEvent.end), 'MMMM d, yyyy, h:mm a')}</p>
+              <p>
+                <strong>Title:</strong> {selectedEvent.title}
+              </p>
+              <p>
+                <strong>Description:</strong> {selectedEvent.description}
+              </p>
+              <p>
+                <strong>Start:</strong>{" "}
+                {format(new Date(selectedEvent.start), "MMMM d, yyyy, h:mm a")}
+              </p>
+              <p>
+                <strong>End:</strong>{" "}
+                {format(new Date(selectedEvent.end), "MMMM d, yyyy, h:mm a")}
+              </p>
             </div>
           )}
         </DialogContent>
         <DialogActions>
-        <Button onClick={handleEditEvent} color="primary">
+          <Button onClick={handleEditEvent} color="primary">
             Edit
           </Button>
           <Button onClick={handleDeleteEvent} color="secondary">
@@ -150,33 +177,23 @@ useEffect(() => {
           <Button onClick={handleEventDetailsClose} color="primary">
             Close
           </Button>
-          </DialogActions>
-          </Dialog>
+        </DialogActions>
+      </Dialog>
 
-        <Dialog open={ShowEditForm} onClose={handleEventDetailsClose}>
-          <DialogTitle>Edit Event</DialogTitle>
-          <DialogContent>
-            {selectedEvent && (
-              <EditEventForm
-                rowinfo={selectedEvent}
-                userId={userId}
-                setShowForm={setShowEditForm}
-                onEventEdited={handleFormClose}
-              />
+      <Dialog open={ShowEditForm} onClose={handleEventDetailsClose}>
+        <DialogTitle>Edit Event</DialogTitle>
+        <DialogContent>
+          {selectedEvent && (
+            <EditEventForm
+              rowinfo={selectedEvent}
+              userId={userId}
+              setShowForm={setShowEditForm}
+              onEventEdited={handleFormClose}
+            />
           )}
         </DialogContent>
       </Dialog>
     </div>
-  );
-}
-
-function renderEventContent(eventInfo: any) {
-  return (
-    <>
-      <b>{eventInfo.timeText}</b>
-      <i>{eventInfo.event.title}</i>
-      <p>{eventInfo.event.extendedProps.description}</p>
-    </>
   );
 }
 
