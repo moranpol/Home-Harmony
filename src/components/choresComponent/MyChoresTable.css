@@ -71,3 +71,10 @@
   border-radius: 5px;
   margin-top: 1rem;
 }
+
+.loadingMessage {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #888;
+  margin-top: 2rem;
+}

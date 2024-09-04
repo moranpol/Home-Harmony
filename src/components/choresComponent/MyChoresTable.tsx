@@ -15,8 +15,10 @@ interface Row {
 
 const MyChoresTable = ({ userId }: { userId: number }) => {
   const [rows, setRows] = useState<Row[]>([]);
+  const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
+    setLoading(true); // Set loading to true when fetching starts
     axios
       .get(`/chores/${userId}`)
       .then((res) => {
@@ -42,6 +44,9 @@ const MyChoresTable = ({ userId }: { userId: number }) => {
       })
       .catch((error) => {
         console.log("Failed to retrieve chores", error);
+      })
+      .finally(() => {
+        setLoading(false); // Set loading to false when fetching completes
       });
   }, [userId]);
 
@@ -98,7 +103,9 @@ const MyChoresTable = ({ userId }: { userId: number }) => {
   return (
     <ThemeProvider theme={theme}>
       <div style={{ height: "100%", width: "100%" }}>
-        {rows.length > 0 ? (
+        {loading ? (
+          <div className="loadingMessage">Loading chores...</div> 
+        ) : rows.length > 0 ? (
           <DataGrid
             rows={rows}
             columns={columns}

@@ -9,7 +9,6 @@ import {
   Grid,
 } from "@mui/material";
 import axios from "axios";
-import "./ExpenseForm.css";
 import { Expense } from "./ExpensesPage";
 
 interface EditExpenseFormProps {

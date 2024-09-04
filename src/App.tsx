@@ -10,7 +10,7 @@ import DocumentsPage from "./components/documentsComponent/DocumentsPage";
 import ApartmentsPage from "./components/apartmentsComponent/ApartmentsPage";
 import NavigateBar from "./components/navigateBarComponent/NavigateBar";
 import SettingsPage from "./components/settingsComponent/SettingsPage";
-import CalendarPage from "./components/calendarComponent/calendarPage";
+import CalendarPage from "./components/calendarComponent/CalendarPage";
 import axios from "axios";
 
 //axios.defaults.baseURL = "http://54.87.10.241:5000";
