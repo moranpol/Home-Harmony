@@ -27,7 +27,7 @@ h1 {
   margin: 0;
 }
 
-.choresGrid {
+.documentsGrid {
   background-color: #f8f8f8;
   border: none;
   border-radius: 0.25rem;
@@ -36,7 +36,7 @@ h1 {
   flex-direction: column;
 }
 
-.choresGrid h1 {
+.documentsGrid h1 {
   margin: 1rem 0;
   font-size: 1.5rem;
   text-align: left;
@@ -91,6 +91,27 @@ tbody td {
   color: black;
 }
 
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  margin-right: 0.8rem;
+}
+
+.addButton {
+  padding: 0.625rem 1.25rem;
+  background-color: #9f9791;
+  color: black;
+  border: 0.1rem solid black;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.addButton:hover {
+  background-color: #d1c8c1;
+}
+
 .loading-container {
   display: flex;
   justify-content: center;
@@ -119,6 +140,17 @@ tbody td {
     align-items: flex-start;
   }
 
+  .buttonContainer {
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .addButton {
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
   table {
     border-spacing: 0;
   }
@@ -137,6 +169,11 @@ tbody td {
 @media (max-width: 480px) {
   h1 {
     font-size: 1.25rem;
+  }
+
+  .addButton {
+    font-size: 0.7rem;
+    padding: 0.5rem 0.75rem;
   }
 
   table {
