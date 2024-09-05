@@ -10,6 +10,7 @@ import DocumentsPage from "./components/documentsComponent/DocumentsPage";
 import ApartmentsPage from "./components/apartmentsComponent/ApartmentsPage";
 import NavigateBar from "./components/navigateBarComponent/NavigateBar";
 import SettingsPage from "./components/settingsComponent/SettingsPage";
+import ChoresPage from "./components/choresComponent/ChoresPage";
 import axios from "axios";
 
 //axios.defaults.baseURL = "http://54.87.10.241:5000";
@@ -123,6 +124,20 @@ function App() {
                 setIsManager={setIsManager}
               />
               <DocumentsPage userId={userId} />
+            </>
+          }
+        />
+        <Route
+          path="/chores"
+          element={
+            <>
+              <NavigateBar
+                userId={userId}
+                setUserId={setUserId}
+                isManager={isManager}
+                setIsManager={setIsManager}
+              />
+              <ChoresPage userId={userId} />
             </>
           }
         />
