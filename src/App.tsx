@@ -14,8 +14,8 @@ import ChoresPage from "./components/choresComponent/ChoresPage";
 import CalendarPage from "./components/calendarComponent/CalendarPage";
 import axios from "axios";
 
-//axios.defaults.baseURL = "http://54.87.10.241:5000";
-axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "http://54.235.111.120:5000";
+//axios.defaults.baseURL = "http://localhost:5000";
 
 function App() {
   function AppWrapper({
