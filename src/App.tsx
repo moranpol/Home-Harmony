@@ -138,7 +138,7 @@ function App() {
                 isManager={isManager}
                 setIsManager={setIsManager}
               />
-              <ChoresPage userId={userId} />
+              <ChoresPage userId={userId} isManager={isManager} />
             </>
           }
         />

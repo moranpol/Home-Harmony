@@ -2,10 +2,21 @@ import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import "./ChoresPage.css";
 import AddChoreDialog from "./AddChoreDialog";
-import { IconButton, CircularProgress, Typography, Checkbox } from "@mui/material";
+import {
+  IconButton,
+  CircularProgress,
+  Typography,
+  Checkbox,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-function ChoresPage({ userId }: { userId: number }) {
+function ChoresPage({
+  userId,
+  isManager,
+}: {
+  userId: number;
+  isManager: boolean;
+}) {
   const [chores, setChores] = useState<
     {
       id: number;
@@ -42,7 +53,6 @@ function ChoresPage({ userId }: { userId: number }) {
   const handleDialogClose = (isCreated: boolean) => {
     setDialogOpen(false);
     if (isCreated) {
-      alert("Chore created successfully.");
       fetchChores();
     }
   };
@@ -66,7 +76,9 @@ function ChoresPage({ userId }: { userId: number }) {
 
   const handleToggleChoreStatus = async (choreId: number, isDone: boolean) => {
     try {
-      const response = await axios.put(`/chores/${choreId}`, { isDone: !isDone });
+      const response = await axios.put(`/chores/${choreId}`, {
+        isDone: !isDone,
+      });
       if (response.data.success) {
         fetchChores();
       } else {
@@ -90,15 +102,14 @@ function ChoresPage({ userId }: { userId: number }) {
         <>
           <div className="choresGrid">
             <div className="headerContainer">
-              <h1>Chores</h1>
+              <h1>CHORES</h1>
             </div>
-            <table>
+            <table className="chorsTable">
               <thead>
                 <tr>
                   <th>Chore</th>
                   <th>Assigned To</th>
-                  <th>Status</th>
-                  <th></th>
+                  <th className="actionsTh">Is Done</th>
                 </tr>
               </thead>
               <tbody>
@@ -106,33 +117,41 @@ function ChoresPage({ userId }: { userId: number }) {
                   <tr key={chore.id}>
                     <td>{chore.description}</td>
                     <td>{`${chore.fname} ${chore.lname}`}</td>
-                    <td>
+                    <td className="actionsTd">
                       <Checkbox
                         checked={chore.isDone}
-                        onChange={() => handleToggleChoreStatus(chore.id, chore.isDone)}
+                        onChange={() =>
+                          handleToggleChoreStatus(chore.id, chore.isDone)
+                        }
                         color="primary"
                       />
-                    </td>
-                    <td>
-                      <IconButton
-                        className="deleteIconButton"
-                        onClick={() => handleDeleteChore(chore.id)}
-                        aria-label="delete"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+                      {isManager && (
+                        <IconButton
+                          className="deleteIconButton"
+                          onClick={() => handleDeleteChore(chore.id)}
+                          aria-label="delete"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      )}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <div className="buttonContainer">
-              <button className="addButton" onClick={handleDialogOpen}>
-                Add Chore
-              </button>
-            </div>
+            {isManager && (
+              <div className="buttonContainer">
+                <button className="addButton" onClick={handleDialogOpen}>
+                  Add Chore
+                </button>
+              </div>
+            )}
           </div>
-          <AddChoreDialog open={dialogOpen} onClose={handleDialogClose} userId={userId} />
+          <AddChoreDialog
+            open={dialogOpen}
+            onClose={handleDialogClose}
+            userId={userId}
+          />
         </>
       )}
     </div>
