@@ -11,6 +11,7 @@ import ApartmentsPage from "./components/apartmentsComponent/ApartmentsPage";
 import NavigateBar from "./components/navigateBarComponent/NavigateBar";
 import SettingsPage from "./components/settingsComponent/SettingsPage";
 import ChoresPage from "./components/choresComponent/ChoresPage";
+import CalendarPage from "./components/calendarComponent/CalendarPage";
 import axios from "axios";
 
 //axios.defaults.baseURL = "http://54.87.10.241:5000";
@@ -143,7 +144,13 @@ function App() {
         />
         <Route
           path="/join-apartment"
-          element={<ApartmentsPage userId={userId} />}
+          element={
+            <ApartmentsPage
+              userId={userId}
+              setUserId={setUserId}
+              setIsManager={setIsManager}
+            />
+          }
         />
         <Route
           path="/settings"
@@ -161,6 +168,20 @@ function App() {
                 isManager={isManager}
                 setIsManager={setIsManager}
               />
+            </>
+          }
+        />
+        <Route
+          path="/calendar"
+          element={
+            <>
+              <NavigateBar
+                userId={userId}
+                setUserId={setUserId}
+                isManager={isManager}
+                setIsManager={setIsManager}
+              />
+              <CalendarPage userId={userId} isManager={isManager} />
             </>
           }
         />

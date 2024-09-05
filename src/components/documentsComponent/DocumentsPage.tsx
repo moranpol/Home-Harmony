@@ -80,7 +80,7 @@ function DocumentsPage({ userId }: { userId: number }) {
         <>
           <div className="documentsGrid">
             <div className="headerContainer">
-              <h1>Documents</h1>
+              <h1>DOCUMENTS</h1>
             </div>
             <table>
               <thead>
@@ -107,7 +107,7 @@ function DocumentsPage({ userId }: { userId: number }) {
                         View Document
                       </a>
                     </td>
-                    <td>
+                    <td className="iconTd">
                       <IconButton
                         className="deleteIconButton"
                         onClick={() => handleDeleteDocument(document.id)}

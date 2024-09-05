@@ -55,7 +55,7 @@ function ConfirmPage({ userId }: { userId: number }) {
 
   return (
     <Box className="cardContainer">
-      <Grid container justifyContent="center">
+      <Grid container justifyContent="center" sx={{maxWidth: "90rem"}}>
         <Grid item xs={12} sm={6} md={4}>
           <Card className="card">
             <CardContent>
@@ -86,10 +86,10 @@ function ConfirmPage({ userId }: { userId: number }) {
                 onClick={handleConfirm}
                 className="submitButton"
                 sx={{
-                  backgroundColor: "#F8C794",
+                  backgroundColor: "#C3A6A0",
                   color: "black",
                   padding: "0.7rem 2rem",
-                  "&:hover": { backgroundColor: "#D8AE7E" },
+                  "&:hover": { backgroundColor: "#8a7874" },
                 }}
               >
                 Confirm

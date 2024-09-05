@@ -1,117 +1,245 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useCallback, useEffect, useState } from "react";
+import axios from "axios";
 import Button from "@mui/material/Button";
-import { DataGrid } from '@mui/x-data-grid';
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
 import "./ExpensesPage.css";
 import AddExpenseForm from "./AddExpenseForm";
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
+import EditExpenseForm from "./EditExpenseForm";
 
-
-function AddExpenseButton({userId, setShowForm} : {userId: number, setShowForm: React.Dispatch<React.SetStateAction<boolean>>}) {
-    function onAddExpenseButtonClick() {
-        console.log("Add Expense button clicked");
-        setShowForm(true);
-    }
-    
-    return <Button variant="outlined" component="span" className="addButton" onClick={onAddExpenseButtonClick}>Add Expense</Button>
+export interface Expense {
+  id: number;
+  user_id: number;
+  fname: string;
+  date: string;
+  product: string;
+  cost: number;
 }
 
-function ClearTableButton({ isManager, update} : { isManager: boolean, update: () => void}) {
-    function onClearTableButtonClick() {
-        console.log("Clear Table button clicked");
-        axios.delete(`/expenses/delete`)
+function AddExpenseButton({
+  userId,
+  setShowAddForm,
+}: {
+  userId: number;
+  setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  function onAddExpenseButtonClick() {
+    console.log("Add Expense button clicked");
+    setShowAddForm(true);
+  }
+  return (
+    <button className="addButton" onClick={onAddExpenseButtonClick}>
+      Add Expense
+    </button>
+  );
+}
+
+function ClearTableButton({
+  isManager,
+  update,
+}: {
+  isManager: boolean;
+  update: () => void;
+}) {
+  function onClearTableButtonClick() {
+    console.log("Clear Table button clicked");
+    if (window.confirm("Are you sure you want to clear the table?")) {
+      axios
+        .delete(`/expenses/delete`)
         .then((response) => {
-            console.log("Table cleared");
-            update();
+          console.log("Table cleared");
+          update();
         })
         .catch((error) => {
-            console.error("Failed to clear table:", error.message);
+          console.error("Failed to clear table:", error.message);
         });
     }
-    return isManager ? <Button variant="outlined" component="span" className="clearButton" onClick={onClearTableButtonClick}>Clear Table</Button> : null;   
+  }
+  return isManager ? (
+    <button className="clearButton" onClick={onClearTableButtonClick}>
+      Clear Table
+    </button>
+  ) : null;
 }
 
 function CurrentBalanceText({ balance }: { balance: number }) {
-    return <p className="balanceText">Current Balance: ${balance.toFixed(1)}</p>;
+  return <p className="balanceText">Current Balance: ${balance.toFixed(1)}</p>;
 }
 
+function ExpensesPage({
+  userId,
+  isManager,
+}: {
+  userId: number;
+  isManager: boolean;
+}) {
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [balance, setBalance] = useState(0);
+  const [ShowAddForm, setShowAddForm] = useState(false);
+  const [ShowEditForm, setShowEditForm] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<Expense | null>(null);
+  const [loading, setLoading] = useState(true);
 
-function ExpensesPage({userId, isManager} : {userId: number, isManager: boolean}) {
-    const [expenses, setExpenses] = useState<{ id: number; name: string; date: string; product: string; cost: number; }[]>([]);
-    const [balance, setBalance] = useState(0);
-    const [showForm, setShowForm] = useState(false);
+  const refreshExpenses = useCallback(async () => {
+    setLoading(true);
+    try {
+      const balanceResponse = await axios.get(`/expenses/balance/${userId}`);
+      setBalance(balanceResponse.data);
 
-    const fetchAllExpenses = async () => {
-        await axios.get(`/expenses/${userId}`)
-        .then((response) => {
-            setExpenses(response.data);
-        })
-        .catch((error) => {
-            console.error("Failed to fetch expenses:", error.message);
-        });
-    };
+      const expensesResponse = await axios.get(`/expenses/${userId}`);
+      setExpenses(expensesResponse.data);
+      console.log(expensesResponse.data);
+    } catch (error: any) {
+      console.error("Failed to fetch expenses:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [userId]);
 
-    const fetchBalance = async () => {
-        await axios.get(`/expenses/balance/${userId}`)
-        .then((response) => {
-            setBalance(response.data);
-        })
-        .catch((error) => {
-            console.error("Failed to fetch expenses:", error.message);
-        });
-    };
+  useEffect(() => {
+    refreshExpenses();
+  }, [userId, refreshExpenses]);
 
-    useEffect(() => {
-        fetchBalance();
-        fetchAllExpenses();
-    }, [userId]);
+  const handleExpenseAdded = () => {
+    console.log("Expense added");
+    refreshExpenses();
+  };
 
-    const handleExpenseAdded = () => {
-        console.log("Expense added");
-        fetchBalance();
-        fetchAllExpenses();
-    };
+  const handleExpenseDelete = async (rowId: number) => {
+    console.log("Delete row with id:", rowId);
+    if (window.confirm("Are you sure you want to delete this row?")) {
+      try {
+        await axios.delete(`/expenses/delete/${rowId}`);
+        console.log("Row deleted");
+        refreshExpenses();
+      } catch (error: any) {
+        console.error("Failed to delete row:", error.message);
+      }
+    }
+  };
 
-    const columns = [
-        { field: 'fname', headerName: 'NAME', width: 150 },
-        { field: 'date', headerName: 'DATE', width: 150 },
-        { field: 'product', headerName: 'PRODUCT', width: 300 },
-        { field: 'cost', headerName: 'COST', width: 50},
-    ];
+  const handleEdit = (row: Expense) => {
+    console.log("Edit row:", row);
+    setSelectedRow(row);
+    setShowEditForm(true);
+  };
 
-    console.log("userId in ExpensesPage: ", userId);
-    return (
-        
-        <div>
-            <Dialog open={showForm} onClose={() => setShowForm(false)}>
-                <DialogTitle>Add Expense</DialogTitle>
-                <DialogContent>
-                    <AddExpenseForm userId={userId} setShowForm={setShowForm} onExpenseAdded={handleExpenseAdded}/>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setShowForm(false)}>Close</Button>
-                </DialogActions>
-            </Dialog>
-            <div className="container">
-            <h1>Expenses Page</h1>
-            <CurrentBalanceText balance={balance}/>
-            
-            <div className="dataGrid" style={{ height: 400, width: '70%' }}>
-                <DataGrid rows={expenses} columns={columns} classes={{
-                        columnHeaders: 'customHeader' }} />
-            </div>
-            <div className="ButtonContainer">
-                <AddExpenseButton userId={userId} setShowForm={setShowForm} />
-                <ClearTableButton isManager={isManager} update={handleExpenseAdded}/>
-            </div>
-            {showForm && <AddExpenseForm userId={userId} setShowForm={setShowForm} onExpenseAdded={handleExpenseAdded}/>}
+  return (
+    <div className="container">
+      {loading ? (
+        <div className="loading-container">
+          <CircularProgress />
+          <Typography variant="h6" className="loading-text">
+            Loading...
+          </Typography>
         </div>
-        </div>
-       
-    );
+      ) : (
+        <>
+          <Dialog open={ShowAddForm} onClose={() => setShowAddForm(false)}>
+            <DialogTitle>Add Expense</DialogTitle>
+            <DialogContent>
+              <AddExpenseForm
+                userId={userId}
+                setShowAddForm={setShowAddForm}
+                onExpenseAdded={handleExpenseAdded}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setShowAddForm(false)}>Close</Button>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog open={ShowEditForm} onClose={() => setShowEditForm(false)}>
+            <DialogTitle>Edit Expense</DialogTitle>
+            <DialogContent>
+              {selectedRow && (
+                <EditExpenseForm
+                  rowinfo={selectedRow}
+                  userId={userId}
+                  setShowForm={setShowEditForm}
+                  onExpenseEdited={handleExpenseAdded}
+                />
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setShowEditForm(false)}>Close</Button>
+            </DialogActions>
+          </Dialog>
+
+          <div className="expensesGrid">
+            <div className="headerContainer">
+              <h1>EXPENSES</h1>
+              <CurrentBalanceText balance={balance} />
+            </div>
+            <table className="expensesTable">
+              <thead>
+                <tr>
+                  <th>NAME</th>
+                  <th>DATE</th>
+                  <th>PRODUCT</th>
+                  <th>COST</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {expenses.map((expense) => (
+                  <tr key={expense.id}>
+                    <td>{expense.fname}</td>
+                    <td>{expense.date}</td>
+                    <td>{expense.product}</td>
+                    <td>${expense.cost}</td>
+                    <td className="iconsTd">
+                      {expense.user_id === userId ? (
+                        <>
+                          <IconButton
+                            className="editIconButton"
+                            onClick={() => handleEdit(expense)}
+                            size="small"
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            className="deleteIconButton"
+                            onClick={() => handleExpenseDelete(expense.id)}
+                            size="small"
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </>
+                      ) : (
+                        <IconButton
+                          className="deleteIconButton"
+                          onClick={() => handleExpenseDelete(expense.id)}
+                          size="large"
+                        ></IconButton>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="buttonContainer">
+              <AddExpenseButton
+                userId={userId}
+                setShowAddForm={setShowAddForm}
+              />
+              <ClearTableButton
+                isManager={isManager}
+                update={handleExpenseAdded}
+              />
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default ExpensesPage;

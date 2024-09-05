@@ -15,8 +15,10 @@ interface Row {
 
 const MyChoresTable = ({ userId }: { userId: number }) => {
   const [rows, setRows] = useState<Row[]>([]);
+  const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
+    setLoading(true); // Set loading to true when fetching starts
     axios
       .get(`/chores/${userId}`)
       .then((res) => {
@@ -42,6 +44,9 @@ const MyChoresTable = ({ userId }: { userId: number }) => {
       })
       .catch((error) => {
         console.log("Failed to retrieve chores", error);
+      })
+      .finally(() => {
+        setLoading(false); // Set loading to false when fetching completes
       });
   }, [userId]);
 
@@ -84,7 +89,7 @@ const MyChoresTable = ({ userId }: { userId: number }) => {
       width: 250,
       editable: false,
       renderCell: (params) => (
-        <div style={{ wordWrap: 'break-word', whiteSpace: 'normal' }}>
+        <div style={{ wordWrap: "break-word", whiteSpace: "normal" }}>
           {params.value}
         </div>
       ),
@@ -98,18 +103,24 @@ const MyChoresTable = ({ userId }: { userId: number }) => {
   return (
     <ThemeProvider theme={theme}>
       <div style={{ height: "100%", width: "100%" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          hideFooter
-          disableColumnMenu
-          scrollbarSize={0}
-          checkboxSelection={false}
-          className="MyChoresTable"
-          density="comfortable"
-          getRowClassName={getRowClassName}
-          style={{ marginTop: "1rem", border: "none" }}
-        />
+        {loading ? (
+          <div className="loadingMessage">Loading chores...</div> 
+        ) : rows.length > 0 ? (
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            hideFooter
+            disableColumnMenu
+            scrollbarSize={0}
+            checkboxSelection={false}
+            className="MyChoresTable"
+            density="comfortable"
+            getRowClassName={getRowClassName}
+            style={{ marginTop: "1rem", border: "none" }}
+          />
+        ) : (
+          <div className="noChoresMessage">You have no chores to do :)</div>
+        )}
       </div>
     </ThemeProvider>
   );

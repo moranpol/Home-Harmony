@@ -17,8 +17,9 @@ router.post("/", async (req, res) => {
     await signIn({ username: email, password: password });
     const userId = await getId(email);
     const isManager = await getIsManager(userId);
+    const aptId = await getApartemntId(userId);
     console.log("Login successful, userId: ", userId);
-    res.status(200).json({ success: true, message: "Login successful", userId: userId, isManager: isManager});
+    res.status(200).json({ success: true, message: "Login successful", userId: userId, isManager: isManager, aptId: aptId });
   } catch (error) {
     console.error("Login error:", error);
     console.log("error: ", error);
@@ -38,9 +39,13 @@ async function getIsManager(userId: Number): Promise<boolean> {
     FROM apartmentstable
     WHERE managerid = '${userId}');`;
   const result = await queryRunner.query(query);
-  return result[0]?.exists;
-  
-  
+  return result[0]?.exists; 
+}
+
+async function getApartemntId(userId: Number): Promise<boolean> {
+  const query = `SELECT aptid FROM usersTable WHERE id = '${userId}'`;
+  const result = await queryRunner.query(query);
+  return result[0]?.aptid; 
 }
 
 export default router;

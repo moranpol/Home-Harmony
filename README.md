@@ -39,8 +39,7 @@ We use PostgreSQL with the following data tables:
 To set up the project locally, follow these steps:
 1. Clone the repository: git clone https://github.com/moranpol/Home-Harmony.git
 2. Navigate to the project directory: cd Home-Harmony
-2. Install the dependencies: npm install
-3. Set up the environment variables as specified in the .env.example file.
+3. Install the dependencies: npm install
 4. Start the development server: npm start
 
 ## Project Team:

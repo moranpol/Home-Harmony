@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Dialog,
@@ -7,28 +6,46 @@ import {
   DialogContent,
   DialogTitle,
   Button,
-  Grid
-} from '@mui/material';
+  Grid,
+} from "@mui/material";
+import axios from "axios";
+import { Expense } from "./ExpensesPage";
 
-interface AddExpenseFormProps {
+interface EditExpenseFormProps {
+  rowinfo: Expense;
   userId: number;
-  setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>;
-  onExpenseAdded: () => void;
+  setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
+  onExpenseEdited: () => void;
 }
 
-const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ userId, setShowAddForm, onExpenseAdded }) => {
+const EditExpenseForm: React.FC<EditExpenseFormProps> = ({
+  rowinfo,
+  userId,
+  setShowForm,
+  onExpenseEdited,
+}) => {
   const [expenseInfo, setExpenseInfo] = useState({
+    rowinfo: rowinfo,
     userId: userId,
-    date: "",
-    product: "",
-    cost: 0
+    date: rowinfo.date,
+    product: rowinfo.product,
+    cost: rowinfo.cost,
   });
 
   const [errors, setErrors] = useState({
     date: "",
     product: "",
-    cost: ""
+    cost: "",
   });
+
+  useEffect(() => {
+    const [day, month, year] = rowinfo.date.split("/");
+    const formattedDate = `20${year}-${month}-${day}`;
+    setExpenseInfo((prevInfo) => ({
+      ...prevInfo,
+      date: formattedDate,
+    }));
+  }, [rowinfo]);
 
   const validateForm = () => {
     const newErrors = { ...errors };
@@ -38,9 +55,9 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ userId, setShowAddForm,
       newErrors.date = "Date is required.";
       isValid = false;
     } else if (new Date(expenseInfo.date) > new Date()) {
-        newErrors.date = "Date cannot be in the future.";
-        isValid = false;
-    }else {
+      newErrors.date = "Date cannot be in the future.";
+      isValid = false;
+    } else {
       newErrors.date = "";
     }
 
@@ -62,30 +79,31 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ userId, setShowAddForm,
     return isValid;
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleEdit = (event: React.FormEvent) => {
     event.preventDefault();
     if (validateForm()) {
-      axios.post("/expenses/add", {
-        userId: expenseInfo.userId,
-        date: expenseInfo.date,
-        product: expenseInfo.product,
-        cost: expenseInfo.cost
-      })
-      .then((response) => {
-        console.log("Expense added successfully");
-        onExpenseAdded();
-        setShowAddForm(false);
-      })
-      .catch((error) => {
-        console.error("Failed to add expense:", error.message);
-      });
+      axios
+        .post("/expenses/edit", {
+          rowId: rowinfo.id,
+          userId: userId,
+          date: expenseInfo.date,
+          product: expenseInfo.product,
+          cost: expenseInfo.cost,
+        })
+        .then((response) => {
+          onExpenseEdited();
+          setShowForm(false);
+        })
+        .catch((error) => {
+          console.error("Failed to edit expense:", error.message);
+        });
     }
   };
 
   return (
     <Dialog
       open
-      onClose={() => setShowAddForm(false)}
+      onClose={() => setShowForm(false)}
       style={{
         minHeight: "100vh",
         display: "flex",
@@ -96,7 +114,7 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ userId, setShowAddForm,
       <DialogTitle
         style={{ textAlign: "center", fontSize: "2rem", color: "#333333" }}
       >
-        Add Expense
+        Edit Expense
         <span
           style={{
             display: "block",
@@ -128,6 +146,9 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ userId, setShowAddForm,
               }}
               fullWidth
               required
+              name="date"
+              id="date"
+              about="date"
               InputLabelProps={{ shrink: true }}
               onChange={(e) =>
                 setExpenseInfo({ ...expenseInfo, date: e.target.value })
@@ -171,21 +192,21 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ userId, setShowAddForm,
       </DialogContent>
       <DialogActions>
         <Button
-          onClick={() => setShowAddForm(false)}
+          onClick={() => setShowForm(false)}
           style={{ color: "#C3A6A0", textTransform: "none" }}
         >
           Cancel
         </Button>
         <Button
-          onClick={handleSubmit}
+          onClick={handleEdit}
           type="submit"
           style={{ color: "#C3A6A0", textTransform: "none" }}
         >
-          Submit
+          Save
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default AddExpenseForm;
+export default EditExpenseForm;
