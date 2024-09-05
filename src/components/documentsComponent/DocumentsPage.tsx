@@ -100,7 +100,7 @@ function DocumentsPage({ userId }: { userId: number }) {
                     <td>{document.description}</td>
                     <td className="document">
                       <a
-                        href={`http://localhost:5000/documents/files/${document.document}`}
+                        href={`http://54.235.111.120:5000/documents/files/${document.document}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
