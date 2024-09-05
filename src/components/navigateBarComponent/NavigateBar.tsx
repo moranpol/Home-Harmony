@@ -97,7 +97,7 @@ function NavigateBar({
         navigate("/expenses");
         break;
       case "CHORES":
-        console.log("Chores");
+        navigate("/chores");
         break;
       case "DOCUMENTS":
         navigate("/documents");

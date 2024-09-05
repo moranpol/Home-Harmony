@@ -1,0 +1,93 @@
+/* Container for the whole page */
+.container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+  
+/* Loading container */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+  
+.loading-text {
+    margin-top: 10px;
+}
+  
+/* Chores grid */
+.choresGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+  
+/* Header container */
+.headerContainer {
+    text-align: center;
+    margin-bottom: 20px;
+}
+  
+/* Table for displaying chores */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+  
+table th,
+table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+  
+table th {
+    background-color: #f5f5f5;
+}
+  
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+  /* Style for the checkbox in the status column */
+.MuiCheckbox-root {
+    margin: 0 auto;
+}
+/* Delete icon button */
+.deleteIconButton {
+    color: #d32f2f;
+}
+  
+/* Form for adding a new chore */
+.addChoreForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+  
+.addChoreForm .MuiTextField-root {
+    width: 100%;
+}
+  
+.addChoreForm .MuiButtonBase-root {
+    align-self: flex-end;
+}
+  
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+  
+    table th,
+    table td {
+        padding: 8px;
+    }
+  
+    .addChoreForm {
+        gap: 10px;
+    }
+}
